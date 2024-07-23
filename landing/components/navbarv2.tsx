@@ -15,10 +15,10 @@ const navLinks = [
     title: "Pricing ",
     link: "#",
   },
-  {
+  /*{
     title: "Blog ",
     link: "#",
-  },
+  },*/
   {
     title: "Contact Us",
     link: "#",
