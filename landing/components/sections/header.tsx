@@ -20,9 +20,9 @@ const Header = ({}) => {
               </p>
               <div className="grid md:grid-cols-2 grid-cols-1 justify-items-stretch">
                 <div>
-                  <Link href="/inspection-request">
+                  <Link href="/signup">
                     <Button size="lg" fullWidth>
-                      Request An Inspection
+                      Sign Up
                     </Button>
                   </Link>
                 </div>
