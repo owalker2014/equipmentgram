@@ -118,9 +118,21 @@ const Home: NextPage = () => {
       </Head>
       <div className="max-w-xs mx-auto md:my-20 my-10">
         <div className="space-y-4">
-          <TextInput label="Email" type="email" onChange={(e) => setEmail(e.target.value)} />
-          <TextInput label="Passowrd" type="password" onChange={(e) => setPassword(e.target.value)} />
-          <Button loading={emailLoginLoadingState} fullWidth onClick={() => login()}>
+          <TextInput
+            label="Email"
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextInput
+            label="Passowrd"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
+            loading={emailLoginLoadingState}
+            fullWidth
+            onClick={() => login()}
+          >
             Login
           </Button>
 

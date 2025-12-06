@@ -7,11 +7,9 @@ import { UserType, useSetUser } from "@/lib/network/users";
 import { Button, Select, TextInput } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
-  signInWithPopup,
 } from "firebase/auth";
 import type { NextPage } from "next";
 import Head from "next/head";

@@ -22,7 +22,9 @@ const FormsPage = (props: Props) => {
     <EquipmentItem
       key={i}
       item={item}
-      onClick={() => navigation.push("/forms".concat(item.link.split(" ").join("-")))}
+      onClick={() =>
+        navigation.push("/forms".concat(item.link.split(" ").join("-")))
+      }
     />
   ));
 

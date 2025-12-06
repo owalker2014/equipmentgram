@@ -13,10 +13,11 @@ const Header = ({}) => {
               <h1 className="text-dark mb-3 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">
                 Streamline Your Heavy Equipment Inspections and Accounting
               </h1>
-              <p className="mb-8  text-base">
-                EquipmentGram improves the buying and selling experience for buyers and sellers of construction
-                equipment with the use of equipment inspection reports that can be easily managed and distributed by
-                buyers and sellers for different purposes
+              <p className="mb-8 text-base">
+                EquipmentGram improves the buying and selling experience for
+                buyers and sellers of construction equipment with the use of
+                equipment inspection reports that can be easily managed and
+                distributed by buyers and sellers for different purposes
               </p>
               <div className="grid md:grid-cols-2 grid-cols-1 justify-items-stretch">
                 <div>
@@ -57,9 +58,19 @@ const Header = ({}) => {
           <div className="w-full px-4 lg:w-6/12 overflow-hidden">
             <div className="lg:ml-auto lg:text-right">
               <div className="relative z-10 inline-block pt-11 lg:pt-0">
-                <img src="inspector.jpg" alt="hero" className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg" />
+                <img
+                  src="inspector.jpg"
+                  alt="hero"
+                  className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg"
+                />
                 <span className="absolute -left-8 -bottom-8 z-[-1]">
-                  <svg width="93" height="93" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="93"
+                    height="93"
+                    viewBox="0 0 93 93"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <circle cx="2.5" cy="2.5" r="2.5" fill="#3056D3" />
                     <circle cx="2.5" cy="24.5" r="2.5" fill="#3056D3" />
                     <circle cx="2.5" cy="46.5" r="2.5" fill="#3056D3" />

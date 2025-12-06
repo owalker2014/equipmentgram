@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DocumentReference, doc, getDoc, getDocs, query, runTransaction, where } from "firebase/firestore";
 import { db } from "../firebaseConfig/init";
 import { UserWithId, UsersCollection } from "./users";
-import { InspectionRequestsCollection } from "./inspection-requests";
 import { DocumentData } from "firebase-admin/firestore";
 import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
