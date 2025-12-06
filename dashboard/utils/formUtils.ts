@@ -10,6 +10,10 @@ export enum EquipmentType {
   MotorGraders = 'Motor Graders',
 }
 
+export const equipmentsInScope = [
+  EquipmentType.MiniExcavators
+]
+
 export enum USStates {
   ALABAMA = 'Alabama',
   ALASKA = 'Alaska',

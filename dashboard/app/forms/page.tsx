@@ -5,6 +5,7 @@ import EquipmentItem from "@/components/EquipmentItem";
 import { useAuth } from "@/lib/authContext";
 import { UserType, useGetUser } from "@/lib/network/users";
 import { equipments } from "@/utils/equipment";
+import { equipmentsInScope } from "@/utils/formUtils";
 import { Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
@@ -18,15 +19,17 @@ const FormsPage = (props: Props) => {
   if (userData?.type !== UserType.inspector) return <div>Not Authorized</div>;
 
   const navigation = useRouter();
-  const items = equipments.map((item, i) => (
-    <EquipmentItem
-      key={i}
-      item={item}
-      onClick={() =>
-        navigation.push("/forms".concat(item.link.split(" ").join("-")))
-      }
-    />
-  ));
+  const items = equipments
+    .filter((o: any) => equipmentsInScope.includes(o.title))
+    .map((item, i) => (
+      <EquipmentItem
+        key={i}
+        item={item}
+        onClick={() =>
+          navigation.push("/forms".concat(item.link.split(" ").join("-")))
+        }
+      />
+    ));
 
   return (
     <div>
