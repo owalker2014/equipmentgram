@@ -66,8 +66,17 @@ const ShareReportDialog = (inspectionForm: Props) => {
     <>
       <Modal opened={opened} onClose={close} title="Share Report">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <TextInput {...register("sendTo")} label="Share report with" type="email" />
-          <Button rightSection={<IconSend size={16} />} className="text-right" type="submit" loading={isLoading}>
+          <TextInput
+            {...register("sendTo")}
+            label="Share report with"
+            type="email"
+          />
+          <Button
+            rightSection={<IconSend size={16} />}
+            className="text-right"
+            type="submit"
+            loading={isLoading}
+          >
             Share
           </Button>
         </form>

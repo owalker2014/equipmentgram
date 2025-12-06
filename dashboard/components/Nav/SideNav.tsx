@@ -2,15 +2,26 @@
 
 import { signOut, useAuth } from "@/lib/authContext";
 import { useGetUser } from "@/lib/network/users";
-import { Avatar, Badge, Center, Divider, Skeleton, Text } from "@mantine/core";
-import { IconBell, IconFileDownload, IconLicense, IconLogout, IconMailShare } from "@tabler/icons-react";
+import { Avatar, Badge, Text } from "@mantine/core";
+import {
+  IconBell,
+  IconFileDownload,
+  IconLicense,
+  IconLogout,
+  IconMailShare,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import classes from "./SideNav.module.css";
 
 const data = [
-  { link: "/forms", label: "Forms", icon: IconLicense, hasAccessTo: "Inspector" },
+  {
+    link: "/forms",
+    label: "Forms",
+    icon: IconLicense,
+    hasAccessTo: "Inspector",
+  },
   { link: "/forms-saved", label: "Saved", icon: IconFileDownload },
   { link: "/forms-sent", label: "Sent", icon: IconMailShare },
   { link: "/notifications", label: "Notifications", icon: IconBell },
@@ -21,26 +32,30 @@ export function SideNav() {
   const navigation = useRouter();
   const [active, setActive] = useState("Billing");
   const { user } = useAuth();
-  const { data: userData, isLoading } = useGetUser(user?.uid as string);
+  const { data: userData } = useGetUser(user?.uid as string);
 
-  if (isLoading)
-    return (
-      <>
-        <Center>
-          <Skeleton height={100} circle mb="xl" />
-        </Center>
-        <Skeleton height={10} radius="xl" />
-        <Skeleton height={10} mt={6} radius="xl" />
-        <Divider my={10} />
-        <Skeleton height={30} mt={10} width="100%" />
-        <Skeleton height={30} mt={10} width="100%" />
-        <Skeleton height={30} mt={10} width="100%" />
-        <Skeleton height={30} mt={10} width="100%" />
-      </>
-    );
+  // if (isLoading)
+  //   return (
+  //     <>
+  //       <Center>
+  //         <Skeleton height={100} circle mb="xl" />
+  //       </Center>
+  //       <Skeleton height={10} radius="xl" />
+  //       <Skeleton height={10} mt={6} radius="xl" />
+  //       <Divider my={10} />
+  //       <Skeleton height={30} mt={10} width="100%" />
+  //       <Skeleton height={30} mt={10} width="100%" />
+  //       <Skeleton height={30} mt={10} width="100%" />
+  //       <Skeleton height={30} mt={10} width="100%" />
+  //     </>
+  //   );
 
   const links = data
-    .filter((item) => (item.hasAccessTo ? item.hasAccessTo.toUpperCase() === userData?.type.toUpperCase() : true))
+    .filter((item) =>
+      item.hasAccessTo
+        ? item.hasAccessTo.toUpperCase() === userData?.type.toUpperCase()
+        : true
+    )
     .map((item) => (
       <Link
         className={classes.link}
@@ -65,10 +80,10 @@ export function SideNav() {
             {userData?.type}
           </Badge>
           <Avatar size="xl" mb="md" src={userData?.photoURL} />
-          <Text>{userData?.display_name}</Text>
+          <Text className="font-bold">{userData?.display_name}</Text>
           <Text>{userData?.email}</Text>
         </div>
-        <div className="pt-4">{links}</div>
+        {userData?.email && <div className="pt-4">{links}</div>}
       </div>
 
       <div className={classes.footer}>

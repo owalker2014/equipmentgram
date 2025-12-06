@@ -35,7 +35,9 @@ const Notifications = (props: Props) => {
           );
         })
       ) : (
-        <div className="h-full flex items-center justify-center">No Notifications</div>
+        <div className="h-full flex items-center justify-center">
+          No Notifications
+        </div>
       )}
     </div>
   );
