@@ -14,14 +14,18 @@ const UploadFileField = ({ onUploadComplete, fileName, error }: Props) => {
   const [loading, setLoading] = useState(false);
 
   const onDropFile = (file: FileWithPath[]) => {
-    const storageRef = ref(storage, fileName + new Date().getTime() + file[0].name);
+    const storageRef = ref(
+      storage,
+      fileName + new Date().getTime() + file[0].name
+    );
     const uploadTask = uploadBytesResumable(storageRef, file[0]);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
         setLoading(true);
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused":
@@ -47,7 +51,14 @@ const UploadFileField = ({ onUploadComplete, fileName, error }: Props) => {
 
   return (
     <>
-      <Dropzone w="200px" p={6} maxFiles={1} loading={loading} accept={IMAGE_MIME_TYPE} onDrop={onDropFile}>
+      <Dropzone
+        w="200px"
+        p={6}
+        maxFiles={1}
+        loading={loading}
+        accept={IMAGE_MIME_TYPE}
+        onDrop={onDropFile}
+      >
         <Text ta="center">Upload Image</Text>
       </Dropzone>
 

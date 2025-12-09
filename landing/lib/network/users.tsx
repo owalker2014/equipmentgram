@@ -1,4 +1,14 @@
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "@firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "@firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { db } from "../firebaseConfig/init";
 
@@ -59,7 +69,9 @@ export type UserWithId = User & {
 export const useUsers = () => {
   return useQuery<UserWithId[], Error>([UsersCollection], async () => {
     const snapshot = await getDocs(collection(db, UsersCollection));
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as UserWithId));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() } as UserWithId)
+    );
   });
 };
 
@@ -161,8 +173,13 @@ export const useSetUserType = () => {
 
 export const useGetInspectors = () => {
   return useQuery<User[], Error>([UsersCollection, "inspectors"], async () => {
-    const q = await query(collection(db, UsersCollection), where("type", "==", UserType.inspector));
+    const q = await query(
+      collection(db, UsersCollection),
+      where("type", "==", UserType.inspector)
+    );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as UserWithId));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() } as UserWithId)
+    );
   });
 };

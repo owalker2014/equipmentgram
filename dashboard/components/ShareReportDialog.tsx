@@ -51,13 +51,13 @@ const ShareReportDialog = (inspectionForm: Props) => {
         ...inspectionForm,
         inspectionFormId: inspectionForm.id,
       });
-      setIsLoading(false);
     } catch (error) {
       notifications.show({
-        title: "Report shared failed",
+        title: "Report sharing failed",
         message: `Report failed to share with ${data.sendTo}`,
         color: "red",
       });
+    } finally {
       setIsLoading(false);
     }
   };
