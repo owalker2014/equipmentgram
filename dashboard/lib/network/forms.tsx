@@ -6,6 +6,7 @@ import { UserWithId, UsersCollection } from "./users";
 import { DocumentData } from "firebase-admin/firestore";
 import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
+import { InspectionRequestsCollection } from "./inspection-requests";
 
 export const InspectionFormsCollection = "inspection-forms";
 
