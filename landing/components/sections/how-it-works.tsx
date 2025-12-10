@@ -28,7 +28,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
               <img
                 src="how-it-works-1.png"
                 alt="how-it-works-1"
-                className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg"
+                className="max-w-full lg:ml-auto rounded-lg"
               />
             </div>
           </div>
@@ -39,7 +39,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
               <img
                 src="how-it-works-2.png"
                 alt="how-it-works-2"
-                className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg"
+                className="max-w-full lg:ml-auto rounded-lg"
               />
             </div>
           </div>
@@ -51,7 +51,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
               <img
                 src="how-it-works-3.png"
                 alt="how-it-works-3"
-                className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg"
+                className="max-w-full lg:ml-auto rounded-lg"
               />
             </div>
           </div>
@@ -63,7 +63,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
               <img
                 src="how-it-works-4.png"
                 alt="how-it-works-4"
-                className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg"
+                className="max-w-full lg:ml-auto rounded-lg"
               />
             </div>
           </div>
