@@ -13,7 +13,7 @@ const SavedFormsPage = (props: Props) => {
   const navigation = useRouter();
 
   const items = equipments
-    .filter((o: any) => equipmentsInScope.includes(o.title))
+    .filter((o: any) => Object.keys(equipmentsInScope).includes(o.title))
     .map((item, i) => (
       <EquipmentItem
         key={i}

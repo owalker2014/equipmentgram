@@ -16,6 +16,7 @@ const BackhoeLoaderFormPage: React.FC<{
   const { user } = useAuth();
 
   const add = useAddNewInspectionForm(params.id, user?.uid!);
+
   const questionForm: QuestionForm = {
     pages: [
       {
@@ -24,8 +25,8 @@ const BackhoeLoaderFormPage: React.FC<{
         key: "GeneralAppearance",
         questions: [
           {
-            label: "CE Mark",
-            key: "CEMark",
+            label: "Exterior Lights",
+            key: "ExteriorLights",
           },
           {
             label: "Paint",
@@ -35,17 +36,17 @@ const BackhoeLoaderFormPage: React.FC<{
             label: "Glass",
             key: "Glass",
           },
-          {
-            label: "Steps/Ladder",
-            key: "StepsLadder",
-          },
+          // {
+          //   label: "Steps/Ladder",
+          //   key: "StepsLadder",
+          // },
           {
             label: "Hand Rails",
             key: "HandRails",
           },
           {
-            label: "Exterior Lights",
-            key: "ExteriorLights",
+            label: "Sheet Metal (Fiberglass Condition)",
+            key: "SheetMetal",
           },
         ],
       },

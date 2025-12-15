@@ -66,15 +66,16 @@ const UploadFileField = ({
         description={`capture an image for ${fieldLabel}`}
         onChange={onChange}
         onProgress={() => {}}
+        error={error}
         size="md"
         rightSection={<IconCamera color="grey" style={{ cursor: "pointer" }} />}
       />
 
-      {error && (
+      {/* {error && (
         <Text size="xs" mt={4} color="red">
           {error}
         </Text>
-      )}
+      )} */}
     </>
   );
 };

@@ -10,10 +10,6 @@ export enum EquipmentType {
   MotorGraders = 'Motor Graders',
 }
 
-export const equipmentsInScope = [
-  EquipmentType.MiniExcavators
-]
-
 export enum USStates {
   ALABAMA = 'Alabama',
   ALASKA = 'Alaska',
@@ -103,4 +99,27 @@ export enum EquipmentManufacturer {
   TAKEUCHI_CE = 'Takeuchi CE',
   TEREX_CE = 'Terex CE',
   YANMAR_CE = 'Yanmar CE',
+}
+
+export const equipmentsInScope = {
+  [EquipmentType.MiniExcavators]: {
+    [EquipmentManufacturer.CATERPILLAR_CE]: {
+      models: ["300.9D", "302CR", "303.5E2CR", "305E2CR", "307.5CR"],
+    },
+    [EquipmentManufacturer.BOBCAT]: {
+      models: ['E10', 'E20', 'E26', 'E32', 'E35'],
+    },
+    [EquipmentManufacturer.DEERE]: {
+      models: ['17G', '26G', '35G', '50G', '60G'],
+    },
+    // [EquipmentManufacturer.JCB_CE]: {
+    //   models: ['8018 CTS', '8026 CTS', '8030 CTS', '8035 CTS', '8045 CTS'],
+    // },
+    // [EquipmentManufacturer.KOMATSU_CE]: {
+    //   models: ['PC45MR-5', 'PC55MR-5', 'PC65MR-5'],
+    // },
+    // [EquipmentManufacturer.KUBOTA]: {
+    //   models: ['K008-3', 'KX018-4', 'KX030-4', 'KX040-4', 'KX057-4'],
+    // },
+  },
 }
