@@ -12,11 +12,15 @@ const Footer = (props: Props) => {
           <div className="grid grid-cols-1 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4">
             <div>
               <Link href="/">
-                <div className="text-xl font-extrabold text-blue-700">EquipmentGram</div>
+                <div className="text-xl font-extrabold text-blue-700">
+                  EquipmentGram
+                </div>
               </Link>
             </div>
             <div>
-              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">Company</h2>
+              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
+                Company
+              </h2>
               <ul className="text-gray-500  font-medium">
                 {navLinks
                   .filter((link) => link.title !== "Contact Us")
@@ -30,15 +34,23 @@ const Footer = (props: Props) => {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">Help center</h2>
+              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
+                Help center
+              </h2>
               <ul className="text-gray-500  font-medium">
                 <li className="mb-4">
-                  <a href="https://twitter.com/EquipmentGram" className="hover:underline">
+                  <a
+                    href="https://twitter.com/EquipmentGram"
+                    className="hover:underline"
+                  >
                     Twitter
                   </a>
                 </li>
                 <li className="mb-4">
-                  <a href="https://www.facebook.com/equipmentgram" className="hover:underline">
+                  <a
+                    href="https://www.facebook.com/equipmentgram"
+                    className="hover:underline"
+                  >
                     Facebook
                   </a>
                 </li>
@@ -51,7 +63,9 @@ const Footer = (props: Props) => {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">Legal</h2>
+              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
+                Legal
+              </h2>
               <ul className="text-gray-500  font-medium">
                 <li className="mb-4">
                   <a href="#" className="hover:underline">
@@ -106,7 +120,10 @@ const Footer = (props: Props) => {
                 </svg>
                 <span className="sr-only">Discord community</span>
               </a>
-              <a href="https://twitter.com/EquipmentGram" className="text-gray-400 hover:text-gray-900 ">
+              <a
+                href="https://twitter.com/EquipmentGram"
+                className="text-gray-400 hover:text-gray-900 "
+              >
                 <svg
                   className="w-4 h-4"
                   aria-hidden="true"

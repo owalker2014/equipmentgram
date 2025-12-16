@@ -12,13 +12,16 @@ interface InspectionRequestsForInspectorsTableProps {
   equipmentType: string;
 }
 
-export const InspectionRequestsForInspectorsTable: FC<InspectionRequestsForInspectorsTableProps> = ({
-  equipmentType,
-}) => {
+export const InspectionRequestsForInspectorsTable: FC<
+  InspectionRequestsForInspectorsTableProps
+> = ({ equipmentType }) => {
   const { user } = useAuth();
   const navigation = useRouter();
 
-  const { data, isLoading } = useInspectionRequestsForInspectors(user?.uid, equipmentType);
+  const { data, isLoading } = useInspectionRequestsForInspectors(
+    user?.uid,
+    equipmentType
+  );
 
   if (isLoading) return <CustomLoader />;
 
@@ -72,7 +75,13 @@ export const InspectionRequestsForInspectorsTable: FC<InspectionRequestsForInspe
                 <Table.Td>{getReportStatus(d.reportStatus!)}</Table.Td>
                 <Table.Td>
                   {d.reportStatus === InspectionReportStatus.Pending && (
-                    <Button onClick={() => navigation.push(`/forms/${equipmentType.split(" ").join("-")}/${d.id}`)}>
+                    <Button
+                      onClick={() =>
+                        navigation.push(
+                          `/forms/${equipmentType.split(" ").join("-")}/${d.id}`
+                        )
+                      }
+                    >
                       Fill Form
                     </Button>
                   )}

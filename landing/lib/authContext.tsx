@@ -83,7 +83,9 @@ export default function AuthContextProvider({ children }: Props) {
         );
 
         // Save decoded token on the state
-        user.getIdTokenResult().then((result) => setUser(result as unknown as TIdTokenResult));
+        user
+          .getIdTokenResult()
+          .then((result) => setUser(result as unknown as TIdTokenResult));
       }
       if (!user) setUser(null);
 
@@ -92,7 +94,11 @@ export default function AuthContextProvider({ children }: Props) {
     return () => unsubscribe();
   }, []);
 
-  return <authContext.Provider value={{ user, loading }}>{children}</authContext.Provider>;
+  return (
+    <authContext.Provider value={{ user, loading }}>
+      {children}
+    </authContext.Provider>
+  );
 }
 
 export const useAuth = () => useContext(authContext);

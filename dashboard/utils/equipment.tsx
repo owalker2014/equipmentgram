@@ -1,18 +1,69 @@
-import { IconBackhoe, IconBulldozer, IconCrane, IconFiretruck, IconReceipt } from "@tabler/icons-react";
+import {
+  IconBackhoe,
+  IconBulldozer,
+  IconCrane,
+  IconFiretruck,
+  IconReceipt,
+} from "@tabler/icons-react";
 import { EquipmentType } from "./formUtils";
 import { InspectionFormWithId } from "../lib/network/forms";
 import { UserType } from "../lib/network/users";
 
 export const equipments = [
-  { title: EquipmentType.Backhoe, icon: IconBackhoe, link: "/Backhoe", color: "indigo" },
-  { title: EquipmentType.CompactLoaders, icon: IconBackhoe, link: "/Compact Loaders", color: "blue" },
-  { title: EquipmentType.Dozers, icon: IconBulldozer, link: "/Dozers", color: "green" },
-  { title: EquipmentType.WheelLoaders, icon: IconReceipt, link: "/Wheel Loaders", color: "teal" },
-  { title: EquipmentType.Excavators, icon: IconFiretruck, link: "/Excavators", color: "teal" },
-  { title: EquipmentType.MiniExcavators, icon: IconCrane, link: "/Mini Excavators", color: "cyan" },
-  { title: EquipmentType.Skidsteers, icon: IconBackhoe, link: "/Skidsteers", color: "pink" },
-  { title: EquipmentType.Telehandlers, icon: IconBackhoe, link: "/Telehandlers", color: "red" },
-  { title: EquipmentType.MotorGraders, icon: IconBackhoe, link: "/Motor Graders", color: "orange" },
+  {
+    title: EquipmentType.Backhoe,
+    icon: IconBackhoe,
+    link: "/Backhoe",
+    color: "indigo",
+  },
+  {
+    title: EquipmentType.CompactLoaders,
+    icon: IconBackhoe,
+    link: "/Compact Loaders",
+    color: "blue",
+  },
+  {
+    title: EquipmentType.Dozers,
+    icon: IconBulldozer,
+    link: "/Dozers",
+    color: "green",
+  },
+  {
+    title: EquipmentType.WheelLoaders,
+    icon: IconReceipt,
+    link: "/Wheel Loaders",
+    color: "teal",
+  },
+  {
+    title: EquipmentType.Excavators,
+    icon: IconFiretruck,
+    link: "/Excavators",
+    color: "teal",
+  },
+  {
+    title: EquipmentType.MiniExcavators,
+    icon: IconCrane,
+    link: "/Mini Excavators",
+    color: "cyan",
+  },
+  {
+    title: EquipmentType.Skidsteers,
+    icon: IconBackhoe,
+    link: "/Skidsteers",
+    color: "pink",
+  },
+  {
+    title: EquipmentType.Telehandlers,
+    icon: IconBackhoe,
+    link: "/Telehandlers",
+    color: "red",
+  },
+  {
+    title: EquipmentType.MotorGraders,
+    icon: IconBackhoe,
+    link: "/Motor Graders",
+    color: "orange",
+  },
 ];
 
 export const demoForm: InspectionFormWithId = {
@@ -518,7 +569,8 @@ export const demoForm: InspectionFormWithId = {
   createdByUser: {
     email: "syedshiblimahmud@gmail.com",
     display_name: "Syed Shibli Mahmud",
-    photoURL: "https://lh3.googleusercontent.com/a/AAcHTtdAKAJ2p0r8HUuaEqXHGfQJSi8m6etBbXgqEz-5gKVypSdc=s96-c",
+    photoURL:
+      "https://lh3.googleusercontent.com/a/AAcHTtdAKAJ2p0r8HUuaEqXHGfQJSi8m6etBbXgqEz-5gKVypSdc=s96-c",
     emailVerified: true,
     phoneNumber: "+8801712345678",
     id: "8JiX6SVjhVYjvHhDwCq0HT0BxOu2",

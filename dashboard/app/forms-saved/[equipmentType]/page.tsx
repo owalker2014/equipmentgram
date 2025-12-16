@@ -4,7 +4,10 @@ import CustomLoader from "@/components/CustomLoader";
 import SavePdfButton from "@/components/SavePdfButton";
 import ShareReportDialog from "@/components/ShareReportDialog";
 import { useAuth } from "@/lib/authContext";
-import { InspectionReportStatus, useGetInspectionFormByType } from "@/lib/network/forms";
+import {
+  InspectionReportStatus,
+  useGetInspectionFormByType,
+} from "@/lib/network/forms";
 import { UserType, useGetUser } from "@/lib/network/users";
 import { Avatar, Button, Table, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
@@ -14,7 +17,10 @@ interface ViewSavedFormListByTypePageProps {
   searchParams: any;
 }
 
-function ViewSavedFormListByTypePage({ params, searchParams }: ViewSavedFormListByTypePageProps) {
+function ViewSavedFormListByTypePage({
+  params,
+  searchParams,
+}: ViewSavedFormListByTypePageProps) {
   const { user } = useAuth();
   const { data: userData } = useGetUser(user?.uid);
 
@@ -48,7 +54,9 @@ function ViewSavedFormListByTypePage({ params, searchParams }: ViewSavedFormList
 
   return (
     <div>
-      <Text className="mb-4 text-2xl font-bold">Saved Inspection Forms - {decodeURI(params.equipmentType)}</Text>
+      <Text className="mb-4 text-2xl font-bold">
+        Saved Inspection Forms - {decodeURI(params.equipmentType)}
+      </Text>
 
       <div>
         <Table
@@ -86,20 +94,34 @@ function ViewSavedFormListByTypePage({ params, searchParams }: ViewSavedFormList
                   </div>
                 </Table.Td>
                 <Table.Td>{inspectionForm.form.customerEmail}</Table.Td>
-                <Table.Td>{new Date(inspectionForm.form.dateOfInspection?.toMillis()).toLocaleDateString()}</Table.Td>
+                <Table.Td>
+                  {new Date(
+                    inspectionForm.form.dateOfInspection?.toMillis()
+                  ).toLocaleDateString()}
+                </Table.Td>
                 <Table.Td>{inspectionForm.form.timeOfInspection}</Table.Td>
-                <Table.Td>{getReportStatus(inspectionForm.reportStatus!)}</Table.Td>
+                <Table.Td>
+                  {getReportStatus(inspectionForm.reportStatus!)}
+                </Table.Td>
                 <Table.Td className="flex gap-2 items-center">
-                  {inspectionForm.reportStatus === InspectionReportStatus.Approved && (
+                  {inspectionForm.reportStatus ===
+                    InspectionReportStatus.Approved && (
                     <>
                       <Button
-                        onClick={() => navigation.push(`/forms-saved/${inspectionForm.type}/${inspectionForm.id}`)}
+                        onClick={() =>
+                          navigation.push(
+                            `/forms-saved/${inspectionForm.type}/${inspectionForm.id}`
+                          )
+                        }
                         size="md"
                       >
                         View Report
                       </Button>
                       <SavePdfButton inspectionForm={inspectionForm} />
-                      <ShareReportDialog {...inspectionForm} sentFrom="shibli" />
+                      <ShareReportDialog
+                        {...inspectionForm}
+                        sentFrom="shibli"
+                      />
                     </>
                   )}
                   {/* <SavePdfButton questionForm={inspectionForm.form} /> */}

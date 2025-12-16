@@ -78,8 +78,8 @@ const Pricing = (props: Props) => {
             ))}
           </ul>
 
-          <Link href="/inspection-request">
-            <Button fullWidth>Request An Inspection</Button>
+          <Link href="/signup">
+            <Button fullWidth>Sign Up</Button>
           </Link>
         </div>
       </div>

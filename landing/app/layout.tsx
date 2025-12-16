@@ -24,7 +24,11 @@ const metadata = {
   title: "EquipmentGram",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
@@ -57,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             >
               <Notifications position="top-right" />
               <Navbar />
-              <div>{children}</div>
+              <div className="min-h-[57vh]">{children}</div>
               <Footer />
             </MantineProvider>
           </FirebaseProvider>
