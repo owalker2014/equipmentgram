@@ -13,7 +13,7 @@ import {
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconClock } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UploadFileField from "./upload-file-field";
 import { notifications } from "@mantine/notifications";
 
@@ -99,6 +99,13 @@ const MultiStepForm = ({ questionForm, onSubmit }: Props) => {
     },
   });
 
+  useEffect(() => {
+    if (user && !values.inspectorName) {
+      setFieldValue("inspectorName", user.displayName || "");
+      setFieldValue("customerEmail", user.email || "");
+    }
+  }, [user]);
+
   const nextStep = async () => {
     const { hasErrors, errors } = validate();
 
@@ -178,6 +185,7 @@ const MultiStepForm = ({ questionForm, onSubmit }: Props) => {
               <TextInput
                 label="Inspector Name"
                 {...getInputProps("inspectorName")}
+                disabled
               />
               <TextInput
                 label="Name Of Business at Which Inspection Took Place"
@@ -186,6 +194,7 @@ const MultiStepForm = ({ questionForm, onSubmit }: Props) => {
               <TextInput
                 label="Customer Email"
                 {...getInputProps("customerEmail")}
+                disabled
               />
               <div>
                 <h2 className="text-sm font-bold">
@@ -213,22 +222,24 @@ const MultiStepForm = ({ questionForm, onSubmit }: Props) => {
                 />
                 <TextInput label="Zip" {...getInputProps("zip")} />
               </div>
-              <DateInput
-                label="Date of Inspection"
-                placeholder="Date input"
-                {...getInputProps("dateOfInspection")}
-              />
-              <TimeInput
-                label="Time at Which Inspection Took Place"
-                leftSection={
-                  <IconClock
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={1.5}
-                  />
-                }
-                placeholder="Time input"
-                {...getInputProps("timeOfInspection")}
-              />
+              <div className="grid grid-cols-2 gap-2">
+                <DateInput
+                  label="Date of Inspection"
+                  placeholder="Date input"
+                  {...getInputProps("dateOfInspection")}
+                />
+                <TimeInput
+                  label="Time at Which Inspection Took Place"
+                  leftSection={
+                    <IconClock
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  }
+                  placeholder="Time input"
+                  {...getInputProps("timeOfInspection")}
+                />
+              </div>
             </>
           )}
           {currentStep > 0 &&

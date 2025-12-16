@@ -61,7 +61,7 @@ export default function RootLayout({
             >
               <Notifications position="top-right" />
               <Navbar />
-              <div style={{ minHeight: '57vh' }}>{children}</div>
+              <div className="min-h-[57vh]">{children}</div>
               <Footer />
             </MantineProvider>
           </FirebaseProvider>

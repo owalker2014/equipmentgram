@@ -125,14 +125,14 @@ const Home: NextPage = () => {
         <title>Signin</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="w-full px-4 md:w-1/2 lg:w-1/3 xl:w-1/4 m-auto my-10 md:my-20 lg:my-10 xl:my-20">
+      <div className="w-full px-4 md:w-1/2 m-auto my-10 md:my-20 lg:w-1/3 xl:w-1/4 lg:my-10 xl:my-20">
         <div className="text-center text-sm pb-4 font-extrabold text-blue-700">
           EquipmentGram
           <span className="block text-gray-700 mt-3 font-bold text-lg">
             Log in to your account
           </span>
         </div>
-        <div className="space-y-4 p-8 rounded-lg shadow-lg">
+        <div className="space-y-5 p-8 rounded-lg shadow-lg">
           <TextInput
             label="Email"
             type="email"
@@ -153,7 +153,7 @@ const Home: NextPage = () => {
 
           <Divider label="Or Sign in with" />
 
-          <div className="text-center mb-4 text-gray-600">
+          <div className="text-center text-gray-600">
             <Button
               className="bg-inherit border-none"
               title="Sign in with Google"

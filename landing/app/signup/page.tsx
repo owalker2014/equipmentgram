@@ -113,6 +113,7 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Signup</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="w-full px-4 md:w-1/2 m-auto my-10 md:my-20">
         <h1 className="mb-8 font-bold text-center text-2xl">

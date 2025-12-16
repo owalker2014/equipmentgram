@@ -77,6 +77,12 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       }
     };
 
+    if (!cookies.idToken) {
+      setUser(null);
+      navigation.push(process.env.NEXT_PUBLIC_REDIRECT_URL as string);
+      return;
+    }
+
     checkUserAuth();
   }, []);
 
