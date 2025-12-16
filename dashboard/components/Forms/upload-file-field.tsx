@@ -62,7 +62,7 @@ const UploadFileField = ({
         capture="environment"
         disabled={loading}
         label={fieldLabel}
-        placeholder={fieldLabel}
+        {...{ placeholder: fieldLabel }}
         description={`capture an image for ${fieldLabel}`}
         onChange={onChange}
         onProgress={() => {}}
