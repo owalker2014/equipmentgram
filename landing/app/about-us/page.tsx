@@ -8,16 +8,13 @@ export const metadata: Metadata = {
   title: "EquipmentGram - About Us",
 };
 
-type Props = {
-  indices?: number[];
-  cpr?: number;
-};
+type Props = {};
 
 const AboutUs = (props: Props) => {
   return (
     <>
       <WhatWeDo />
-      <FeaturesGrid indices={props.indices} cpr={props.cpr} />
+      <FeaturesGrid />
     </>
   );
 };
