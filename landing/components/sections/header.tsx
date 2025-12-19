@@ -1,6 +1,8 @@
-import { Button } from "@mantine/core";
+import { Button, Divider } from "@mantine/core";
 import Link from "next/link";
 import { HowItWorksSection } from "./how-it-works";
+import WhatWeDo from "./about-us/what-we-do";
+import { FeaturesGrid } from "./about-us/feature";
 
 type Props = {};
 
@@ -8,7 +10,7 @@ const Header = ({}) => {
   return (
     <>
       <div className="container mx-auto max-w-7xl">
-        <div className="relative bg-white pt-[120px] pb-[110px] lg:pt-[150px]">
+        <div className="relative bg-white pt-[30px] pb-[50px] lg:pt-[50px]">
           <div className="flex flex-wrap">
             <div className="w-full px-4 lg:w-5/12">
               <div className="hero-content">
@@ -24,7 +26,7 @@ const Header = ({}) => {
                 <div className="grid md:grid-cols-2 grid-cols-1 justify-items-stretch">
                   <div>
                     <Link href="/signup">
-                      <Button size="lg" fullWidth>
+                      <Button size="lg" fullWidth className="rounded-s-full">
                         Sign Up
                       </Button>
                     </Link>
@@ -35,6 +37,7 @@ const Header = ({}) => {
                         fullWidth
                         size="lg"
                         variant="white"
+                        className="rounded-e-full bg-blue-50"
                         leftSection={
                           <span className="mr-2">
                             <svg
@@ -106,7 +109,11 @@ const Header = ({}) => {
           </div>
         </div>
       </div>
-      <HowItWorksSection isHome={true} />
+      <Divider />
+      <WhatWeDo />
+      <FeaturesGrid indices={[0, 2, 5, 8, 9, 11]} cpr={3} isLanding={true} />
+      <Divider />
+      <HowItWorksSection isLanding={true} />
     </>
   );
 };

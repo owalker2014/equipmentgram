@@ -8,14 +8,17 @@ export const metadata: Metadata = {
   title: "EquipmentGram - About Us",
 };
 
-type Props = {};
+type Props = {
+  indices?: number[];
+  cpr?: number;
+};
 
 const AboutUs = (props: Props) => {
   return (
-    <div className="container max-w-screen-xl  mx-auto px-4 my-20">
+    <>
       <WhatWeDo />
-      <FeaturesGrid />
-    </div>
+      <FeaturesGrid indices={props.indices} cpr={props.cpr} />
+    </>
   );
 };
 

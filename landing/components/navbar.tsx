@@ -16,6 +16,19 @@ import NavUserMenu from "./nav-user-menu";
 
 type Props = {};
 
+const ContactSales = () => {
+  return (
+    <Link href="/how-it-works#calendly-sales">
+      <Button
+        variant="default"
+        className="rounded-full bg-blue-50 hover:bg-blue-200 border-none text-blue-700 mr-2"
+      >
+        Contact Sales
+      </Button>
+    </Link>
+  );
+};
+
 const Navbar = ({}: Props) => {
   const [opened, { open, close }] = useDisclosure();
   const { user } = useAuth();
@@ -29,7 +42,7 @@ const Navbar = ({}: Props) => {
               EquipmentGram
             </div>
           </Link>
-          <ul className="flex-col hidden p-4 mt-4 font-medium border border-gray-100 rounded-lg md:flex md:p-0 bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white ">
+          {/* <ul className="flex-col hidden p-4 mt-4 font-medium border border-gray-100 rounded-lg md:flex md:p-0 bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white ">
             {navLinks.map((item, i) => (
               <li key={i}>
                 <Link
@@ -40,24 +53,30 @@ const Navbar = ({}: Props) => {
                 </Link>
               </li>
             ))}
-            {/* <li>
+            <li>
               <Link
                 href="/admin/inspection-requests"
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
               >
                 Admin
               </Link>
-            </li> */}
-          </ul>
+            </li>
+          </ul> */}
           <div className="flex gap-2">
             {!user ? (
               <div className="space-x-2 hidden md:block">
-                <Link href="/signup">
-                  <Button>Sign Up</Button>
-                </Link>
                 <Link href="/signin">
-                  <Button variant="outline">Sign In</Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-none"
+                  >
+                    Sign In
+                  </Button>
                 </Link>
+                <Link href="/signup">
+                  <Button className="rounded-full">Sign Up</Button>
+                </Link>
+                <ContactSales />
               </div>
             ) : (
               <NavUserMenu />
@@ -102,13 +121,20 @@ const Navbar = ({}: Props) => {
           {!user && (
             <div className="grid grid-cols-2 gap-2">
               <Link href="/signin">
-                <Button fullWidth variant="outline">
+                <Button
+                  fullWidth
+                  variant="outline"
+                  className="rounded-full border-none"
+                >
                   Sign In
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button fullWidth>Sign Up</Button>
+                <Button fullWidth className="rounded-full">
+                  Sign Up
+                </Button>
               </Link>
+              <ContactSales />
             </div>
           )}
         </ul>
