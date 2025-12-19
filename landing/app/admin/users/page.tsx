@@ -9,7 +9,11 @@ import { NextPage } from "next";
 import { useState } from "react";
 
 const Inspectors: NextPage = () => {
-  const [types, setTypes] = useState<UserType[]>([UserType.admin, UserType.inspector, UserType.customer]);
+  const [types, setTypes] = useState<UserType[]>([
+    UserType.admin,
+    UserType.inspector,
+    UserType.customer,
+  ]);
   const [userIds] = useState<string[]>([]);
   const { user, loading } = useAuth();
   const { data: users, isLoading } = useUsers();

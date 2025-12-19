@@ -40,7 +40,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       const cookies = parseCookies();
       if (!cookies.idToken) {
         setUser(null);
-        navigation.push(process.env.NEXT_PUBLIC_REDIRECT_URL as string);
+        navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       }
 
       if (user) {
@@ -73,13 +73,13 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         setUser(signInResponse.user);
       } else {
         console.error("Error:", response.statusText);
-        navigation.push(process.env.NEXT_PUBLIC_REDIRECT_URL as string);
+        navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       }
     };
 
     if (!cookies.idToken) {
       setUser(null);
-      navigation.push(process.env.NEXT_PUBLIC_REDIRECT_URL as string);
+      navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       return;
     }
 
