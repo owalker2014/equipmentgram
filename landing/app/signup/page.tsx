@@ -115,7 +115,7 @@ const Home: NextPage = () => {
         <title>Signup</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="w-full px-4 md:w-1/2 m-auto my-10 md:my-20">
+      <div className="w-full px-4 md:w-1/2 m-auto my-10 md:my-10 pb-4">
         <h1 className="mb-8 font-bold text-center text-2xl">
           Individual Registration
         </h1>
@@ -161,19 +161,25 @@ const Home: NextPage = () => {
             />
           </div>
 
-          <TextInput
-            label="Name Of Business"
-            {...getInputProps("nameOfBusiness")}
-          />
-          <TextInput
-            label="Address"
-            placeholder="Address Line 1"
-            {...getInputProps("addressLine1")}
-          />
-          <TextInput
-            placeholder="Address Line 2"
-            {...getInputProps("addressLine2")}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <TextInput
+              label="Name Of Business"
+              {...getInputProps("nameOfBusiness")}
+            />
+            <TextInput label="Job/Job Title" {...getInputProps("jobTitle")} />
+          </div>
+
+          <div className="grid gap-4">
+            <TextInput
+              label="Address"
+              placeholder="Address Line 1"
+              {...getInputProps("addressLine1")}
+            />
+            <TextInput
+              placeholder="Address Line 2"
+              {...getInputProps("addressLine2")}
+            />
+          </div>
 
           <div className="grid grid-cols-8 gap-4">
             <TextInput
@@ -197,7 +203,6 @@ const Home: NextPage = () => {
               {...getInputProps("zipCode")}
             />
           </div>
-          <TextInput label="Job/Job Title" {...getInputProps("jobTitle")} />
 
           <Button loading={isCreatingUser || isLoadingSetUser} type="submit">
             Submit

@@ -1,15 +1,15 @@
 import React from "react";
 
 type HowItWorksSectionProps = {
-  isHome?: boolean;
+  isLanding?: boolean;
 };
 
 export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
-  isHome = false,
+  isLanding = false,
 }) => {
   return (
     <section
-      className={`${isHome ? "bg-gray-100" : "bg-white"} py-20`}
+      className={`${isLanding ? "bg-blue-50" : "bg-white"} py-10`}
       id="how-it-works"
     >
       <div className="container mx-auto px-4 max-w-7xl">

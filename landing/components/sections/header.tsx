@@ -1,31 +1,34 @@
-import { Button } from "@mantine/core";
+import { Button, Divider } from "@mantine/core";
 import Link from "next/link";
 import { HowItWorksSection } from "./how-it-works";
+import WhatWeDo from "./about-us/what-we-do";
+import { FeaturesGrid } from "./about-us/feature";
 
 type Props = {};
 
 const Header = ({}) => {
+  const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL!;
   return (
     <>
       <div className="container mx-auto max-w-7xl">
-        <div className="relative bg-white pt-[120px] pb-[110px] lg:pt-[150px]">
+        <div className="relative bg-white pt-[30px] pb-[50px] lg:pt-[50px]">
           <div className="flex flex-wrap">
             <div className="w-full px-4 lg:w-5/12">
               <div className="hero-content">
                 <h1 className="text-dark mb-3 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">
-                  Streamline Your Heavy Equipment Inspections and Accounting
+                  Streamline Your Excavator Inspections and Record-keeping
                 </h1>
                 <p className="mb-8 text-base">
                   EquipmentGram improves the buying and selling experience for
-                  buyers and sellers of construction equipment with the use of
-                  equipment inspection reports that can be easily managed and
-                  distributed by buyers and sellers for different purposes
+                  excavator owners, buyers, and sellers by enabling easy
+                  creation, management, and distribution of inspection reports
+                  directly through a phone app.
                 </p>
                 <div className="grid md:grid-cols-2 grid-cols-1 justify-items-stretch">
                   <div>
-                    <Link href="/signup">
-                      <Button size="lg" fullWidth>
-                        Sign Up
+                    <Link href={dashboardUrl}>
+                      <Button size="lg" fullWidth className="rounded-s-full">
+                        Produce a report
                       </Button>
                     </Link>
                   </div>
@@ -35,6 +38,7 @@ const Header = ({}) => {
                         fullWidth
                         size="lg"
                         variant="white"
+                        className="rounded-e-full bg-blue-50"
                         leftSection={
                           <span className="mr-2">
                             <svg
@@ -106,7 +110,11 @@ const Header = ({}) => {
           </div>
         </div>
       </div>
-      <HowItWorksSection isHome={true} />
+      <Divider />
+      <WhatWeDo />
+      <FeaturesGrid indices={[0, 2, 5, 8, 9, 11]} cpr={3} isLanding={true} />
+      <Divider />
+      <HowItWorksSection isLanding={true} />
     </>
   );
 };

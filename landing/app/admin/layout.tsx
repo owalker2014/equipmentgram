@@ -36,7 +36,7 @@ export type AdminLayoutProps = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const path = usePathname();
-  const [value, setValue] = useState(path.split("/")[2]);
+  const [value, setValue] = useState(path?.split("/")[2]);
 
   const { user } = useAuth();
   const { data: userData, isLoading } = useGetUser(user?.claims.user_id as string);

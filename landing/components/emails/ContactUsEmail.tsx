@@ -9,17 +9,29 @@ export interface ContactUsEmailProps {
   message: string;
 }
 
-const ContactUsEmail = ({ email, message, name, phone }: ContactUsEmailProps) => {
+const ContactUsEmail = ({
+  email,
+  message,
+  name,
+  phone,
+}: ContactUsEmailProps) => {
   return (
     <Html>
       <Head />
       <Tailwind>
         <Body>
-          <Text className="text-[18px] font-bold p-0 my-[30px] mx-0">{name} wants to connect with you.</Text>
-
-          <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">Email: {email}</Text>
-          <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">Phone: {phone}</Text>
-          <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">Message: {message}</Text>
+          <Text className="text-[18px] font-bold p-0 my-[30px] mx-0">
+            {name} wants to connect with you.
+          </Text>
+          <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">
+            Email: {email}
+          </Text>
+          <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">
+            Phone: {phone}
+          </Text>
+          <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">
+            Message: {message}
+          </Text>
         </Body>
       </Tailwind>
     </Html>

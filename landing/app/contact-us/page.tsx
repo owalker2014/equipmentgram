@@ -1,7 +1,7 @@
 "use client";
 
 import { HowItWorksSection } from "@/components/sections/how-it-works";
-import { Button, TextInput, Textarea } from "@mantine/core";
+import { Button, Divider, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -10,7 +10,7 @@ type Props = {};
 
 const ContactUs = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { reset, getInputProps, onSubmit, onReset } = useForm({
+  const { reset, getInputProps, onSubmit } = useForm({
     initialValues: {
       name: "",
       email: "",
@@ -55,72 +55,74 @@ const ContactUs = (props: Props) => {
     <>
       <HowItWorksSection />
       <section className="bg-gray-100" id="contact">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="mb-4">
-            <div className="mb-3 max-w-3xl text-center sm:text-center md:mx-auto md:mb-3">
-              {/* <p className="text-base font-semibold uppercase tracking-wide text-blue-600 ">
-                Contact
-              </p> */}
-              <h4 className="font-heading mb-4 font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
-                Get in Touch
-              </h4>
-            </div>
-          </div>
-          <div className="flex items-stretch justify-center">
-            <div className="flex">
-              <div
-                className="card min-w-[600px] h-fit max-w-6xl p-5 md:p-5"
-                id="form"
-              >
-                <h2 className="mb-4 text-xl text-center font-bold">
-                  Ready to Get Started?
-                </h2>
-                <form id="contactForm" onSubmit={onSubmit(onSubmitForm)}>
-                  <div className="mb-6">
-                    <div className="mx-0 mb-1 sm:mb-4">
-                      <div className="mx-0 mb-1 sm:mb-4">
-                        <TextInput
-                          placeholder="Your Name"
-                          {...getInputProps("name")}
-                        />
-                      </div>
-                      <div className="mx-0 mb-1 sm:mb-4">
-                        <TextInput
-                          placeholder="Your Email"
-                          type="email"
-                          {...getInputProps("email")}
-                        />
-                      </div>
-                      <div className="mx-0 mb-1 sm:mb-4">
-                        <TextInput
-                          placeholder="Your Phone"
-                          type="tel"
-                          {...getInputProps("phone")}
-                        />
-                      </div>
-                    </div>
-                    <div className="mx-0 mb-1 sm:mb-4">
-                      <Textarea
-                        placeholder="Your Message"
-                        rows={5}
-                        cols={30}
-                        {...getInputProps("message")}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <Button
-                      type="submit"
-                      fullWidth
-                      size="md"
-                      loading={isLoading}
-                    >
-                      Send Message
-                    </Button>
-                  </div>
-                </form>
+        <div className="container bg-blue-100x mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10 flex flex-row gap-10 sm:flex-col md:flex-col lg:flex-row">
+          <div className="flex flex-col flex-grow" id="contact-us">
+            <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
+              Get in Touch
+            </h2>
+            <h4 className="mb-2 mt-0 font-medium text-gray-500">
+              Ready to Get Started?
+            </h4>
+            <small className="mb-7 text-gray-500">
+              Leave us a message below and we will get back to you as soon as
+              possible.
+            </small>
+            <form id="contactForm" onSubmit={onSubmit(onSubmitForm)}>
+              <div className="mb-6">
+                <div className="mx-0 mb-1 sm:mb-4">
+                  <TextInput
+                    placeholder="Your Name"
+                    {...getInputProps("name")}
+                  />
+                </div>
+                <div className="mx-0 mb-1 sm:mb-4">
+                  <TextInput
+                    placeholder="Your Email"
+                    type="email"
+                    {...getInputProps("email")}
+                  />
+                </div>
+                <div className="mx-0 mb-1 sm:mb-4">
+                  <TextInput
+                    placeholder="Your Phone"
+                    type="tel"
+                    {...getInputProps("phone")}
+                  />
+                </div>
+                <div className="mx-0 mb-1 sm:mb-4">
+                  <Textarea
+                    placeholder="Your Message"
+                    rows={7}
+                    cols={30}
+                    {...getInputProps("message")}
+                  />
+                </div>
               </div>
-            </div>
+              <Button type="submit" size="md" loading={isLoading}>
+                Send Message
+              </Button>
+            </form>
+          </div>
+
+          <Divider orientation="vertical" className="md:visible" />
+
+          <div className="flex flex-col" id="calendly-sales">
+            <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
+              Let's Talk
+            </h2>
+            <h4 className="mb-5 mt-0 font-medium text-gray-500">
+              Schedule a meeting with a Sales Executive
+            </h4>
+            <div
+              className="bg-white calendly-inline-widget w-[20vw] min-w-[320px] h-[500px]"
+              data-url="https://calendly.com/tobiwalker2014/30min?hide_event_type_details=1&hide_gdpr_banner=1"
+              // style={{ minWidth: "320px", height: "700px" }}
+            ></div>
+            <script
+              type="text/javascript"
+              src="https://assets.calendly.com/assets/external/widget.js"
+              async
+            ></script>
           </div>
         </div>
       </section>
