@@ -7,6 +7,7 @@ import { FeaturesGrid } from "./about-us/feature";
 type Props = {};
 
 const Header = ({}) => {
+  const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL!;
   return (
     <>
       <div className="container mx-auto max-w-7xl">
@@ -15,19 +16,19 @@ const Header = ({}) => {
             <div className="w-full px-4 lg:w-5/12">
               <div className="hero-content">
                 <h1 className="text-dark mb-3 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">
-                  Streamline Your Heavy Equipment Inspections and Accounting
+                  Streamline Your Excavator Inspections and Record-keeping
                 </h1>
                 <p className="mb-8 text-base">
                   EquipmentGram improves the buying and selling experience for
-                  buyers and sellers of construction equipment with the use of
-                  equipment inspection reports that can be easily managed and
-                  distributed by buyers and sellers for different purposes
+                  excavator owners, buyers, and sellers by enabling easy
+                  creation, management, and distribution of inspection reports
+                  directly through a phone app.
                 </p>
                 <div className="grid md:grid-cols-2 grid-cols-1 justify-items-stretch">
                   <div>
-                    <Link href="/signup">
+                    <Link href={dashboardUrl}>
                       <Button size="lg" fullWidth className="rounded-s-full">
-                        Sign Up
+                        Produce a report
                       </Button>
                     </Link>
                   </div>

@@ -1,19 +1,5 @@
-import {
-  ThemeIcon,
-  Text,
-  Title,
-  Container,
-  SimpleGrid,
-  rem,
-  Button,
-} from "@mantine/core";
-import {
-  IconGauge,
-  IconCookie,
-  IconUser,
-  IconMessage2,
-  IconLock,
-} from "@tabler/icons-react";
+import { Text, Title, SimpleGrid, Button } from "@mantine/core";
+import { IconGauge } from "@tabler/icons-react";
 import Link from "next/link";
 
 export const MOCKDATA = [
@@ -21,73 +7,73 @@ export const MOCKDATA = [
     icon: IconGauge,
     title: "Transparency",
     description:
-      "Empowers buyers with information and trust to make informed and confident purchasing decisions possible",
+      "Gives buyers and sellers clear visibility into excavator condition for more confident decisions.",
   },
   {
     icon: IconGauge,
     title: "Quality Assurance",
     description:
-      "Ensures that the equipment being bought and sold is in good condition, as it directly impacts the buyers/sellers' experience and long-term satisfaction",
+      "Helps verify the condition of excavators at the point of sale or transfer.",
   },
   {
     icon: IconGauge,
     title: "Risk Mitigation",
     description:
-      "Reduced risk means buyers/sellers are less likely to face unexpected expenses or downtime due to equipment issues",
+      "Reduces unexpected repair costs and downtime by identifying issues early.",
   },
   {
     icon: IconGauge,
-    title: "Insurance Benefits",
+    title: "Insurance & Financing Support",
     description:
-      "Some insurance companies may offer better rates for equipment with documented inspection reports",
+      "Documented inspection reports may support better insurance or financing terms.",
   },
   {
     icon: IconGauge,
     title: "Standardization",
     description:
-      "Providing standardized inspection reports simplifies the buying/selling process and enhances the efficiency of the marketplace",
+      "Standardized excavator reports simplify comparison and speed up transactions.",
   },
   {
     icon: IconGauge,
     title: "Credibility",
     description:
-      "The involvement of professional inspectors instills confidence in the accuracy of the inspection reports, making the service more trustworthy",
+      "Consistent, structured reports improve trust in shared condition data.",
   },
   {
     icon: IconGauge,
     title: "Peace of Mind",
     description:
-      "Offering buyers/sellers peace of mind is a valuable benefit, as it reduces stress and anxiety associated with significant purchases",
+      "Reduces uncertainty and stress around high-value excavator purchases.",
   },
   {
     icon: IconGauge,
     title: "Market Efficiency",
     description:
-      "Streamlining the buying and selling process in the construction equipment market benefits all parties involved and enhances overall market efficiency",
+      "Faster, clearer information flow improves excavator buying and selling outcomes.",
   },
   {
     icon: IconGauge,
     title: "Improved Resale Value",
     description:
-      "For sellers, having an EquipmentGram inspection report can help justify a higher resale price",
+      "Well-documented excavators are easier to price and justify at resale.",
   },
   {
     icon: IconGauge,
     title: "Reduced Fraud",
     description:
-      "Helps reduce the likelihood of fraud and misrepresentation of equipment condition",
+      "Clear documentation helps limit misrepresentation of excavator condition.",
   },
   {
     icon: IconGauge,
-    title: "Regulatory Compliance",
+    title: "Compliance Readiness",
     description:
-      "Ensures that equipment meets all necessary regulatory and safety standards",
+      "Supports documentation needed for safety, regulatory, or internal requirements.",
   },
   {
     icon: IconGauge,
     title: "Long-Term Reliability",
     description:
-      "Buyers can expect better long-term reliability and durability from equipment with documented inspections",
+      "Better condition tracking supports stronger long-term ownership outcomes.",
   },
 ];
 
@@ -152,7 +138,7 @@ export function FeaturesGrid({
           <div className="mt-10">
             <p className="mb-2">
               Join us on this journey to bring transparency, trust, and
-              reliability to the construction equipment marketplace.&nbsp;
+              reliability to the excavator marketplace.&nbsp;
               <Link href="/contact-us" className="font-bold text-blue-700">
                 Ready to get started? Contact us today!
               </Link>

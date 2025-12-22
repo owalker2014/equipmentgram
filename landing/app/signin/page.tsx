@@ -37,7 +37,7 @@ const Home: NextPage = () => {
 
         try {
           await updateUserAfterLogin(user);
-          router.push(process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "/");
+          router.push("/");
         } catch (e) {
           console.error("[login][updateUserAfterLogin] error --> ", e);
         }
@@ -67,7 +67,8 @@ const Home: NextPage = () => {
 
         try {
           await updateUserAfterLogin(user);
-          router.push(process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "/");
+          // router.push(process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "/");
+          router.push("/");
         } catch (e) {
           console.error(
             "[loginWithGoogle][updateUserAfterLogin] error --> ",

@@ -79,7 +79,10 @@ const Navbar = ({}: Props) => {
                 <ContactSales />
               </div>
             ) : (
-              <NavUserMenu />
+              <>
+                <ContactSales />
+                <NavUserMenu />
+              </>
             )}
             <div className="md:hidden inline-flex ">
               <ActionIcon onClick={open} variant="white" color="dark">

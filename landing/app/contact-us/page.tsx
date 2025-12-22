@@ -111,7 +111,7 @@ const ContactUs = (props: Props) => {
               Let's Talk
             </h2>
             <h4 className="mb-5 mt-0 font-medium text-gray-500">
-              Ready to Connect with a Sales Executive?
+              Schedule a meeting with a Sales Executive
             </h4>
             <div
               className="bg-white calendly-inline-widget w-[20vw] min-w-[320px] h-[500px]"

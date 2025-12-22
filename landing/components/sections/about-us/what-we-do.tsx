@@ -17,22 +17,26 @@ const WhatWeDo: React.FC<Props> = ({ isLanding = false }) => {
             <Title className="text-blue-700">What We Do</Title>
 
             <Text c="dimmed" className="">
-              EquipmentGram is your trusted partner when it comes to evaluating
-              the condition and history of construction equipment. We work with
-              a network of dedicated inspectors who meticulously assess heavy
-              machinery and provide detailed inspection reports. These reports
-              help you make informed decisions, whether you're looking to buy,
-              sell, or maintain your equipment.
+              EquipmentGram is focused on{" "}
+              <span className="font-bold text-gray-700">
+                excavator inspections
+              </span>
+              . Using the EquipmentGram{" "}
+              <span className="font-bold text-gray-700">phone app</span>, anyone
+              with a phone or tablet can capture excavator component data and
+              generate standardized inspection reports. These reports help
+              buyers, sellers, and owners make informed decisions and can be
+              easily shared.
             </Text>
           </div>
           <div className="space-y-2 px-5">
             <Title className="text-blue-700">Our Mission</Title>
 
             <Text c="dimmed" className="">
-              EquipmentGram is here to bridge the gap between the world of
-              construction equipment inspections and technology. Our mission is
-              to simplify the equipment inspection process, save customers time
-              and money, and to ensure that customers get the most out of their
+              EquipmentGram's mission is to simplify excavator inspections by
+              allowing anyone with a smartphone or tablet to produce an
+              inspection report. We aim to reduce uncertainty, save time and
+              cost, and help customers get more value from their excavator
               investments.
             </Text>
           </div>
