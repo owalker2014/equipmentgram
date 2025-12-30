@@ -18,10 +18,10 @@ type Props = {};
 
 const ContactSales = () => {
   return (
-    <Link href="/how-it-works#calendly-sales">
+    <Link href="/contact-sales">
       <Button
         variant="default"
-        className="rounded-full bg-blue-50 hover:bg-blue-200 border-none text-blue-700 mr-2"
+        className="rounded-full bg-blue-50 hover:bg-blue-200 border-none text-blue-700 mr-2 hidden md:block"
       >
         Contact Sales
       </Button>
