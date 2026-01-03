@@ -3,6 +3,7 @@ import WhatWeDo from "@/components/sections/about-us/what-we-do";
 import React from "react";
 
 import type { Metadata } from "next";
+import { Divider } from "@mantine/core";
 
 export const metadata: Metadata = {
   title: "EquipmentGram - About Us",
@@ -14,6 +15,7 @@ const AboutUs = (props: Props) => {
   return (
     <>
       <WhatWeDo />
+      <Divider />
       <FeaturesGrid />
     </>
   );

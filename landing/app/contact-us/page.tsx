@@ -1,7 +1,7 @@
 "use client";
 
 import { HowItWorksSection } from "@/components/sections/how-it-works";
-import { Button, Divider, TextInput, Textarea } from "@mantine/core";
+import { Button, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -55,7 +55,7 @@ const ContactUs = (props: Props) => {
     <>
       <HowItWorksSection />
       <section className="bg-gray-100" id="contact">
-        <div className="container bg-blue-100x mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10 flex flex-row gap-10 sm:flex-col md:flex-col lg:flex-row">
+        <div className="container bg-blue-100x mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10 flex flex-row gap-10 sm:flex-col md:flex-col lg:flex-row">
           <div className="flex flex-col flex-grow" id="contact-us">
             <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
               Get in Touch
@@ -102,27 +102,6 @@ const ContactUs = (props: Props) => {
                 Send Message
               </Button>
             </form>
-          </div>
-
-          <Divider orientation="vertical" className="md:visible" />
-
-          <div className="flex flex-col" id="calendly-sales">
-            <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
-              Let's Talk
-            </h2>
-            <h4 className="mb-5 mt-0 font-medium text-gray-500">
-              Schedule a meeting with a Sales Executive
-            </h4>
-            <div
-              className="bg-white calendly-inline-widget w-[20vw] min-w-[320px] h-[500px]"
-              data-url="https://calendly.com/tobiwalker2014/30min?hide_event_type_details=1&hide_gdpr_banner=1"
-              // style={{ minWidth: "320px", height: "700px" }}
-            ></div>
-            <script
-              type="text/javascript"
-              src="https://assets.calendly.com/assets/external/widget.js"
-              async
-            ></script>
           </div>
         </div>
       </section>

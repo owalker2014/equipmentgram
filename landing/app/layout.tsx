@@ -33,6 +33,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script
+          async
+          defer
           src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDa5QyoPFwUz6X6U2znLg88tBWDenn3KTs&libraries=places`}
         ></script>
         <ColorSchemeScript />

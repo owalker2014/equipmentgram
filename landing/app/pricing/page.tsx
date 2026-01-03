@@ -95,7 +95,7 @@ const Pricing = (props: Props) => {
             </ul>
 
             <Link href={dashboardUrl}>
-              <Button fullWidth>Produce a report</Button>
+              <Button fullWidth>Produce a Report</Button>
             </Link>
           </div>
         </div>

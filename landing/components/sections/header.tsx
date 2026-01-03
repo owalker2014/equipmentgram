@@ -16,7 +16,7 @@ const Header = ({}) => {
             <div className="w-full px-4 lg:w-5/12">
               <div className="hero-content">
                 <h1 className="text-dark mb-3 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">
-                  Streamline Your Excavator Inspections and Record-keeping
+                  Streamline Your Excavator Inspections and Record-Keeping
                 </h1>
                 <p className="mb-8 text-base">
                   EquipmentGram improves the buying and selling experience for
@@ -28,7 +28,7 @@ const Header = ({}) => {
                   <div>
                     <Link href={dashboardUrl}>
                       <Button size="lg" fullWidth className="rounded-s-full">
-                        Produce a report
+                        Produce a Report
                       </Button>
                     </Link>
                   </div>
@@ -111,10 +111,10 @@ const Header = ({}) => {
         </div>
       </div>
       <Divider />
-      <WhatWeDo />
-      <FeaturesGrid indices={[0, 2, 5, 8, 9, 11]} cpr={3} isLanding={true} />
-      <Divider />
+      <WhatWeDo isLanding={true} />
       <HowItWorksSection isLanding={true} />
+      <Divider />
+      <FeaturesGrid indices={[0, 2, 5, 8, 9, 11]} cpr={3} isLanding={true} />
     </>
   );
 };
