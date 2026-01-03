@@ -150,7 +150,7 @@ export function FeaturesGrid({
           <div className="mt-5 flex flex-row justify-end">
             <Link href="/pricing">
               <Button fullWidth size="md" className="rounded-s-full">
-                Check pricing
+                Check Pricing
               </Button>
             </Link>
             <Link href={dashboardUrl}>
@@ -159,7 +159,7 @@ export function FeaturesGrid({
                 size="md"
                 className="text-blue-700 rounded-e-full bg-white hover:bg-blue-100"
               >
-                Produce a report &nbsp;&#x2192;
+                Produce a Report &nbsp;&#x2192;
               </Button>
             </Link>
           </div>

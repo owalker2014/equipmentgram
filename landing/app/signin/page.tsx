@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -166,6 +167,18 @@ const Home: NextPage = () => {
                 className="inline h-5 mr-2"
               />
             </Button>
+          </div>
+          <Divider label="Don't have an account?" />
+          <div className="text-sm text-gray-500 text-center">
+            <Link href="/signup">
+              <Button
+                variant="outline"
+                size="compact-sm"
+                className="border-none"
+              >
+                Sign Up
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
