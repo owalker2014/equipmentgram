@@ -121,7 +121,7 @@ export function FeaturesGrid({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-4">
         <Title className="text-center">EquipmentGram's Benefits</Title>
 
-        <Text size="sm" className="text-center">
+        <Text size="sm" className="text-center text-gray-600">
           Below are some benefits that come with using EquipmentGram reports
         </Text>
 

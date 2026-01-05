@@ -1,11 +1,15 @@
-// "use client";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "EquipmentGram - Contact Sales",
+};
 
 type Props = {};
 
 const ContactSales = () => {
   return (
     <>
-      <section id="contact" style={{ display: 'block' }}>
+      <section id="contact" style={{ display: "block" }}>
         <div className="container mx-auto max-w-7xl px-4 py-8">
           <div id="calendly-sales">
             <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
