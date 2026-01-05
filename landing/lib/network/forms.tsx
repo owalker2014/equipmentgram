@@ -65,6 +65,10 @@ export interface InspectionForm {
   reportStatus?: InspectionReportStatus;
 }
 
+export interface InspectionFormWithId extends InspectionForm {
+  id: string;
+}
+
 export const useAddNewInspectionForm = (inspectionRequestId: string, userId: string) => {
   const queryClient = useQueryClient();
 
@@ -107,10 +111,6 @@ export const useAddNewInspectionForm = (inspectionRequestId: string, userId: str
     }
   );
 };
-
-export interface InspectionFormWithId extends InspectionForm {
-  id: string;
-}
 
 export const useGetInspectionFormByType = (equipmentType: string) => {
   return useQuery<InspectionFormWithId[], Error>(

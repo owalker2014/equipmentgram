@@ -1,6 +1,5 @@
 "use client";
 
-import { HowItWorksSection } from "@/components/sections/how-it-works";
 import { Button, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -53,20 +52,15 @@ const ContactUs = (props: Props) => {
 
   return (
     <>
-      <HowItWorksSection />
       <section className="bg-gray-100" id="contact">
         <div className="container bg-blue-100x mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10 flex flex-row gap-10 sm:flex-col md:flex-col lg:flex-row">
           <div className="flex flex-col flex-grow" id="contact-us">
             <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
               Get in Touch
             </h2>
-            <h4 className="mb-2 mt-0 font-medium text-gray-500">
+            <h4 className="mb-9 mt-0 font-medium text-gray-500">
               Ready to Get Started?
             </h4>
-            <small className="mb-7 text-gray-500">
-              Leave us a message below and we will get back to you as soon as
-              possible.
-            </small>
             <form id="contactForm" onSubmit={onSubmit(onSubmitForm)}>
               <div className="mb-6">
                 <div className="mx-0 mb-1 sm:mb-4">

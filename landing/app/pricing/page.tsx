@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 import Head from "next/head";
@@ -51,11 +51,10 @@ const Pricing = (props: Props) => {
         <title>EquipmentGram - Pricing</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="my-10 container px-4 mx-auto max-w-screen-xl">
-        <div className="flex items-center justify-center flex-col gap-10">
-          <h1 className="text-4xl font-bold text-gray-900 ">
-            Pricing Details for An Inspection Report
-          </h1>
+      <div className="container px-4 mx-auto max-w-screen-xl py-10">
+        <Title className="text-center">Pricing Details for An Inspection Report</Title>
+
+        <div className="flex items-center justify-center flex-col gap-10 pt-10">
           <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg  sm:p-8">
             <h5 className="mb-4 text-xl font-medium text-gray-500 ">
               Standard plan

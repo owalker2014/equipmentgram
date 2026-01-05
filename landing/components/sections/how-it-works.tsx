@@ -1,3 +1,4 @@
+import { Text, Title } from "@mantine/core";
 import React from "react";
 
 type HowItWorksSectionProps = {
@@ -14,11 +15,12 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
     >
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">How It Works</h2>
-          <p className="text-gray-600 mb-12">
+          <Title className="text-center">How It Works</Title>
+  
+          <Text size="sm" className="text-center text-gray-600">
             Below are the steps for generating an inspection report by anyone
             using their tablet or smartphone.
-          </p>
+          </Text>
         </div>
         <div className="flex flex-wrap -mx-4 mt-12">
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 mb-8">
