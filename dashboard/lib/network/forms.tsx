@@ -241,27 +241,29 @@ export const useGetInspectionFormById = (id: string) => {
       const docRef = doc(db, inspectionFormsCollection, id);
       const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const createdByUserUid = data.createdByUserUid;
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const createdByUserUid = data.createdByUserUid;
 
         const userDocRef = doc(db, usersCollection, createdByUserUid);
         const userDocSnap = await getDoc(userDocRef);
 
-      if (userDocSnap.exists()) {
-        const createdByUser = userDocSnap.data() as UserWithId; // Cast the user document to UserWithId type
+        if (userDocSnap.exists()) {
+          const createdByUser = userDocSnap.data() as UserWithId; // Cast the user document to UserWithId type
 
-        return {
-          type: data.type,
-          createdByUserUid: createdByUserUid,
-          form: data.form,
-          createdByUser: createdByUser as UserWithId, // Cast the createdByUser property to UserWithId type
-        };
+          return {
+            id: data.id,
+            type: data.type,
+            createdByUserUid: createdByUserUid,
+            form: data.form,
+            createdByUser: createdByUser as UserWithId, // Cast the createdByUser property to UserWithId type
+          };
+        } else {
+          throw new Error("User does not exist");
+        }
       } else {
-        throw new Error("User does not exist");
+        throw new Error("Inspection form does not exist");
       }
-    } else {
-      throw new Error("Inspection form does not exist");
     }
-  });
+  );
 };
