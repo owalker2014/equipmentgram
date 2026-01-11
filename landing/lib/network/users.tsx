@@ -103,7 +103,6 @@ export const useSetUser = () => {
     (user: User) => {
       const docRef = doc(db, UsersCollection, user.user_id);
       return setDoc(docRef, user);
-
       // return addDoc(collection(db, UsersCollection, user.id), user);
     },
     {
