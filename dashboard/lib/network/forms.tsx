@@ -4,7 +4,15 @@ import {
   QueryConstraint,
 } from "@firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { DocumentReference, doc, getDoc, getDocs, query, runTransaction, where } from "firebase/firestore";
+import {
+  DocumentReference,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  runTransaction,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig/init";
 import { UserWithId, usersCollection } from "./users";
 import { DocumentData } from "firebase-admin/firestore";
@@ -14,17 +22,6 @@ import { notify } from "../utils";
 
 export const inspectionFormsCollection = "inspection-forms";
 
-export enum EquipmentType {
-  Backhoe = "Backhoe",
-  CompactLoaders = "Compact Loaders",
-  Dozers = "Dozers",
-  WheelLoaders = "Wheel Loaders",
-  Excavators = "Excavators",
-  MiniExcavators = "Mini Excavators",
-  Skidsteers = "Skidsteers",
-  Telehandlers = "Telehandlers",
-  MotorGraders = "Motor Graders",
-}
 
 export interface QuestionForm {
   pages: QuestionPage[];
