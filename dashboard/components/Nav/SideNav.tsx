@@ -6,16 +6,17 @@ import { Avatar, Badge, Text } from "@mantine/core";
 import {
   IconBell,
   IconFileDownload,
+  IconHome,
   IconLicense,
   IconLogout,
   IconMailShare,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import classes from "./SideNav.module.css";
 
 const data = [
+  { link: "/", label: "Home", icon: IconHome },
   {
     link: "/forms",
     label: "Forms",
@@ -30,7 +31,8 @@ const data = [
 
 export function SideNav() {
   const navigation = useRouter();
-  const [active, setActive] = useState("Billing");
+  const pathname = usePathname(); // Reads the current URL pathname
+
   const { user } = useAuth();
   const { data: userData } = useGetUser(user?.uid as string);
 
@@ -59,24 +61,27 @@ export function SideNav() {
     .map((item) => (
       <Link
         className={classes.link}
-        data-active={item.label === active || undefined}
+        data-active={item.link === pathname || undefined}
         href={item.link}
         key={item.label}
-        onClick={(event) => {
-          // event.preventDefault();
-          setActive(item.label);
-        }}
       >
         <item.icon className={classes.linkIcon} stroke={1.5} />
         <span>{item.label}</span>
       </Link>
     ));
 
+  // don't show anything if not logged in
+  if (!userData?.email) return <></>;
+
   return (
     <div className="h-full flex flex-col justify-between ">
       <div className="divide-y flex flex-col gap-4">
         <div className="flex flex-col items-center ">
-          <Badge color="blue" radius={0} className="absolute top-4 left-0">
+          <Badge
+            color="blue"
+            radius={0}
+            className="absolute top-4 left-0 bg-blue-700"
+          >
             {userData?.type}
           </Badge>
           <Avatar size="xl" mb="md" src={userData?.photoURL} />

@@ -63,11 +63,11 @@ const Home: NextPage = () => {
   async function createUserCredentials() {
     setIsCreatingUser(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log("success", user);
-        mutateAsync({
+        await mutateAsync({
           user_id: user.uid,
           email: user?.email!,
           display_name: values.firstName + " " + values.lastName,
