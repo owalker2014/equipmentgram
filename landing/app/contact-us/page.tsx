@@ -52,13 +52,14 @@ const ContactUs = (props: Props) => {
 
   return (
     <>
-      <section className="bg-gray-100" id="contact">
-        <div className="container bg-blue-100x mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10 flex flex-row gap-10 sm:flex-col md:flex-col lg:flex-row">
+      <section className="bg-gray-100x" id="contact">
+        <div className="container bg-blue-100x text-center mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10 flex flex-row gap-10 sm:flex-col md:flex-col lg:flex-row">
           <div className="flex flex-col flex-grow" id="contact-us">
-            <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
+            <p className="text-base font-bold uppercase tracking-wide text-blue-600">Contact</p>
+            <h2 className="font-heading mb-4 font-bold tracking-tight text-gray-900 text-3xl sm:text-5xl">
               Get in Touch
             </h2>
-            <h4 className="mb-9 mt-0 font-medium text-gray-500">
+            <h4 className="mb-9 mt-0 font-bold text-2xl text-gray-500">
               Ready to Get Started?
             </h4>
             <form id="contactForm" onSubmit={onSubmit(onSubmitForm)}>
@@ -92,7 +93,7 @@ const ContactUs = (props: Props) => {
                   />
                 </div>
               </div>
-              <Button type="submit" size="md" loading={isLoading}>
+              <Button type="submit" fullWidth size="md" loading={isLoading}>
                 Send Message
               </Button>
             </form>
