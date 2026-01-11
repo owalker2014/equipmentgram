@@ -99,7 +99,7 @@ const Home: NextPage = () => {
       ? snapshot?.data()?.type ?? UserType.customer
       : UserType.customer;
 
-    mutateAsync({
+    await mutateAsync({
       user_id: user.uid,
       email: user?.email!,
       display_name: user?.displayName!,

@@ -260,7 +260,7 @@ const FaqPage = (props: Props) => {
       <div className="mt-10">
         <Accordion variant="separated">
           {faqItems.map((item, index) => (
-            <Accordion.Item value={item.question}>
+            <Accordion.Item key={`faq-${index}`} value={item.question}>
               <Accordion.Control>
                 <div className="font-medium text-xl">
                   {index + 1}.&nbsp;{item.question}
