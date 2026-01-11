@@ -224,8 +224,6 @@ export const useGetInspectionFormByType = (
             createdByUser: createdByUser,
             id: doc.id,
             reportStatus: data.reportStatus,
-            manufacturer: data.manufacturer,
-            model: data.model,
             requestedByUserRef: data.requestedByUserRef,
             requestedByUserId: data.requestedByUserId,
             userRef: data.userRef,
