@@ -10,11 +10,11 @@ import {
 } from "@firebase/firestore";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { db } from "../firebaseConfig/init";
-import { UsersCollection } from "./users";
+import { usersCollection } from "./users";
 import { DocumentData } from "firebase-admin/firestore";
 import { DocumentReference, FieldValue } from "firebase/firestore";
-import { EquipmentType, InspectionReportStatus } from "./forms";
-import { EquipmentManufacturer } from "@/utils/formUtils";
+import { InspectionReportStatus } from "./forms";
+import { EquipmentManufacturer, EquipmentType } from "@/utils/formUtils";
 
 export enum Step {
   Request = "Request",
@@ -49,7 +49,7 @@ export type InspectionRequestObject = {
   reportStatus: InspectionReportStatus;
 };
 
-export const InspectionRequestsCollection = "inspection-requests";
+export const inspectionRequestsCollection = "inspection-requests";
 
 export type InspectionRequestObjectWithId = Partial<InspectionRequestObject> & {
   id: string;
@@ -57,10 +57,10 @@ export type InspectionRequestObjectWithId = Partial<InspectionRequestObject> & {
 
 export const useInspectionRequests = () => {
   return useQuery<InspectionRequestObjectWithId[], Error>(
-    [InspectionRequestsCollection],
+    [inspectionRequestsCollection],
     async () => {
       const snapshot = await getDocs(
-        collection(db, InspectionRequestsCollection)
+        collection(db, inspectionRequestsCollection)
       );
       return snapshot.docs.map(
         (doc) =>
@@ -75,7 +75,7 @@ export const useInspectionRequestsForInspectors = (
   equipmentType: string
 ) => {
   return useQuery<InspectionRequestObjectWithId[], Error>(
-    [InspectionRequestsCollection, user_id, equipmentType],
+    [inspectionRequestsCollection, user_id, equipmentType],
     async () => {
       if (!user_id) {
         return [];
@@ -83,7 +83,7 @@ export const useInspectionRequestsForInspectors = (
       const userDocRef = doc(db, "users", user_id);
 
       const q = query(
-        collection(db, InspectionRequestsCollection),
+        collection(db, inspectionRequestsCollection),
         where("inspectorRef", "==", userDocRef), // Compare with the reference
         where("equipmentType", "==", equipmentType), // Compare with the reference
         where("reportStatus", "==", InspectionReportStatus.Pending)
@@ -103,10 +103,10 @@ export const useInspectionRequestsForInspectors = (
 // Define a custom hook that uses useQuery to fetch all inspection requests for a given user
 export const useInspectionRequestsForUser = (user_id: string | undefined) => {
   return useQuery<InspectionRequestObjectWithId[], Error>(
-    [InspectionRequestsCollection, user_id],
+    [inspectionRequestsCollection, user_id],
     async () => {
       const q = await query(
-        collection(db, InspectionRequestsCollection),
+        collection(db, inspectionRequestsCollection),
         where("user_id", "==", user_id),
         where("canceled", "==", false)
       );
@@ -127,11 +127,11 @@ export const useAddInspectionRequest = () => {
   const queryClient = useQueryClient();
   return useMutation(
     (inspectionRequest: InspectionRequestObject) =>
-      addDoc(collection(db, InspectionRequestsCollection), inspectionRequest),
+      addDoc(collection(db, inspectionRequestsCollection), inspectionRequest),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([InspectionRequestsCollection]);
-        queryClient.refetchQueries([InspectionRequestsCollection]);
+        queryClient.invalidateQueries([inspectionRequestsCollection]);
+        queryClient.refetchQueries([inspectionRequestsCollection]);
       },
     }
   );
@@ -149,9 +149,9 @@ export const useAddInspectorToInspectionRequest = () => {
       user_id: string;
       inspection_request_id: string;
     }) => {
-      const userDoc = doc(db, UsersCollection, user_id);
+      const userDoc = doc(db, usersCollection, user_id);
       return updateDoc(
-        doc(db, InspectionRequestsCollection, inspection_request_id!),
+        doc(db, inspectionRequestsCollection, inspection_request_id!),
         {
           inspectorRef: userDoc,
           step: Step.Inspection,
@@ -160,8 +160,8 @@ export const useAddInspectorToInspectionRequest = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([InspectionRequestsCollection]);
-        queryClient.refetchQueries([InspectionRequestsCollection]);
+        queryClient.invalidateQueries([inspectionRequestsCollection]);
+        queryClient.refetchQueries([inspectionRequestsCollection]);
       },
     }
   );
@@ -174,7 +174,7 @@ export const useRemoveInspectorFromInspectionRequest = () => {
   return useMutation(
     ({ inspection_request_id }: { inspection_request_id: string }) => {
       return updateDoc(
-        doc(db, InspectionRequestsCollection, inspection_request_id!),
+        doc(db, inspectionRequestsCollection, inspection_request_id!),
         {
           inspectorRef: null,
           step: Step.Schedule,
@@ -183,8 +183,8 @@ export const useRemoveInspectorFromInspectionRequest = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([InspectionRequestsCollection]);
-        queryClient.refetchQueries([InspectionRequestsCollection]);
+        queryClient.invalidateQueries([inspectionRequestsCollection]);
+        queryClient.refetchQueries([inspectionRequestsCollection]);
       },
     }
   );
@@ -195,13 +195,13 @@ export const useUpdateInspectionRequest = () => {
   return useMutation(
     (inspectionRequest: InspectionRequestObjectWithId) =>
       updateDoc(
-        doc(db, InspectionRequestsCollection, inspectionRequest.id),
+        doc(db, inspectionRequestsCollection, inspectionRequest.id),
         inspectionRequest
       ),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([InspectionRequestsCollection]);
-        queryClient.refetchQueries([InspectionRequestsCollection]);
+        queryClient.invalidateQueries([inspectionRequestsCollection]);
+        queryClient.refetchQueries([inspectionRequestsCollection]);
       },
     }
   );

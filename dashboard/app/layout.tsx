@@ -8,7 +8,16 @@ import "@mantine/dropzone/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 
-import { MantineProvider, ColorSchemeScript, AppShell, Group, Burger, Skeleton, createTheme, rem } from "@mantine/core";
+import {
+  MantineProvider,
+  ColorSchemeScript,
+  AppShell,
+  Group,
+  Burger,
+  Skeleton,
+  createTheme,
+  rem,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SideNav } from "@/components/Nav/SideNav";
 
@@ -28,7 +37,11 @@ const theme = createTheme({
   scale: 1,
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [opened, { toggle }] = useDisclosure();
   return (
     <html lang="en">
@@ -43,13 +56,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <AppShell
                 h="100%"
                 header={{ height: 60 }}
-                navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
+                navbar={{
+                  width: 300,
+                  breakpoint: "sm",
+                  collapsed: { mobile: !opened },
+                }}
                 padding="md"
               >
                 <AppShell.Header>
                   <Group h="100%" px="md">
-                    <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-                    <div className="text-blue-700 text-xl font-extrabold">EquipmentGram</div>
+                    <Burger
+                      opened={opened}
+                      onClick={toggle}
+                      hiddenFrom="sm"
+                      size="sm"
+                    />
+                    <div className="text-blue-700 text-xl font-extrabold">
+                      EquipmentGram
+                    </div>
                   </Group>
                 </AppShell.Header>
                 <AppShell.Navbar p="md">

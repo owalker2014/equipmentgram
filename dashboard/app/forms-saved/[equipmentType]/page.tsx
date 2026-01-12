@@ -25,9 +25,9 @@ function ViewSavedFormListByTypePage({
   const { data: userData } = useGetUser(user?.uid);
 
   const { data, isLoading } = useGetInspectionFormByType(
-    params.equipmentType.replace(/%20/g, " "),
     user?.uid!,
-    userData?.type === UserType.customer ? true : false
+    params.equipmentType.replace(/%20/g, " "),
+    userData?.type === UserType.customer
   );
 
   const navigation = useRouter();

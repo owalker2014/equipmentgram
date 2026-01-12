@@ -2,11 +2,8 @@
 
 import MultiStepForm from "@/components/Forms/multi-step-form";
 import { useAuth } from "@/lib/authContext";
-import {
-  EquipmentType,
-  QuestionForm,
-  useAddNewInspectionForm,
-} from "@/lib/network/forms";
+import { QuestionForm, useAddNewInspectionForm } from "@/lib/network/forms";
+import { EquipmentType } from "@/utils/formUtils";
 import React from "react";
 
 const BackhoeLoaderFormPage: React.FC<{
