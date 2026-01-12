@@ -171,3 +171,22 @@ export const notify = (
     color: isError ? color ?? "red" : "green",
   });
 };
+
+export const fileToBase64 = (file: File) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+export const getTimeString = (timestampz: string) => {
+  let currentTime = timestampz.split(":");
+  if (+currentTime[0] >= 12) {
+    currentTime[0] = String(+currentTime[0] - 12).padStart(2, "0");
+    currentTime[2] = ":PM";
+  } else {
+    currentTime[2] = ":AM";
+  }
+  return currentTime.join(":").replace("::", "");
+};

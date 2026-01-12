@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   QueryConstraint,
+  serverTimestamp,
 } from "@firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -22,6 +23,35 @@ import { notify } from "../utils";
 
 export const inspectionFormsCollection = "inspection-forms";
 
+export interface InspectionRequest {
+  equipment_type: string;
+  manufacturer: string;
+  model: string;
+  section: string;
+  component: string;
+}
+
+export interface InspectionResult {
+  id: string;
+  equipment_type: string;
+  manufacturer: string;
+  model: string;
+  section: string;
+  component: string;
+  timestamp: string;
+  defect_present: boolean;
+  defect_type: any;
+  severity: number;
+  observations: string;
+  recommended_action: string;
+  image_base64: any;
+}
+
+export interface ValidationError {
+  loc: any;
+  msg: string;
+  type: string;
+}
 
 export interface QuestionForm {
   pages: QuestionPage[];
@@ -38,6 +68,7 @@ export interface QuestionForm {
   timeOfInspection?: any;
   inspectorName?: string;
 }
+
 export interface QuestionPage {
   name: string;
   comment?: string;
@@ -50,6 +81,8 @@ export interface Question {
   key: string;
   value?: string;
   imageUrl?: string;
+  progress?: number;
+  imageResult?: any; // inspection-result
   comment?: string;
 }
 
@@ -66,15 +99,80 @@ export interface InspectionForm {
   createdByUser?: UserWithId;
   form: QuestionForm;
   reportStatus?: InspectionReportStatus;
+  reportID?: string;
+  equipmentType?: string;
+  manufacturer?: string;
+  equipmentManufacturer?: string;
+  equipmentSerialNumber?: string;
+  model?: string;
+  equipmentModel?: string;
+  nameOfBusiness?: string;
+  customerEmail?: string;
+  dateOfInspection?: any;
+  timeOfInspection?: any;
+  inspectorName?: string;
   requestedByUserRef?: DocumentReference<DocumentData>;
   requestedByUserId?: string;
   userRef?: DocumentReference<DocumentData>;
-  inspectionRequestRef?: DocumentReference<DocumentData>;
+  // inspectionRequestRef?: DocumentReference<DocumentData>;
 }
 
 export interface InspectionFormWithId extends InspectionForm {
   id: string;
 }
+
+export const useAddFreshInspectionForm = (userId: string) => {
+  const queryClient = useQueryClient();
+  const navigation = useRouter();
+
+  return useMutation(
+    async (inspectionForm: InspectionForm): Promise<any> => {
+      const userDoc = doc(db, usersCollection, userId);
+
+      const inspectionFormWithReferences = {
+        ...inspectionForm,
+        userRef: userDoc, // inspector
+        reportStatus: InspectionReportStatus.FilledForm,
+        reportID: crypto.randomUUID(),
+        timestamp: serverTimestamp(),
+      };
+
+      const docRef = await addDoc(
+        collection(db, inspectionFormsCollection),
+        inspectionFormWithReferences
+      );
+      return docRef;
+    },
+    {
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries([inspectionFormsCollection]);
+        queryClient.refetchQueries([inspectionFormsCollection]);
+
+        notify(
+          {
+            title: "Inspection Submission Successful",
+            message: `Inspection record created successfully for \n
+              ${variables.type} > ${variables.manufacturer} > ${variables.model}`,
+          },
+          false
+        );
+        navigation.push(`/forms-saved/${variables.type}/${data.id}`);
+      },
+      onError: (error: any) => {
+        console.error("error adding inspection --> ", error);
+        notify(
+          {
+            title: "Inspection Submission Error",
+            message:
+              error.message ??
+              "Error on submitting inspection form. Please try again later.",
+          },
+          true
+        );
+      },
+    }
+  );
+};
 
 export const useAddNewInspectionForm = (
   inspectionRequestId: string,
@@ -266,4 +364,63 @@ export const useGetInspectionFormById = (id: string) => {
       }
     }
   );
+};
+
+export const runInspection = async (
+  file: File,
+  { component, equipment_type, manufacturer, model, section }: InspectionRequest
+) => {
+  try {
+    const formData = new FormData();
+    formData.append("equipment_type", equipment_type);
+    formData.append("manufacturer", manufacturer);
+    formData.append("model", model);
+    formData.append("section", section);
+    formData.append("component", component);
+    formData.append("image", file);
+
+    const url = `${process.env.NEXT_PUBLIC_DEFECT_DETECTION_URL}/inspect`;
+    const response = await fetch(url, { method: "POST", body: formData });
+
+    // Check if the request was successful (status in the 2xx range)
+    if (!response.ok) {
+      if ([400, 422].includes(response.status)) {
+        // Validation Error
+        const validationErrors: { detail: string } = await response.json();
+        throw new Error(validationErrors?.detail ?? "Unknown Error");
+      }
+
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData: InspectionResult = await response.json(); // Parse the JSON response
+    return [null, responseData];
+  } catch (error: any) {
+    console.error("Error during defect detection: ", error);
+
+    let message = error.message;
+    let color = "red";
+
+    if (
+      error &&
+      typeof error === "object" &&
+      "loc" in error &&
+      "msg" in error &&
+      "type" in error
+    ) {
+      // Handle ValidationError
+      message = `Error occurred on analyzing for ${component}`;
+      color = "yellow";
+    }
+
+    notify(
+      {
+        title: "Inspection Error",
+        message,
+        color,
+      },
+      true
+    );
+    return ["Inspection Error", null];
+  }
 };

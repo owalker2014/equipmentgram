@@ -1,6 +1,6 @@
 "use client";
 
-import CustomLoader from "@/components/CustomLoader";
+import CustomLoader, { ReturnButton } from "@/components/CustomLoader";
 import { useAuth } from "@/lib/authContext";
 import { useGetSentReports } from "@/lib/network/sent-reports";
 import { Avatar, Button, Divider, Table, Text, Title } from "@mantine/core";
@@ -31,6 +31,8 @@ function ViewSavedFormListByTypePage({
         Overview of Sent Inspection Reports By Equipment Type
       </Text>
       <Divider className="mb-8" />
+
+      <ReturnButton target="/forms-sent" />
 
       <Table
         styles={{

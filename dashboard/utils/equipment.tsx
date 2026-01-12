@@ -47,6 +47,12 @@ export const equipments = [
     color: "cyan",
   },
   {
+    title: EquipmentType.CompactExcavator,
+    icon: IconCrane,
+    link: "/Compact Excavator",
+    color: "cyan",
+  },
+  {
     title: EquipmentType.Skidsteers,
     icon: IconBackhoe,
     link: "/Skidsteers",
