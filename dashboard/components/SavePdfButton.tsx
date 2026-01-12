@@ -19,13 +19,23 @@ function SavePdfButton({ inspectionForm }: Props) {
           fileName={`${inspectionForm.id}.pdf`}
         >
           {({ blob, url, loading, error }) => (
-            <Button loading={loading} size="md">
+            <Button
+              loading={loading}
+              size="xs"
+              variant="outline"
+              className="text-blue-700"
+            >
               Download PDF
             </Button>
           )}
         </PDFDownloadLink>
       ) : (
-        <Button size="md" onClick={() => setIsButtonClicked(true)}>
+        <Button
+          size="xs"
+          variant="outline"
+          className="text-blue-700"
+          onClick={() => setIsButtonClicked(true)}
+        >
           Generate PDF
         </Button>
       )}
