@@ -51,13 +51,13 @@ const ShareReportDialog = (inspectionForm: Props) => {
         ...inspectionForm,
         inspectionFormId: inspectionForm.id,
       });
-      setIsLoading(false);
     } catch (error) {
       notifications.show({
-        title: "Report shared failed",
+        title: "Report sharing failed",
         message: `Report failed to share with ${data.sendTo}`,
         color: "red",
       });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -66,13 +66,23 @@ const ShareReportDialog = (inspectionForm: Props) => {
     <>
       <Modal opened={opened} onClose={close} title="Share Report">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <TextInput {...register("sendTo")} label="Share report with" type="email" />
-          <Button rightSection={<IconSend size={16} />} className="text-right" type="submit" loading={isLoading}>
+          <TextInput
+            {...register("sendTo")}
+            label="Share report with"
+            type="email"
+          />
+          <Button
+            rightSection={<IconSend size={16} />}
+            className="text-right bg-blue-700"
+            type="submit"
+            size="xs"
+            loading={isLoading}
+          >
             Share
           </Button>
         </form>
       </Modal>
-      <Button onClick={open} size="md">
+      <Button onClick={open} className="bg-blue-700" size="xs">
         Share
       </Button>
     </>

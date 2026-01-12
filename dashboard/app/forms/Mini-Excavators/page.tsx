@@ -7,7 +7,9 @@ import React from "react";
 const AssignedForms: React.FC = () => {
   return (
     <div>
-      <InspectionRequestsForInspectorsTable equipmentType={EquipmentType.MiniExcavators} />
+      <InspectionRequestsForInspectorsTable
+        equipmentType={EquipmentType.MiniExcavators}
+      />
     </div>
   );
 };

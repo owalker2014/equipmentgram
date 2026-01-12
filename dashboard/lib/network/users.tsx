@@ -1,8 +1,18 @@
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "@firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "@firebase/firestore";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { db } from "../firebaseConfig/init";
 
-export const UsersCollection = "users";
+export const usersCollection = "users";
 
 export enum UserType {
   admin = "admin",
@@ -57,17 +67,19 @@ export type UserWithId = User & {
 };
 
 export const useUsers = () => {
-  return useQuery<UserWithId[], Error>([UsersCollection], async () => {
-    const snapshot = await getDocs(collection(db, UsersCollection));
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as UserWithId));
+  return useQuery<UserWithId[], Error>([usersCollection], async () => {
+    const snapshot = await getDocs(collection(db, usersCollection));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() } as UserWithId)
+    );
   });
 };
 
 export const useGetUser = (user_id: string | undefined) => {
   return useQuery<User, Error>(
-    [UsersCollection, user_id],
+    [usersCollection, user_id],
     async () => {
-      const docRef = doc(db, UsersCollection, user_id!);
+      const docRef = doc(db, usersCollection, user_id!);
       const snapshot = await getDoc(docRef);
       return snapshot.data() as User;
     },
@@ -82,13 +94,13 @@ export const useSetUser = () => {
   const queryClient = useQueryClient();
   return useMutation(
     (user: User) => {
-      const docRef = doc(db, UsersCollection, user.user_id);
+      const docRef = doc(db, usersCollection, user.user_id);
       return setDoc(docRef, user);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([UsersCollection]);
-        queryClient.refetchQueries([UsersCollection]);
+        queryClient.invalidateQueries([usersCollection]);
+        queryClient.refetchQueries([usersCollection]);
       },
     }
   );
@@ -98,13 +110,13 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   return useMutation(
     (user: UpdateUser) => {
-      const docRef = doc(db, UsersCollection, user.user_id);
+      const docRef = doc(db, usersCollection, user.user_id);
       return updateDoc(docRef, user);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([UsersCollection]);
-        queryClient.refetchQueries([UsersCollection]);
+        queryClient.invalidateQueries([usersCollection]);
+        queryClient.refetchQueries([usersCollection]);
       },
     }
   );
@@ -114,23 +126,28 @@ export const useSetUserType = () => {
   const queryClient = useQueryClient();
   return useMutation(
     ({ user_id, type }: { user_id: string; type: UserType }) => {
-      return updateDoc(doc(db, UsersCollection, user_id!), {
+      return updateDoc(doc(db, usersCollection, user_id!), {
         type: type,
       });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([UsersCollection]);
-        queryClient.refetchQueries([UsersCollection]);
+        queryClient.invalidateQueries([usersCollection]);
+        queryClient.refetchQueries([usersCollection]);
       },
     }
   );
 };
 
 export const useGetInspectors = () => {
-  return useQuery<User[], Error>([UsersCollection, "inspectors"], async () => {
-    const q = await query(collection(db, UsersCollection), where("type", "==", UserType.inspector));
+  return useQuery<User[], Error>([usersCollection, "inspectors"], async () => {
+    const q = await query(
+      collection(db, usersCollection),
+      where("type", "==", UserType.inspector)
+    );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as UserWithId));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() } as UserWithId)
+    );
   });
 };

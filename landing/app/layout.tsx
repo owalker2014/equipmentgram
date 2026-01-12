@@ -24,11 +24,17 @@ const metadata = {
   title: "EquipmentGram",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
         <script
+          async
+          defer
           src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDa5QyoPFwUz6X6U2znLg88tBWDenn3KTs&libraries=places`}
         ></script>
         <ColorSchemeScript />
@@ -57,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             >
               <Notifications position="top-right" />
               <Navbar />
-              <div>{children}</div>
+              <div className="min-h-[57vh]">{children}</div>
               <Footer />
             </MantineProvider>
           </FirebaseProvider>

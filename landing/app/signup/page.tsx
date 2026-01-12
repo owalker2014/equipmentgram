@@ -7,11 +7,9 @@ import { UserType, useSetUser } from "@/lib/network/users";
 import { Button, Select, TextInput } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
-  signInWithPopup,
 } from "firebase/auth";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -65,11 +63,11 @@ const Home: NextPage = () => {
   async function createUserCredentials() {
     setIsCreatingUser(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log("success", user);
-        mutateAsync({
+        await mutateAsync({
           user_id: user.uid,
           email: user?.email!,
           display_name: values.firstName + " " + values.lastName,
@@ -96,11 +94,10 @@ const Home: NextPage = () => {
           });
         }
       })
-      .then(() => {
-        setIsCreatingUser(false);
-      })
       .catch((error) => {
-        console.log("error", error);
+        console.error("error", error);
+      })
+      .finally(() => {
         setIsCreatingUser(false);
       });
   }
@@ -112,24 +109,42 @@ const Home: NextPage = () => {
     return null;
   }
 
-  if (user) return <h1>Authenticated</h1>;
-
   return (
     <>
       <Head>
         <title>Signup</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <div className="w-full px-4 md:w-1/2 m-auto my-10 md:my-20">
-        <h1 className="mb-8 font-bold text-center text-2xl">Individual Registration</h1>
+      <div className="w-full px-4 md:w-1/2 m-auto my-10 md:my-10 pb-4">
+        <h1 className="mb-8 font-bold text-center text-2xl">
+          Individual Registration
+        </h1>
         <form onSubmit={onSubmit(createUserCredentials)} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <TextInput label="First Name" placeholder="First Name" {...getInputProps("firstName")} />
-            <TextInput label="Last Name" placeholder="Last Name" {...getInputProps("lastName")} />
+            <TextInput
+              label="First Name"
+              placeholder="First Name"
+              {...getInputProps("firstName")}
+            />
+            <TextInput
+              label="Last Name"
+              placeholder="Last Name"
+              {...getInputProps("lastName")}
+            />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
-            <TextInput label="Email" type="email" placeholder="Email" {...getInputProps("email")} />
-            <TextInput label="Phone" placeholder="Phone" {...getInputProps("phone")} />
+            <TextInput
+              label="Email"
+              type="email"
+              placeholder="Email"
+              {...getInputProps("email")}
+            />
+            <TextInput
+              label="Phone"
+              placeholder="Phone"
+              {...getInputProps("phone")}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -146,12 +161,32 @@ const Home: NextPage = () => {
             />
           </div>
 
-          <TextInput label="Name Of Business" {...getInputProps("nameOfBusiness")} />
-          <TextInput label="Address" placeholder="Address Line 1" {...getInputProps("addressLine1")} />
-          <TextInput placeholder="Address Line 2" {...getInputProps("addressLine2")} />
+          <div className="grid grid-cols-2 gap-4">
+            <TextInput
+              label="Name Of Business"
+              {...getInputProps("nameOfBusiness")}
+            />
+            <TextInput label="Job/Job Title" {...getInputProps("jobTitle")} />
+          </div>
+
+          <div className="grid gap-4">
+            <TextInput
+              label="Address"
+              placeholder="Address Line 1"
+              {...getInputProps("addressLine1")}
+            />
+            <TextInput
+              placeholder="Address Line 2"
+              {...getInputProps("addressLine2")}
+            />
+          </div>
 
           <div className="grid grid-cols-8 gap-4">
-            <TextInput placeholder="City" className="col-span-3" {...getInputProps("city")} />
+            <TextInput
+              placeholder="City"
+              className="col-span-3"
+              {...getInputProps("city")}
+            />
             <Select
               placeholder="State"
               data={Object.entries(USStates).map(([statekey, state]) => ({
@@ -162,9 +197,12 @@ const Home: NextPage = () => {
               {...getInputProps("state")}
             />
 
-            <TextInput placeholder="Zip Code" className="col-span-2" {...getInputProps("zipCode")} />
+            <TextInput
+              placeholder="Zip Code"
+              className="col-span-2"
+              {...getInputProps("zipCode")}
+            />
           </div>
-          <TextInput label="Job/Job Title" {...getInputProps("jobTitle")} />
 
           <Button loading={isCreatingUser || isLoadingSetUser} type="submit">
             Submit

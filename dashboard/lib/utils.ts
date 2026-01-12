@@ -1,5 +1,6 @@
+import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export function toTitleCase(str: string) {
   return str.replace(/\b\w/g, function (match) {
@@ -145,3 +146,28 @@ export function clipObject(
   keysToClip.forEach((key: string) => delete clippedObj[key]);
   return clippedObj;
 }
+
+export const notify = (
+  {
+    title,
+    message,
+    color,
+    clean,
+  }: {
+    title: ReactNode;
+    message: ReactNode;
+    color?: string;
+    clean?: boolean;
+  },
+  isError: boolean
+) => {
+  if (clean) {
+    notifications.clean();
+  }
+
+  notifications.show({
+    title,
+    message,
+    color: isError ? color ?? "red" : "green",
+  });
+};

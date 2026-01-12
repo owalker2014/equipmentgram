@@ -1,27 +1,37 @@
 import { storage } from "@/lib/firebaseConfig/init";
-import { Text } from "@mantine/core";
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { FileInput, Text } from "@mantine/core";
+import { IconCamera } from "@tabler/icons-react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 
 type Props = {
   onUploadComplete: (url: string) => void;
   fileName: string;
+  fieldLabel: string;
   error?: string;
 };
 
-const UploadFileField = ({ onUploadComplete, fileName, error }: Props) => {
+const UploadFileField = ({
+  onUploadComplete,
+  fileName,
+  fieldLabel,
+  error,
+}: Props) => {
   const [loading, setLoading] = useState(false);
 
-  const onDropFile = (file: FileWithPath[]) => {
-    const storageRef = ref(storage, fileName + new Date().getTime() + file[0].name);
-    const uploadTask = uploadBytesResumable(storageRef, file[0]);
+  const onChange = (file: File) => {
+    const storageRef = ref(
+      storage,
+      fileName + new Date().getTime() + file.name
+    );
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
         setLoading(true);
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused":
@@ -47,15 +57,25 @@ const UploadFileField = ({ onUploadComplete, fileName, error }: Props) => {
 
   return (
     <>
-      <Dropzone w="200px" p={6} maxFiles={1} loading={loading} accept={IMAGE_MIME_TYPE} onDrop={onDropFile}>
-        <Text ta="center">Upload Image</Text>
-      </Dropzone>
+      <FileInput
+        accept="image/png,image/jpeg"
+        capture="environment"
+        disabled={loading}
+        label={fieldLabel}
+        {...{ placeholder: fieldLabel }}
+        description={`capture an image for ${fieldLabel}`}
+        onChange={onChange}
+        onProgress={() => {}}
+        error={error}
+        size="md"
+        rightSection={<IconCamera color="grey" style={{ cursor: "pointer" }} />}
+      />
 
-      {error && (
+      {/* {error && (
         <Text size="xs" mt={4} color="red">
           {error}
         </Text>
-      )}
+      )} */}
     </>
   );
 };

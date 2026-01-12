@@ -1,6 +1,13 @@
 import CustomLoader from "@/components/CustomLoader";
 import { MantineProvider } from "@mantine/core";
-import { Auth, User, getAuth, onAuthStateChanged, signInWithCustomToken, signOut as signout } from "firebase/auth";
+import {
+  Auth,
+  User,
+  getAuth,
+  onAuthStateChanged,
+  signInWithCustomToken,
+  signOut as signout,
+} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import React, { useEffect, useState } from "react";
@@ -21,7 +28,9 @@ interface AuthContextProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }: AuthContextProviderProps) => {
+export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
+  children,
+}: AuthContextProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const navigation = useRouter();
@@ -31,7 +40,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
       const cookies = parseCookies();
       if (!cookies.idToken) {
         setUser(null);
-        navigation.push(process.env.NEXT_PUBLIC_REDIRECT_URL as string);
+        navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       }
 
       if (user) {
@@ -64,9 +73,15 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
         setUser(signInResponse.user);
       } else {
         console.error("Error:", response.statusText);
-        navigation.push(process.env.NEXT_PUBLIC_REDIRECT_URL as string);
+        navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       }
     };
+
+    if (!cookies.idToken) {
+      setUser(null);
+      navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
+      return;
+    }
 
     checkUserAuth();
   }, []);

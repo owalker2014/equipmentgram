@@ -7,7 +7,11 @@ export const metadata: Metadata = {
   title: "EquipmentGram - Inspection Request",
 };
 
-const InspectionRequestLayout = ({ children }: { children: React.ReactNode }) => {
+const InspectionRequestLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return <>{children}</>;
 };
 
