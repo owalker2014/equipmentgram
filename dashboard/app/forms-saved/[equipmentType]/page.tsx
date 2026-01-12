@@ -113,17 +113,16 @@ function ViewSavedFormListByTypePage({
                   )}
                 </Table.Td>
                 <Table.Td>{inspectionForm.type}</Table.Td>
-                <Table.Td>{inspectionForm.manufacturer}</Table.Td>
+                <Table.Td>{inspectionForm.form?.nameOfBusiness}</Table.Td>
                 <Table.Td className="text-center">
                   <div className="flexx gap-2x text-centerx">
                     {/* <Avatar size="sm" src={inspectionForm.createdByUser?.photoURL} /> */}
-                    {/* {inspectionForm.createdByUser?.display_name} */}
-                    {inspectionForm.model}
+                    {inspectionForm.createdByUser?.display_name}
                   </div>
                 </Table.Td>
                 <Table.Td className="text-center">
                   {new Date(
-                    inspectionForm.form.dateOfInspection //?.toMillis()
+                    inspectionForm.form.dateOfInspection?.toMillis()
                   ).toLocaleDateString()}
                 </Table.Td>
                 <Table.Td className="text-center">**Fair**</Table.Td>
