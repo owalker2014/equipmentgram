@@ -1,6 +1,6 @@
 "use client";
 
-import CustomLoader from "@/components/CustomLoader";
+import CustomLoader, { ReturnButton } from "@/components/CustomLoader";
 import SavePdfButton from "@/components/SavePdfButton";
 import ShareReportDialog from "@/components/ShareReportDialog";
 import { useAuth } from "@/lib/authContext";
@@ -59,6 +59,8 @@ function ViewSavedFormListByTypePage({
       </Text>
       <Divider className="mb-8" />
 
+      <ReturnButton target="/forms-saved" />
+
       <Table
         styles={{
           table: {
@@ -113,16 +115,17 @@ function ViewSavedFormListByTypePage({
                   )}
                 </Table.Td>
                 <Table.Td>{inspectionForm.type}</Table.Td>
-                <Table.Td>{inspectionForm.form?.nameOfBusiness}</Table.Td>
+                <Table.Td>{inspectionForm.manufacturer}</Table.Td>
                 <Table.Td className="text-center">
                   <div className="flexx gap-2x text-centerx">
                     {/* <Avatar size="sm" src={inspectionForm.createdByUser?.photoURL} /> */}
-                    {inspectionForm.createdByUser?.display_name}
+                    {/* {inspectionForm.createdByUser?.display_name} */}
+                    {inspectionForm.model}
                   </div>
                 </Table.Td>
                 <Table.Td className="text-center">
                   {new Date(
-                    inspectionForm.form.dateOfInspection?.toMillis()
+                    inspectionForm.form.dateOfInspection //?.toMillis()
                   ).toLocaleDateString()}
                 </Table.Td>
                 <Table.Td className="text-center">**Fair**</Table.Td>

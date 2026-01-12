@@ -5,6 +5,7 @@ export enum EquipmentType {
   WheelLoaders = 'Wheel Loaders',
   Excavators = 'Excavators',
   MiniExcavators = 'Mini Excavators',
+  CompactExcavator = 'Compact Excavator',
   Skidsteers = 'Skidsteers',
   Telehandlers = 'Telehandlers',
   MotorGraders = 'Motor Graders',
@@ -121,5 +122,16 @@ export const equipmentsInScope = {
     // [EquipmentManufacturer.KUBOTA]: {
     //   models: ['K008-3', 'KX018-4', 'KX030-4', 'KX040-4', 'KX057-4'],
     // },
+  },
+  [EquipmentType.CompactExcavator]: {
+    [EquipmentManufacturer.CATERPILLAR_CE]: {
+      models: ["300.9D", "302CR", "303.5E2CR", "305E2CR", "307.5CR"],
+    },
+    [EquipmentManufacturer.BOBCAT]: {
+      models: ['E10', 'E20', 'E26', 'E32', 'E35'],
+    },
+    [EquipmentManufacturer.DEERE]: {
+      models: ['17G', '26G', '35G', '50G', '60G'],
+    },
   },
 }

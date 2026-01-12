@@ -4,9 +4,9 @@ import MultiStepForm from "@/components/Forms/multi-step-form";
 import { useAuth } from "@/lib/authContext";
 import { QuestionForm, useAddNewInspectionForm } from "@/lib/network/forms";
 import { EquipmentType } from "@/utils/formUtils";
-import React from "react";
+import React, { useCallback } from "react";
 
-const BackhoeLoaderFormPage: React.FC<{
+const MiniExcavatorsFormPage: React.FC<{
   params: any;
   searchParams: any;
 }> = ({ params, searchParams }) => {
@@ -409,17 +409,30 @@ const BackhoeLoaderFormPage: React.FC<{
     ],
   };
 
-  const handleSubmit = (data: QuestionForm) => {
+  const handleSubmit = useCallback(({ pages, ...others }: QuestionForm) => {
     if (!user) return;
 
     add.mutate({
       createdByUserUid: user.uid,
-      form: data,
+      form: { pages },
       type: EquipmentType.MiniExcavators,
+      manufacturer: params.id,
+      model: searchParams.model,
+      ...others,
     });
-  };
+  }, []);
 
-  return <MultiStepForm questionForm={questionForm} onSubmit={handleSubmit} />;
+  return (
+    <MultiStepForm
+      questionForm={questionForm}
+      onSubmit={handleSubmit}
+      metadata={{
+        equipment_type: EquipmentType.MiniExcavators,
+        manufacturer: params.id,
+        model: searchParams.model,
+      }}
+    />
+  );
 };
 
-export default BackhoeLoaderFormPage;
+export default MiniExcavatorsFormPage;

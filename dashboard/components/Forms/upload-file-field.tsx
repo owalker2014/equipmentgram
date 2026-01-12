@@ -1,38 +1,57 @@
 import { storage } from "@/lib/firebaseConfig/init";
+import { InspectionResult, runInspection } from "@/lib/network/forms";
 import { FileInput, Text } from "@mantine/core";
 import { IconCamera } from "@tabler/icons-react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 
 type Props = {
-  onUploadComplete: (url: string) => void;
+  onUploadComplete: (url: string, result: InspectionResult) => void;
   fileName: string;
   fieldLabel: string;
   error?: string;
+  metadata: {
+    equipment_type: string;
+    manufacturer: string;
+    model: string;
+    section: string;
+  };
+  onProgress: (progress: number) => void;
+  onError: (err: string) => void;
+  clearFieldError: () => void;
 };
 
 const UploadFileField = ({
   onUploadComplete,
   fileName,
-  fieldLabel,
+  fieldLabel: component,
   error,
+  metadata,
+  onProgress,
+  onError,
+  clearFieldError,
 }: Props) => {
   const [loading, setLoading] = useState(false);
 
   const onChange = (file: File) => {
-    const storageRef = ref(
-      storage,
-      fileName + new Date().getTime() + file.name
-    );
+    setLoading(true);
+    clearFieldError();
+
+    const urlPref = `${fileName}-${new Date().getTime()}-${file.name.replace(
+      " ",
+      "-"
+    )}`;
+    const storageRef = ref(storage, urlPref);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        setLoading(true);
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
+        // onProgress(progress);
+
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -43,17 +62,32 @@ const UploadFileField = ({
         }
       },
       (error) => {
-        setLoading(false);
         // Handle unsuccessful uploads
+        setLoading(false);
       },
       () => {
-        setLoading(false);
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          onUploadComplete(downloadURL);
-        });
+        // Handle successful uploads on complete
+        getDownloadURL(uploadTask.snapshot.ref)
+          .then((downloadURL) => {
+            return Promise.all([
+              downloadURL,
+              runInspection(file, { ...metadata, component }),
+            ]);
+          })
+          .then(([downloadURL, [error, response]]) => {
+            if (!error) {
+              onUploadComplete(downloadURL, response as InspectionResult);
+              return;
+            }
+            onError(error as string); //
+          })
+          .finally(() => setLoading(false));
       }
     );
   };
+
+  // for debugging
+  // console.log('inspection-meta ---> ', { ...metadata, component });
 
   return (
     <>
@@ -61,11 +95,12 @@ const UploadFileField = ({
         accept="image/png,image/jpeg"
         capture="environment"
         disabled={loading}
-        label={fieldLabel}
-        {...{ placeholder: fieldLabel }}
-        description={`capture an image for ${fieldLabel}`}
+        label={component}
+        {...{ placeholder: component }}
+        description={`capture an image for ${component}`}
         onChange={onChange}
-        onProgress={() => {}}
+        onProgress={(e) => onProgress(e.eventPhase)}
+        variant="filled"
         error={error}
         size="md"
         rightSection={<IconCamera color="grey" style={{ cursor: "pointer" }} />}
