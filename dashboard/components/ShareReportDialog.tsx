@@ -73,15 +73,16 @@ const ShareReportDialog = (inspectionForm: Props) => {
           />
           <Button
             rightSection={<IconSend size={16} />}
-            className="text-right"
+            className="text-right bg-blue-700"
             type="submit"
+            size="xs"
             loading={isLoading}
           >
             Share
           </Button>
         </form>
       </Modal>
-      <Button onClick={open} size="md">
+      <Button onClick={open} className="bg-blue-700" size="xs">
         Share
       </Button>
     </>

@@ -3,7 +3,7 @@
 import EquipmentItem from "@/components/EquipmentItem";
 import { equipments } from "@/utils/equipment";
 import { equipmentsInScope } from "@/utils/formUtils";
-import { Text } from "@mantine/core";
+import { Divider, Text, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -23,10 +23,14 @@ const SavedFormsPage = (props: Props) => {
     ));
 
   return (
-    <div>
-      <Text className="mb-4 text-2xl font-bold">Saved Forms</Text>
+    <>
+      <Title size={30}>Saved Forms</Title>
+      <Text size="sm" className="mb-2 text-gray-500">
+        Overview of Saved Inspection Forms
+      </Text>
+      <Divider className="mb-8" />
       <div className="space-y-2">{items}</div>
-    </div>
+    </>
   );
 };
 
