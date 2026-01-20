@@ -1,7 +1,7 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
 import { Button } from "@mantine/core";
 import { PDFDownloadLink, usePDF } from "@react-pdf/renderer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import QuestionFormPDF from "./QuestionFormPDF";
 
 type Props = {
@@ -15,7 +15,7 @@ function SavePdfButton({ inspectionForm }: Props) {
     <div>
       {isButtonClicked ? (
         <PDFDownloadLink
-          document={<QuestionFormPDF inspectionForm={inspectionForm} />}
+          document={<QuestionFormPDF data={inspectionForm} />}
           fileName={`${inspectionForm.id}.pdf`}
         >
           {({ blob, url, loading, error }) => (

@@ -14,7 +14,7 @@ import {
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconClock } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import UploadFileField from "./upload-file-field";
 import { getTimeString, notify } from "@/lib/utils";
 
@@ -39,6 +39,10 @@ interface QF extends QuestionForm {
 const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const { user } = useAuth();
+  const progressRange = useMemo(
+    () => Array.from({ length: 99 }, (v, i) => 1 + i),
+    [],
+  );
 
   const {
     getInputProps,
@@ -95,7 +99,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
 
             return acc;
           },
-          {}
+          {},
         );
       }
 
@@ -145,7 +149,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
           title: "Form has errors",
           message: "Please fix all errors before submitting",
         },
-        true
+        true,
       );
       return;
     }
@@ -242,7 +246,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                   label="States"
                   variant="filled"
                   data={Object.entries(USStates).map(
-                    ([stateKey, state]) => state
+                    ([stateKey, state]) => state,
                   )}
                   required
                   {...getInputProps("state")}
@@ -288,17 +292,17 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                     onUploadComplete={(url, result) => {
                       setFieldValue(
                         `pages.${currentStep - 1}.questions.${i}.imageUrl`,
-                        url
+                        url,
                       );
                       setFieldValue(
                         `pages.${currentStep - 1}.questions.${i}.imageResult`,
-                        result
+                        result,
                       );
                     }}
                     onProgress={(progress) => {
                       setFieldValue(
                         `pages.${currentStep - 1}.questions.${i}.progress`,
-                        progress
+                        progress,
                       );
                     }}
                     onError={(err) => {
@@ -309,7 +313,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                     }}
                     clearFieldError={() =>
                       clearFieldError(
-                        `pages.${currentStep - 1}.questions.${i}.imageUrl`
+                        `pages.${currentStep - 1}.questions.${i}.imageUrl`,
                       )
                     }
                     error={errors[
@@ -317,19 +321,18 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                     ]?.toString()}
                   />
 
-                  {(values.pages[currentStep - 1]?.questions[i]?.progress ??
-                    0) > 0 &&
-                    (values.pages[currentStep - 1]?.questions[i]?.progress ??
-                      0) < 100 && (
-                      <Progress
-                        value={
-                          values.pages[currentStep - 1]?.questions[i]
-                            ?.progress ?? 0
-                        }
-                        striped
-                        animated
-                      />
-                    )}
+                  {progressRange.includes(
+                    values.pages[currentStep - 1]?.questions[i]?.progress ?? 0,
+                  ) && (
+                    <Progress
+                      value={
+                        values.pages[currentStep - 1]?.questions[i]?.progress ??
+                        0
+                      }
+                      striped
+                      animated
+                    />
+                  )}
                   {values.pages[currentStep - 1].questions[i].imageUrl && (
                     <Image
                       className="mt-4 max-h-5"
@@ -344,7 +347,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                   <Textarea
                     label="Comment"
                     {...getInputProps(
-                      `pages.${currentStep - 1}.questions.${i}.comment`
+                      `pages.${currentStep - 1}.questions.${i}.comment`,
                     )}
                   />
                 )}

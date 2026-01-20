@@ -107,6 +107,13 @@ export interface InspectionForm {
   model?: string;
   equipmentModel?: string;
   nameOfBusiness?: string;
+  address?: {
+    state: string;
+    zip: string;
+    city: string;
+    line1: string;
+    line2: string;
+  };
   customerEmail?: string;
   dateOfInspection?: any;
   timeOfInspection?: any;
@@ -314,6 +321,8 @@ export const useGetInspectionFormByType = (
 
           return {
             type: data.type,
+            manufacturer: data.manufacturer,
+            model: data.model,
             createdByUserUid: createdByUserUid,
             form: data.form,
             createdByUser: createdByUser,
@@ -353,6 +362,12 @@ export const useGetInspectionFormById = (id: string) => {
             id: data.id,
             type: data.type,
             createdByUserUid: createdByUserUid,
+            address: data.address,
+            nameOfBusiness: data.nameOfBusiness,
+            customerEmail: data.customerEmail,
+            dateOfInspection: data.dateOfInspection,
+            timeOfInspection: data.timeOfInspection,
+            inspectorName: data.inspectorName,
             form: data.form,
             createdByUser: createdByUser as UserWithId, // Cast the createdByUser property to UserWithId type
           };

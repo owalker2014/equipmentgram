@@ -33,7 +33,6 @@ export default function Home(props: any) {
     undefined,
     userData?.type === UserType.customer
   );
-
   const { data: sentReportsData } = useGetSentReports();
   const { data: notificationData, isLoading } = useGetNotification(
     user?.email!
