@@ -50,7 +50,7 @@ const UploadFileField = ({
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
-        // onProgress(progress);
+        onProgress(progress);
 
         switch (snapshot.state) {
           case "paused":
@@ -63,6 +63,7 @@ const UploadFileField = ({
       },
       (error) => {
         // Handle unsuccessful uploads
+        console.error("error-uploading --> ", error.code);
         setLoading(false);
       },
       () => {
@@ -99,7 +100,7 @@ const UploadFileField = ({
         {...{ placeholder: component }}
         description={`capture an image for ${component}`}
         onChange={onChange}
-        onProgress={(e) => onProgress(e.eventPhase)}
+        // onProgress={(e) => onProgress(e.eventPhase)}
         variant="filled"
         error={error}
         size="md"
