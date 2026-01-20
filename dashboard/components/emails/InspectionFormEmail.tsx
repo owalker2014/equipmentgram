@@ -1,5 +1,13 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
-import { Body, Container, Head, Html, Img, Section, Text } from "@react-email/components";
+import {
+  Body,
+  Container,
+  Head,
+  Html,
+  Img,
+  Section,
+  Text,
+} from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 import {} from "../../utils/equipment";
 
@@ -15,6 +23,11 @@ export default function InspectionFormEmail({
   type,
   createdByUser,
   sentFrom,
+  address,
+  nameOfBusiness,
+  customerEmail,
+  dateOfInspection,
+  timeOfInspection,
 }: InspectionFormEmailProps) {
   return (
     <Html>
@@ -23,30 +36,40 @@ export default function InspectionFormEmail({
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">
-              {sentFrom} has sent you a new inspection report for {form?.nameOfBusiness} . Please review the report and
-              take any necessary action.
+              {sentFrom} has sent you a new inspection report for{" "}
+              {nameOfBusiness} . Please review the report and take any necessary
+              action.
             </Text>
 
             <Section className="border border-solid divide-y">
-              <Item value={createdByUser?.display_name} label="Name of Inspector" />
-              <Item value={form?.nameOfBusiness} label="Name of Business Where Inspection Took Place:" />
+              <Item
+                value={createdByUser?.display_name}
+                label="Name of Inspector"
+              />
+              <Item value={nameOfBusiness} label="Business Name" />
+
+              <Item
+                value={new Date(dateOfInspection).toLocaleDateString()}
+                label="Date of Inspection"
+              />
+              <Item
+                value={timeOfInspection}
+                label="Time at Which Inspection Took Place:"
+              />
+              <Item value={customerEmail} label="Customers Email Address" />
 
               <Item
                 value={
                   <Section className="pl-6">
-                    <Text className="m-0">{form?.address?.line1}</Text>
-                    <Text className="m-0">{form?.address?.line2}</Text>
+                    <Text className="m-0">{address?.line1}</Text>
+                    <Text className="m-0">{address?.line2}</Text>
                     <Text className="m-0">
-                      {form?.address?.city}, {form?.address?.state} {form?.address?.zip}
+                      {address?.city}, {address?.state} {address?.zip}
                     </Text>
                   </Section>
                 }
                 label="Address"
               />
-
-              <Item value={form?.customerEmail} label="Customers Email Address" />
-              <Item value={"form?.dateOfInspection"} label="Date of Inspection" />
-              <Item value={form?.timeOfInspection} label="Time at Which Inspection Took Place:" />
 
               {form?.pages.map((page, index) => (
                 <Section key={index}>
@@ -57,9 +80,21 @@ export default function InspectionFormEmail({
                   <Section>
                     {page.questions.map((question, index) => (
                       <Section key={index}>
-                        {question.value && <Item value={question.value} label={question.label} />}
-                        {question.comment && <Item value={question.comment} label={question.value!} />}
-                        {question.imageUrl && <ImageItem src={question.imageUrl} label="Post Image" />}
+                        {question.value && (
+                          <Item value={question.value} label={question.label} />
+                        )}
+                        {question.comment && (
+                          <Item
+                            value={question.comment}
+                            label={question.value!}
+                          />
+                        )}
+                        {question.imageUrl && (
+                          <ImageItem
+                            src={question.imageUrl}
+                            label={question.label}
+                          />
+                        )}
                       </Section>
                     ))}
                   </Section>

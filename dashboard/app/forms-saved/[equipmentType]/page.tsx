@@ -27,7 +27,7 @@ function ViewSavedFormListByTypePage({
   const { data, isLoading } = useGetInspectionFormByType(
     user?.uid!,
     params.equipmentType.replace(/%20/g, " "),
-    userData?.type === UserType.customer
+    userData?.type === UserType.customer,
   );
 
   const getReportStatus = (status: string) => {
@@ -125,7 +125,7 @@ function ViewSavedFormListByTypePage({
                 </Table.Td>
                 <Table.Td className="text-center">
                   {new Date(
-                    inspectionForm.form.dateOfInspection //?.toMillis()
+                    inspectionForm.form.dateOfInspection, //?.toMillis()
                   ).toLocaleDateString()}
                 </Table.Td>
                 <Table.Td className="text-center">**Fair**</Table.Td>
@@ -142,7 +142,7 @@ function ViewSavedFormListByTypePage({
                 {isLoading ? (
                   <CustomLoader />
                 ) : (
-                  <span className="text-blue-700 font-bold">
+                  <span className="text-blue-700 font-semibold">
                     No saved forms found.
                   </span>
                 )}

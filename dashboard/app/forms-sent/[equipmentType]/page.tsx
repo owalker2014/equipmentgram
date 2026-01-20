@@ -94,7 +94,7 @@ function ViewSavedFormListByTypePage({
                 {isLoading ? (
                   <CustomLoader />
                 ) : (
-                  <span className="text-blue-700 font-bold">
+                  <span className="text-blue-700 font-semibold">
                     No data found.
                   </span>
                 )}
