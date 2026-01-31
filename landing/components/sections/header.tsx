@@ -24,10 +24,14 @@ const Header = ({}) => {
                   creation, management, and distribution of inspection reports
                   directly through a phone app.
                 </p>
-                <div className="grid md:grid-cols-2 grid-cols-1 justify-items-stretch">
+                <div className="grid grid-cols-2 justify-items-stretch">
                   <div>
                     <Link href={dashboardUrl}>
-                      <Button size="lg" fullWidth className="rounded-s-full">
+                      <Button
+                        size="lg"
+                        fullWidth
+                        className="rounded-s-full sm:text-sm md:text-lg"
+                      >
                         Produce a Report
                       </Button>
                     </Link>
@@ -38,7 +42,7 @@ const Header = ({}) => {
                         fullWidth
                         size="lg"
                         variant="white"
-                        className="rounded-e-full bg-blue-50"
+                        className="rounded-e-full bg-blue-50 sm:text-sm md:text-lg"
                         leftSection={
                           <span className="mr-2">
                             <svg
@@ -67,7 +71,7 @@ const Header = ({}) => {
                   <img
                     src="inspector.jpg"
                     alt="hero"
-                    className="max-w-full lg:ml-auto rounded-tl-[100px] rounded-lg"
+                    className="max-w-full lg:ml-auto md:rounded-tl-[100px] rounded-lg"
                   />
                   <span className="absolute -left-8 -bottom-8 z-[-1]">
                     <svg

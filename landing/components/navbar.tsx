@@ -20,6 +20,7 @@ const ContactSales = () => {
   return (
     <Link href="/contact-sales">
       <Button
+        aria-label="Contact Sales"
         variant="default"
         className="rounded-full bg-blue-50 hover:bg-blue-200 border-none text-blue-700 mr-2 hidden md:inline-block"
       >
@@ -67,6 +68,7 @@ const Navbar = ({}: Props) => {
               <div className="space-x-2 hidden md:block">
                 <Link href="/signin">
                   <Button
+                    aria-label="Sign In"
                     variant="outline"
                     className="rounded-full border-none"
                   >
@@ -74,7 +76,9 @@ const Navbar = ({}: Props) => {
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="rounded-full">Sign Up</Button>
+                  <Button aria-label="Sign Up" className="rounded-full">
+                    Sign Up
+                  </Button>
                 </Link>
                 <ContactSales />
               </div>
@@ -86,7 +90,7 @@ const Navbar = ({}: Props) => {
             )}
             <div className="md:hidden inline-flex ">
               <ActionIcon onClick={open} variant="white" color="dark">
-                <IconMenu />
+                <IconMenu aria-label="Menu" />
               </ActionIcon>
             </div>
           </div>
@@ -105,7 +109,7 @@ const Navbar = ({}: Props) => {
               EquipmentGram
             </div>
           </a>
-          <CloseButton onClick={close} />
+          <CloseButton aria-label="Close" onClick={close} />
         </div>
         <ul className="flex flex-col gap-4 mt-4 font-medium ">
           {navLinks.map((item, i) => (
@@ -125,6 +129,7 @@ const Navbar = ({}: Props) => {
             <div className="grid grid-cols-2 gap-2">
               <Link href="/signin">
                 <Button
+                  aria-label="Sign In"
                   fullWidth
                   variant="outline"
                   className="rounded-full border-none"
@@ -133,7 +138,7 @@ const Navbar = ({}: Props) => {
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button fullWidth className="rounded-full">
+                <Button aria-label="Sign Up" fullWidth className="rounded-full">
                   Sign Up
                 </Button>
               </Link>

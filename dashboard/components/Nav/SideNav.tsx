@@ -56,7 +56,7 @@ export function SideNav() {
     .filter((item) =>
       item.hasAccessTo
         ? item.hasAccessTo.toUpperCase() === userData?.type.toUpperCase()
-        : true
+        : true,
     )
     .map((item) => (
       <Link
@@ -84,7 +84,7 @@ export function SideNav() {
           >
             {userData?.type}
           </Badge>
-          <Avatar size="xl" mb="md" src={userData?.photoURL} />
+          <Avatar size="xl" mb="md" src={userData?.photoURL} alt="user photo" />
           <Text className="font-bold">{userData?.display_name}</Text>
           <Text>{userData?.email}</Text>
         </div>
