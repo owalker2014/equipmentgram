@@ -106,7 +106,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
           </Text>
         </div>
 
-        <Avatar src={image} radius="xl" />
+        <Avatar src={image} radius="xl" alt="user image" />
         {/* {icon || <IconChevronDown size="1rem" />} */}
       </Group>
     </UnstyledButton>

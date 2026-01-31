@@ -29,7 +29,11 @@ export function ReturnButton({ target }: { target: string }) {
             size="md"
             gradient={{ from: "blue", to: "cyan", deg: 90 }}
           >
-            <IconDoorExit onClick={() => navigation.push(target)} size={50} />
+            <IconDoorExit
+              aria-label="Back"
+              onClick={() => navigation.push(target)}
+              size={50}
+            />
           </ActionIcon>
         </Tooltip>
       </ActionIcon.Group>
