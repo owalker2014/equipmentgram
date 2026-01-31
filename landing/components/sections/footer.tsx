@@ -26,7 +26,11 @@ const Footer = (props: Props) => {
                   .filter((link) => link.title !== "Contact Us")
                   .map((link, i) => (
                     <li className="mb-4" key={i}>
-                      <Link href={link.link} className="hover:underline">
+                      <Link
+                        href={link.link}
+                        aria-label={link.title}
+                        className="hover:underline"
+                      >
                         {link.title}
                       </Link>
                     </li>
@@ -42,6 +46,7 @@ const Footer = (props: Props) => {
                   <a
                     href="https://twitter.com/EquipmentGram"
                     className="hover:underline"
+                    aria-label="Twitter / X"
                   >
                     Twitter
                   </a>
@@ -50,16 +55,14 @@ const Footer = (props: Props) => {
                   <a
                     href="https://www.facebook.com/equipmentgram"
                     className="hover:underline"
+                    aria-label="Facebook"
                   >
                     Facebook
                   </a>
                 </li>
 
                 <li className="mb-4">
-                  <Link
-                    href="/contact-us"
-                    className="hover:underline"
-                  >
+                  <Link href="/contact-us" className="hover:underline">
                     Contact Us
                   </Link>
                 </li>
