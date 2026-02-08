@@ -43,11 +43,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       }
 
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
+      setUser(user || null);
       setLoading(false);
     });
 
