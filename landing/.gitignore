@@ -43,3 +43,5 @@ next-env.d.ts
 
 # ignore the blog folder
 /app/blog
+
+/public/sw.js.map
