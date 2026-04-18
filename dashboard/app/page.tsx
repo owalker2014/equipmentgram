@@ -31,11 +31,11 @@ export default function Home(props: any) {
   const { data: savedReportsData } = useGetInspectionFormByType(
     user?.uid!,
     undefined,
-    userData?.type === UserType.customer
+    userData?.type === UserType.customer,
   );
   const { data: sentReportsData } = useGetSentReports();
   const { data: notificationData, isLoading } = useGetNotification(
-    user?.email!
+    user?.email!,
   );
 
   useEffect(() => {}, []);
@@ -45,12 +45,17 @@ export default function Home(props: any) {
   if (!userData?.email) {
     return (
       <>
-        <Skeleton height={10} radius="lg" width="600px" />
-        <Skeleton height={10} mt={6} radius="lg" width="600px" />
-        <Skeleton height={30} mt={10} width="600px" />
-        <Skeleton height={30} mt={10} width="600px" />
-        <Skeleton height={30} mt={10} width="600px" />
-        <Skeleton height={30} mt={10} width="600px" />
+        <Skeleton height={10} radius="lg" className="w-full lg:w-[40%]" />
+        <Skeleton
+          height={10}
+          mt={6}
+          radius="lg"
+          className="w-full lg:w-[40%]"
+        />
+        <Skeleton height={30} mt={10} className="w-full lg:w-[40%]" />
+        <Skeleton height={30} mt={10} className="w-full lg:w-[40%]" />
+        <Skeleton height={30} mt={10} className="w-full lg:w-[40%]" />
+        <Skeleton height={30} mt={10} className="w-full lg:w-[40%]" />
       </>
     );
   }
@@ -67,7 +72,7 @@ export default function Home(props: any) {
         <Button
           key={`link-${i}`}
           size="xl"
-          className="flex max-w-full min-w-[600px] text-lg my-4 bg-blue-700"
+          className="flex w-full lg:w-[40%] text-lg my-4 bg-blue-700"
           onClick={() => navigation.push(link.path)}
         >
           {link.label}
