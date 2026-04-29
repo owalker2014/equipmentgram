@@ -330,6 +330,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                   )}
                   {values.pages[currentStep - 1].questions[i].imageUrl && (
                     <Image
+        {             ...{ alt: "eq-image" }}
                       className="mt-4 max-h-5"
                       src={values.pages[currentStep - 1].questions[i].imageUrl}
                     />

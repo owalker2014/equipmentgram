@@ -6,7 +6,7 @@ import { useGetNotification } from "@/lib/network/notification";
 import { Divider, Notification, Text, Title } from "@mantine/core";
 import React from "react";
 
-type Props = {};
+type Props = Record<string, never>;
 
 const Notifications = (props: Props) => {
   const { user } = useAuth();
@@ -25,6 +25,7 @@ const Notifications = (props: Props) => {
           data?.map((item, i) => {
             return (
               <Notification
+                key={`note-${i}`}
                 onClick={() => {
                   console.log("clicked");
                 }}
