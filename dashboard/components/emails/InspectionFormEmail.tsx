@@ -1,4 +1,5 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
+import React from "react";
 import {
   Body,
   Container,
@@ -18,9 +19,9 @@ export interface InspectionFormEmailProps extends InspectionFormWithId {
 
 export default function InspectionFormEmail({
   form,
-  createdByUserUid,
-  id,
-  type,
+  createdByUserUid: _createdByUserUid,
+  id: _id,
+  type: _type,
   createdByUser,
   sentFrom,
   address,
@@ -108,7 +109,7 @@ export default function InspectionFormEmail({
   );
 }
 
-function Item({ value, label }: { value: any; label: string }) {
+function Item({ value, label }: { value: React.ReactNode; label: string }) {
   return (
     <Section>
       <Text className="px-2 font-bold m-0 bg-blue-100">{label}:</Text>
@@ -117,7 +118,7 @@ function Item({ value, label }: { value: any; label: string }) {
   );
 }
 
-function ImageItem({ src, label }: { src: any; label: string }) {
+function ImageItem({ src, label }: { src: string; label: string }) {
   return (
     <Section className="">
       <Text className="font-bold px-2 m-0 bg-blue-100">{label}:</Text>

@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -39,6 +38,8 @@ export type User = {
   emailVerified?: boolean;
   phoneNumber?: string;
   photoURL?: string;
+  signatureUrl?: string;
+  stripe_customer_id?: string;
 };
 
 export type UpdateUser = {
@@ -60,6 +61,8 @@ export type UpdateUser = {
   emailVerified?: boolean;
   phoneNumber?: string;
   photoURL?: string;
+  signatureUrl?: string;
+  stripe_customer_id?: string;
 };
 
 export type UserWithId = User & {
@@ -141,7 +144,7 @@ export const useSetUserType = () => {
 
 export const useGetInspectors = () => {
   return useQuery<User[], Error>([usersCollection, "inspectors"], async () => {
-    const q = await query(
+    const q = query(
       collection(db, usersCollection),
       where("type", "==", UserType.inspector)
     );

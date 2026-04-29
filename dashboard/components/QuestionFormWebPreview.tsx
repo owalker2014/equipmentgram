@@ -66,7 +66,7 @@ const QuestionFormWebPreview = ({ data }: Props) => {
 
 export default QuestionFormWebPreview;
 
-function Item({ value, label }: { value: any; label: string }) {
+function Item({ value, label }: { value: React.ReactNode; label: string }) {
   return (
     <>
       <Text size="md" className="px-2 bg-blue-100">
@@ -85,7 +85,7 @@ function Item({ value, label }: { value: any; label: string }) {
   );
 }
 
-function ImageItem({ src, label }: { src: any; label: string }) {
+function ImageItem({ src, label }: { src: string; label: string }) {
   return (
     <div className="flex flex-col">
       <Text size="md" className="px-2 bg-gray-100 font-bold">
