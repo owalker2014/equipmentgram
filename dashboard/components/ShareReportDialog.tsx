@@ -22,8 +22,6 @@ const ShareReportDialog = (inspectionForm: Props) => {
     register,
     handleSubmit,
     reset,
-
-    formState: { errors, isSubmitting },
   } = useForm<Inputs>();
 
   const [isLoading, setIsLoading] = useState(false);

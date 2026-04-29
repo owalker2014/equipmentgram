@@ -11,7 +11,7 @@ type Props = {
 function CustomLoader({ message, type }: Props) {
   return (
     <Center h="100%" w="100%">
-      <Loader size={30} type={type ?? "bars"} children={<>{message}</>} />
+      <Loader size={30} type={type ?? "bars"}>{message}</Loader>
     </Center>
   );
 }

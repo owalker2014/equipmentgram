@@ -142,7 +142,7 @@ export function clipObject(
   keysToClip: string[]
 ) {
   const clippedObj = { ...obj };
-  // @ts-ignore
+  // @ts-expect-error -- clippedObj is a copy of a plain object, index access is safe here
   keysToClip.forEach((key: string) => delete clippedObj[key]);
   return clippedObj;
 }
@@ -181,7 +181,7 @@ export const fileToBase64 = (file: File) =>
   });
 
 export const getTimeString = (timestampz: string) => {
-  let currentTime = timestampz.split(":");
+  const currentTime = timestampz.split(":");
   if (+currentTime[0] >= 12) {
     currentTime[0] = String(+currentTime[0] - 12).padStart(2, "0");
     currentTime[2] = ":PM";

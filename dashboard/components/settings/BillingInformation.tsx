@@ -42,8 +42,14 @@ export const BillingInformation: React.FC = () => {
       if (!res.ok) throw new Error("Failed to open billing portal");
       const { url } = await res.json();
       window.location.href = url;
-    } catch (e: any) {
-      notify({ title: "Error", message: e.message }, true);
+    } catch (e) {
+      notify(
+        {
+          title: "Error",
+          message: e instanceof Error ? e.message : "Unknown error",
+        },
+        true,
+      );
       setLoading(false);
     }
   };

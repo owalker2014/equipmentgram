@@ -8,6 +8,7 @@ import { Button, FileInput, Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCamera } from "@tabler/icons-react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import Image from "next/image";
 import React, { useState } from "react";
 
 export const DigitalSignature: React.FC = () => {
@@ -45,8 +46,14 @@ export const DigitalSignature: React.FC = () => {
           );
           setFile(null);
           close();
-        } catch (e: any) {
-          notify({ title: "Error", message: e.message }, true);
+        } catch (e) {
+          notify(
+            {
+              title: "Error",
+              message: e instanceof Error ? e.message : "Unknown error",
+            },
+            true,
+          );
         } finally {
           setLoading(false);
         }
@@ -61,7 +68,7 @@ export const DigitalSignature: React.FC = () => {
         <div className="flex-grow">
           <div className="flex gap-2">
             {userData?.signatureUrl && (
-              <img
+              <Image
                 src={userData.signatureUrl}
                 alt={"digital signature"}
                 className={

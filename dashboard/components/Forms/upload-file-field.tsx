@@ -1,12 +1,12 @@
 import { storage } from "@/lib/firebaseConfig/init";
 import { InspectionResult, runInspection } from "@/lib/network/forms";
-import { FileInput, Text } from "@mantine/core";
+import { FileInput } from "@mantine/core";
 import { IconCamera } from "@tabler/icons-react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 
 type Props = {
-  onUploadComplete: (url: string, result: InspectionResult) => void;
+  onUploadComplete: (_url: string, _result: InspectionResult) => void;
   fileName: string;
   fieldLabel: string;
   error?: string;
@@ -16,8 +16,8 @@ type Props = {
     model: string;
     section: string;
   };
-  onProgress: (progress: number) => void;
-  onError: (err: string) => void;
+  onProgress: (_progress: number) => void;
+  onError: (_err: string) => void;
   clearFieldError: () => void;
 };
 
@@ -39,7 +39,7 @@ const UploadFileField = ({
 
     const urlPref = `${fileName}-${new Date().getTime()}-${file.name.replace(
       " ",
-      "-"
+      "-",
     )}`;
     const storageRef = ref(storage, urlPref);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -83,7 +83,7 @@ const UploadFileField = ({
             onError(error as string); //
           })
           .finally(() => setLoading(false));
-      }
+      },
     );
   };
 

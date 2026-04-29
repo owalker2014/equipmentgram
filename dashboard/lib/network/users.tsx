@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -145,7 +144,7 @@ export const useSetUserType = () => {
 
 export const useGetInspectors = () => {
   return useQuery<User[], Error>([usersCollection, "inspectors"], async () => {
-    const q = await query(
+    const q = query(
       collection(db, usersCollection),
       where("type", "==", UserType.inspector)
     );

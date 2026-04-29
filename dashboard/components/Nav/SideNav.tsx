@@ -2,7 +2,7 @@
 
 import { signOut, useAuth } from "@/lib/authContext";
 import { useGetUser } from "@/lib/network/users";
-import { Avatar, Badge, Text } from "@mantine/core";
+import { Badge } from "@mantine/core";
 import {
   IconBell,
   IconFileDownload,

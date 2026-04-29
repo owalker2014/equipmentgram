@@ -1,7 +1,7 @@
 import { addDoc, collection } from "@firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { db } from "../firebaseConfig/init";
-import { InspectionForm, InspectionFormWithId } from "./forms";
+import { InspectionFormWithId } from "./forms";
 import { getDocs, query, where } from "firebase/firestore";
 import { NotificationCollection, NotificationType } from "./notification";
 import { useAuth } from "../authContext";

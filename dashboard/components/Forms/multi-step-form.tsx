@@ -9,11 +9,8 @@ import {
   Text,
   TextInput,
   Textarea,
-  rem,
 } from "@mantine/core";
-import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import { IconClock } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 import UploadFileField from "./upload-file-field";
 import { getTimeString, notify } from "@/lib/utils";
@@ -40,7 +37,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const { user } = useAuth();
   const progressRange = useMemo(
-    () => Array.from({ length: 99 }, (v, i) => 1 + i),
+    () => Array.from({ length: 99 }, (_v, i) => 1 + i),
     [],
   );
 
@@ -123,9 +120,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
   }, [user]);
 
   const nextStep = async () => {
-    const { hasErrors, errors } = validate();
-
-    console.log(errors);
+    const { hasErrors } = validate();
 
     setCurrentStep((prevStep) => {
       if (hasErrors) {
@@ -141,7 +136,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
   };
 
   const onFormSubmit = (data: QF) => {
-    const { hasErrors, errors } = validate();
+    const { hasErrors } = validate();
 
     if (hasErrors) {
       notify(
@@ -246,7 +241,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                   label="States"
                   variant="filled"
                   data={Object.entries(USStates).map(
-                    ([stateKey, state]) => state,
+                    ([_stateKey, state]) => state,
                   )}
                   required
                   {...getInputProps("state")}
