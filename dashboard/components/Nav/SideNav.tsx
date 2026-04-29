@@ -2,7 +2,7 @@
 
 import { signOut, useAuth } from "@/lib/authContext";
 import { useGetUser } from "@/lib/network/users";
-import { Avatar, Badge, Text } from "@mantine/core";
+import { Badge } from "@mantine/core";
 import {
   IconBell,
   IconFileDownload,
@@ -10,6 +10,7 @@ import {
   IconLicense,
   IconLogout,
   IconMailShare,
+  IconSettings,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -26,7 +27,7 @@ const data = [
   { link: "/forms-saved", label: "Saved", icon: IconFileDownload },
   { link: "/forms-sent", label: "Sent", icon: IconMailShare },
   { link: "/notifications", label: "Notifications", icon: IconBell },
-  // { link: "/settings", label: "Settings", icon: IconSettings },
+  { link: "/settings", label: "Settings", icon: IconSettings },
 ];
 
 export function SideNav() {
@@ -75,8 +76,8 @@ export function SideNav() {
 
   return (
     <div className="h-full flex flex-col justify-between ">
-      <div className="divide-y flex flex-col gap-4">
-        <div className="flex flex-col items-center ">
+      <div className="divide-yx flex flex-col gap-4">
+        <div className="flex flex-col items-center mb-12">
           <Badge
             color="blue"
             radius={0}
@@ -84,9 +85,9 @@ export function SideNav() {
           >
             {userData?.type}
           </Badge>
-          <Avatar size="xl" mb="md" src={userData?.photoURL} alt="user photo" />
+          {/* <Avatar size="xl" mb="md" src={userData?.photoURL} alt="user photo" />
           <Text className="font-bold">{userData?.display_name}</Text>
-          <Text>{userData?.email}</Text>
+          <Text>{userData?.email}</Text> */}
         </div>
         {userData?.email && <div className="pt-4">{links}</div>}
       </div>

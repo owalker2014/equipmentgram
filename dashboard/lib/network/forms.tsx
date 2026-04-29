@@ -40,11 +40,11 @@ export interface InspectionResult {
   component: string;
   timestamp: string;
   defect_present: boolean;
-  defect_type: any;
+  defect_type: string;
   severity: number;
   observations: string;
   recommended_action: string;
-  image_base64: any;
+  image_base64: string;
 }
 
 export interface ValidationError {
@@ -82,7 +82,7 @@ export interface Question {
   value?: string;
   imageUrl?: string;
   progress?: number;
-  imageResult?: any; // inspection-result
+  imageResult?: InspectionResult;
   comment?: string;
 }
 
@@ -163,7 +163,7 @@ export const useAddFreshInspectionForm = (userId: string) => {
           },
           false
         );
-        navigation.push(`/forms-saved/${variables.type}/${data.id}`);
+        navigation.push(`/forms-saved/${variables.type}/${data.id}?mode=preview`);
       },
       onError: (error: any) => {
         console.error("error adding inspection --> ", error);

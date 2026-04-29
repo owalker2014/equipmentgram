@@ -35,7 +35,7 @@ function ViewSavedFormListByTypePage({
       case InspectionReportStatus.Pending:
         return "Pending";
       case InspectionReportStatus.FilledForm:
-        return "Awaiting Approval";
+        // return "Awaiting Approval";
       case InspectionReportStatus.Approved:
         return "Approved";
       case InspectionReportStatus.Rejected:
@@ -88,7 +88,7 @@ function ViewSavedFormListByTypePage({
           {data?.map((inspectionForm, index) => {
             const isApproved = [
               InspectionReportStatus.Approved,
-              // InspectionReportStatus.FilledForm,
+              InspectionReportStatus.FilledForm,
             ].includes(inspectionForm.reportStatus!);
 
             return (
@@ -106,11 +106,11 @@ function ViewSavedFormListByTypePage({
                   </Link>
                   {isApproved && (
                     <div className="mt-1 flex flex-row gap-2">
-                      <SavePdfButton inspectionForm={inspectionForm} />
-                      <ShareReportDialog
+                      {/* <SavePdfButton inspectionForm={inspectionForm} /> */}
+                      {/* <ShareReportDialog
                         {...inspectionForm}
                         sentFrom="shibli"
-                      />
+                      /> */}
                     </div>
                   )}
                 </Table.Td>
