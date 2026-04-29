@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
+import React from "react";
 
 type Props = {
   data: InspectionFormWithId;
@@ -141,8 +142,8 @@ const QuestionFormPDF = ({ data }: Props) => {
 
 export default QuestionFormPDF;
 
-function Item({ value, label }: { value: any; label: string }) {
 function Item({ value, label }: { value: React.ReactNode; label: string }) {
+  return (
     <View>
       <View style={styles.label}>
         <Text>{label}:</Text>
