@@ -1,6 +1,7 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
 import { Text } from "@mantine/core";
-import { Fragment } from "react";
+import Image from "next/image";
+import React, { Fragment } from "react";
 
 type Props = {
   data: InspectionFormWithId;
@@ -91,7 +92,7 @@ function ImageItem({ src, label }: { src: string; label: string }) {
       <Text size="md" className="px-2 bg-gray-100 font-bold">
         {label}:
       </Text>
-      <img className="p-2 max-w-xs" src={src} />
+      <img alt="eq-image" className="p-2 max-w-xs" src={src} />
     </div>
   );
 }

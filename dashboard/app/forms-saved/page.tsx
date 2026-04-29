@@ -7,7 +7,7 @@ import { Divider, Text, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-type Props = {};
+type Props = Record<string, never>;
 
 const SavedFormsPage = (props: Props) => {
   const navigation = useRouter();

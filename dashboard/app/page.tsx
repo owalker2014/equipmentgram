@@ -88,8 +88,8 @@ export default function Home(props: any) {
 
       <h4 className="font-bold mt-7">Recent Notifications</h4>
       {notificationData?.map((note, i) => (
-        <List listStyleType="square">
-          <List.Item key={`note-${i}`}>{note.message}</List.Item>
+        <List key={`note-${i}`} listStyleType="square">
+          <List.Item>{note.message}</List.Item>
         </List>
       ))}
       {notificationData?.length === 0 && <>----</>}
