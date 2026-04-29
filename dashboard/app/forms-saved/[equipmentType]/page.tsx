@@ -35,8 +35,8 @@ function ViewSavedFormListByTypePage({
       case InspectionReportStatus.Pending:
         return "Pending";
       case InspectionReportStatus.FilledForm:
-        // return "Awaiting Approval";
       case InspectionReportStatus.Approved:
+        // return "Awaiting Approval";
         return "Approved";
       case InspectionReportStatus.Rejected:
         return "Rejected";

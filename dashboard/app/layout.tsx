@@ -22,6 +22,7 @@ import { SideNav } from "@/components/Nav/SideNav";
 import { AuthContextProvider } from "../lib/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
+import React from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 

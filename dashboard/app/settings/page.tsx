@@ -4,7 +4,7 @@ import ProfileSettings from "@/components/settings/ProfileSettings";
 import { Divider, Text, Title } from "@mantine/core";
 import React from "react";
 
-type Props = {};
+type Props = Record<string, never>;
 
 const SettingsPage = (props: Props) => {
   return (

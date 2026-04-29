@@ -159,7 +159,12 @@ function ImageItem({ src, label }: { src: any; label: string }) {
   return (
     <View>
       <Text style={styles.label2}>{label}:</Text>
-      <Image cache src={`data:image/png;base64,${src}`} style={styles.image} />
+      <Image
+        {...{ alt: "eq-image" }}
+        cache
+        src={`data:image/png;base64,${src}`}
+        style={styles.image}
+      />
     </View>
   );
 }
