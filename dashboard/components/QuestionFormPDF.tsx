@@ -1,7 +1,6 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
 import {
   Document,
-  Font,
   Image,
   Page,
   StyleSheet,
@@ -143,7 +142,7 @@ const QuestionFormPDF = ({ data }: Props) => {
 export default QuestionFormPDF;
 
 function Item({ value, label }: { value: any; label: string }) {
-  return (
+function Item({ value, label }: { value: React.ReactNode; label: string }) {
     <View>
       <View style={styles.label}>
         <Text>{label}:</Text>

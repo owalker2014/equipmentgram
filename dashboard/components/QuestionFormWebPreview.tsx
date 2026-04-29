@@ -92,7 +92,7 @@ function ImageItem({ src, label }: { src: string; label: string }) {
       <Text size="md" className="px-2 bg-gray-100 font-bold">
         {label}:
       </Text>
-      <Image alt="eq-image" className="p-2 max-w-xs" src={src} />
+      <img alt="eq-image" className="p-2 max-w-xs" src={src} />
     </div>
   );
 }
