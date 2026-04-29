@@ -97,6 +97,16 @@ const SavedForm: React.FC<{
           <Button className="mt-4 bg-blue-700" onClick={() => {}}>
             Share
           </Button>
+          <Button
+            className="mt-4 ml-2 bg-stone-500"
+            onClick={() => {
+              const url = new URL(window.location.href);
+              url.search = isPreview ? "" : "?mode=preview";
+              window.location.href = url.href;
+            }}
+          >
+            View {isPreview ? "as PDF" : "on Web"}
+          </Button>
         </div>
       </div>
     </>

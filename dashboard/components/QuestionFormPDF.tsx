@@ -63,7 +63,9 @@ const styles = StyleSheet.create({
   },
   image: {
     // width: "100%",
-    height: 450,
+    width: 250,
+    height: 200,
+    objectFit: "contain",
     padding: 10,
   },
 });
@@ -122,7 +124,11 @@ const QuestionFormPDF = ({ data }: Props) => {
                     <Item value={question.comment} label={question.value!} />
                   )}
                   {question.imageUrl && (
-                    <ImageItem src={question.imageUrl} label={question.label} />
+                    // <ImageItem src={question.imageUrl} label={question.label} />
+                    <ImageItem
+                      src={question.imageResult?.image_base64}
+                      label={question.label}
+                    />
                   )}
                 </View>
               ))}
@@ -153,7 +159,7 @@ function ImageItem({ src, label }: { src: any; label: string }) {
   return (
     <View>
       <Text style={styles.label2}>{label}:</Text>
-      <Image cache src={src} style={styles.image} />
+      <Image cache src={`data:image/png;base64,${src}`} style={styles.image} />
     </View>
   );
 }

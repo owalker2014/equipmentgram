@@ -163,7 +163,7 @@ export const useAddFreshInspectionForm = (userId: string) => {
           },
           false
         );
-        navigation.push(`/forms-saved/${variables.type}/${data.id}`);
+        navigation.push(`/forms-saved/${variables.type}/${data.id}?mode=preview`);
       },
       onError: (error: any) => {
         console.error("error adding inspection --> ", error);
