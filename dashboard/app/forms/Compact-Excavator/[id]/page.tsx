@@ -53,34 +53,34 @@ const CompactExcavatorsFormPage: React.FC<{
         comment: undefined,
         key: "Safety",
         questions: [
-          {
-            label: "Travel Alarm",
-            key: "TravelAlarm",
-          },
-          {
-            label: "Horn",
-            key: "Horn",
-          },
-          {
-            label: "Seat Belt",
-            key: "SeatBelt",
-          },
+          // {
+          //   label: "Travel Alarm",
+          //   key: "TravelAlarm",
+          // },
+          // {
+          //   label: "Horn",
+          //   key: "Horn",
+          // },
+          // {
+          //   label: "Seat Belt",
+          //   key: "SeatBelt",
+          // },
           {
             label: "Safety Lock Out/Stop",
             key: "SafetyLockOutStop",
           },
-          {
-            label: "Swing Break",
-            key: "SwingBreak",
-          },
-          {
-            label: "Current Safety Manual",
-            key: "CurrentSafetyManual",
-          },
-          {
-            label: "Current Operator/Maintenance Manual",
-            key: "CurrentOperatorMaintenanceManual",
-          },
+          // {
+          //   label: "Swing Break",
+          //   key: "SwingBreak",
+          // },
+          // {
+          //   label: "Current Safety Manual",
+          //   key: "CurrentSafetyManual",
+          // },
+          // {
+          //   label: "Current Operator/Maintenance Manual",
+          //   key: "CurrentOperatorMaintenanceManual",
+          // },
         ],
       },
       {
@@ -92,10 +92,10 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Seats/Armrests",
             key: "SeatsArmrests",
           },
-          {
-            label: "Mirrors",
-            key: "Mirrors",
-          },
+          // {
+          //   label: "Mirrors",
+          //   key: "Mirrors",
+          // },
           {
             label: "Steering Controls",
             key: "SteeringControls",
@@ -128,22 +128,22 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Gauges",
             key: "Gauges",
           },
-          {
-            label: "Hour Meter",
-            key: "HourMeter",
-          },
-          {
-            label: "Air Conditioner",
-            key: "AirConditioner",
-          },
-          {
-            label: "Heater",
-            key: "Heater",
-          },
-          {
-            label: "Limited Function Check",
-            key: "LimitedFunctionCheckControlStation",
-          },
+          // {
+          //   label: "Hour Meter",
+          //   key: "HourMeter",
+          // },
+          // {
+          //   label: "Air Conditioner",
+          //   key: "AirConditioner",
+          // },
+          // {
+          //   label: "Heater",
+          //   key: "Heater",
+          // },
+          // {
+          //   label: "Limited Function Check",
+          //   key: "LimitedFunctionCheckControlStation",
+          // },
         ],
       },
       {
@@ -159,10 +159,10 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "A/C Compressor",
             key: "ACCompressor",
           },
-          {
-            label: "Starter",
-            key: "Starter",
-          },
+          // {
+          //   label: "Starter",
+          //   key: "Starter",
+          // },
           {
             label: "Exhaust System",
             key: "ExhaustSystem",
@@ -191,10 +191,10 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Engine - Right Side",
             key: "EngineRightSide",
           },
-          {
-            label: "Limited Function Check",
-            key: "LimitedFunctionCheckEngine",
-          },
+          // {
+          //   label: "Limited Function Check",
+          //   key: "LimitedFunctionCheckEngine",
+          // },
         ],
       },
       {
@@ -219,10 +219,10 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Right Final Drive",
             key: "RightFinalDrive",
           },
-          {
-            label: "Limited Function Check",
-            key: "LimitedFunctionCheckDrivetrain",
-          },
+          // {
+          //   label: "Limited Function Check",
+          //   key: "LimitedFunctionCheckDrivetrain",
+          // },
         ],
       },
       {
@@ -254,14 +254,14 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Auxiliary Hydraulic Plumbing",
             key: "AuxiliaryHydraulicPlumbing",
           },
-          {
-            label: "Swing Motor",
-            key: "SwingMotor",
-          },
-          {
-            label: "Hydraulic Center Swivel",
-            key: "HydraulicCenterSwivel",
-          },
+          // {
+          //   label: "Swing Motor",
+          //   key: "SwingMotor",
+          // },
+          // {
+          //   label: "Hydraulic Center Swivel",
+          //   key: "HydraulicCenterSwivel",
+          // },
           {
             label: "Boom Swing Cylinders",
             key: "BoomSwingCylinders",
@@ -286,10 +286,10 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Blade Lift Cylinder",
             key: "BladeLiftCylinder",
           },
-          {
-            label: "Limited Function Check",
-            key: "LimitedFunctionCheckHydraulics",
-          },
+          // {
+          //   label: "Limited Function Check",
+          //   key: "LimitedFunctionCheckHydraulics",
+          // },
         ],
       },
       {
@@ -330,10 +330,10 @@ const CompactExcavatorsFormPage: React.FC<{
             label: "Bottom Covers",
             key: "BottomCovers",
           },
-          {
-            label: "Limited Function Check",
-            key: "LimitedFunctionCheckBoomCondition",
-          },
+          // {
+          //   label: "Limited Function Check",
+          //   key: "LimitedFunctionCheckBoomCondition",
+          // },
         ],
       },
       {
