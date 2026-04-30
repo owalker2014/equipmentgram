@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { PDFViewer } from "@react-pdf/renderer";
 import { IconAt } from "@tabler/icons-react";
-import React, { Fragment } from "react";
+import React from "react";
 
 const SavedForm: React.FC<{
   params: any;
@@ -102,7 +102,7 @@ const SavedForm: React.FC<{
             onClick={() => {
               const url = new URL(window.location.href);
               url.search = isPreview ? "" : "?mode=preview";
-              window.location.href = url.href;
+              window.location.assign(url);
             }}
           >
             View {isPreview ? "as PDF" : "on Web"}

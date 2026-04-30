@@ -9,7 +9,7 @@ import {
   useGetInspectionFormByType,
 } from "@/lib/network/forms";
 import { UserType, useGetUser } from "@/lib/network/users";
-import { Avatar, Button, Divider, Table, Text, Title } from "@mantine/core";
+import { Divider, Table, Text, Title } from "@mantine/core";
 import Link from "next/link";
 
 interface ViewSavedFormListByTypePageProps {
