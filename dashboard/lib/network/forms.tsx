@@ -151,7 +151,7 @@ export const useAddFreshInspectionForm = (userId: string) => {
       return docRef;
     },
     {
-      onSuccess: (data, variables, context) => {
+      onSuccess: (data, variables) => {
         queryClient.invalidateQueries([inspectionFormsCollection]);
         queryClient.refetchQueries([inspectionFormsCollection]);
 
@@ -166,7 +166,7 @@ export const useAddFreshInspectionForm = (userId: string) => {
         navigation.push(`/forms-saved/${variables.type}/${data.id}?mode=preview`);
       },
       onError: (error: any) => {
-        console.error("error adding inspection --> ", error);
+        // console.error("error adding inspection --> ", error);
         notify(
           {
             title: "Inspection Submission Error",
@@ -411,7 +411,7 @@ export const runInspection = async (
     const responseData: InspectionResult = await response.json(); // Parse the JSON response
     return [null, responseData];
   } catch (error: any) {
-    console.error("Error during defect detection: ", error);
+    // console.error("Error during defect detection: ", error);
 
     let message = error.message;
     let color = "red";
