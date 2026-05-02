@@ -68,7 +68,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         const signInResponse = await signInWithCustomToken(auth, data.token);
         setUser(signInResponse.user);
       } else {
-        console.error("Error:", response.statusText);
+        // console.error("Error:", response.statusText);
         navigation.push(`${process.env.NEXT_PUBLIC_REDIRECT_URL}/signin`);
       }
     };

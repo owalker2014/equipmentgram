@@ -28,10 +28,12 @@ const CompactExcavatorsFormPage: React.FC<{
           {
             label: "Paint",
             key: "Paint",
+            required: true,
           },
           {
             label: "Glass",
             key: "Glass",
+            required: true,
           },
           // don't include this one
           {
@@ -99,6 +101,7 @@ const CompactExcavatorsFormPage: React.FC<{
           {
             label: "Steering Controls",
             key: "SteeringControls",
+            required: true,
           },
           {
             label: "Hydraulic Controls",
