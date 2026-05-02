@@ -81,7 +81,7 @@ export function SideNav() {
           <Badge
             color="blue"
             radius={0}
-            className="absolute top-4 left-0 bg-blue-700"
+            className="absolute top-4 left-0 bg-stone-700"
           >
             {userData?.type}
           </Badge>

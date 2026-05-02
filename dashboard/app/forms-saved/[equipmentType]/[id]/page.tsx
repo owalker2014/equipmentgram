@@ -44,10 +44,10 @@ const SavedForm: React.FC<{
       <Divider className="mb-8" />
 
       <div className="flex flex-col lg:flex-row gap-8">
-        <div className="w-full lg:min-w-[40vw] lg:max-w-[650px] mx-auto pb-10">
+        <div className="w-full lg:min-w-[40vw] lg:max-w-[70vw] mx-auto pb-10">
           {!isPreview && (
             <>
-              <PDFViewer style={{ width: "100%", height: "60vh" }}>
+              <PDFViewer style={{ width: "100%", height: "70vh" }}>
                 <QuestionFormPDF data={data} />
               </PDFViewer>
               <Divider />
@@ -99,7 +99,7 @@ const SavedForm: React.FC<{
               Share
             </Button>
             <Button
-              className="bg-stone-500"
+              className="bg-stone-700"
               onClick={() => {
                 const url = new URL(window.location.href);
                 url.search = isPreview ? "" : "?mode=preview";

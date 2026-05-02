@@ -360,7 +360,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                             values.pages[currentStep - 1]?.questions[i]
                               ?.progress ?? 0
                           }
-                          className="bg-stone-500"
+                          className="bg-stone-700"
                           striped
                           animated
                         />
@@ -393,7 +393,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
         </div>
         <div className="pb-10 my-4 space-x-4">
           {currentStep > 0 && (
-            <Button onClick={prevStep} className="bg-stone-500">
+            <Button onClick={prevStep} className="bg-stone-700">
               Previous
             </Button>
           )}
