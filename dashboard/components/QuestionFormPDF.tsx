@@ -1,4 +1,5 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
+import { analysisChecklist } from "@/utils/constants";
 import {
   Document,
   Image,
@@ -21,92 +22,151 @@ type Props = {
 
 const styles = StyleSheet.create({
   page: {
-    padding: 20,
-    fontSize: 14,
+    padding: 10,
+    fontSize: 11,
     fontFamily: "Helvetica",
   },
   section: {
     // paddingHorizontal: 10,
-    marginTop: 10,
+    marginTop: 5,
+    border: 1,
+    borderTop: "none",
+    borderStyle: "solid",
+    borderColor: "#e5e7eb",
   },
   label: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     paddingVertical: 3,
     fontFamily: "Helvetica-Bold",
-    fontSize: 14,
+    fontSize: 10,
     backgroundColor: "#dbeafe",
     fontWeight: "black",
   },
   label2: {
-    paddingHorizontal: 10,
-    paddingVertical: 3,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
     fontFamily: "Helvetica-Bold",
-    fontSize: 14,
+    fontSize: 9,
     backgroundColor: "rgba(243 244 246, 1)",
     fontWeight: "black",
   },
   pageInfoContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingHorizontal: 5,
+    paddingVertical: 4,
     fontWeight: "bold",
     backgroundColor: "#dbeafe",
   },
   pageTitle: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
   },
   value: {
-    paddingLeft: 20,
-    paddingRight: 10,
+    paddingLeft: 7,
+    paddingRight: 7,
     paddingVertical: 5,
+    color: "#6b7280",
   },
   image: {
     // width: "100%",
-    width: 250,
+    width: 200,
     height: 200,
     objectFit: "contain",
     padding: 10,
+  },
+  imageRow: {
+    flexDirection: "row",
+    gap: 12,
+    margin: 4,
+  },
+  metadataContainer: {
+    flex: 1,
+    gap: 4,
+  },
+  metadataKeysRow: {
+    flexDirection: "row",
+    gap: 4,
+  },
+  metadataItem: {
+    flex: 1,
+    padding: 4,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#e5e7eb",
+    borderRadius: 4,
+  },
+  metadataLabel: {
+    fontFamily: "Helvetica-Bold",
+    fontSize: 8,
+  },
+  metadataValue: {
+    color: "#6b7280",
+    fontSize: 10,
   },
 });
 
 const QuestionFormPDF = ({ data }: Props) => {
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page
+        size="A4"
+        style={styles.page}
+        renderTextLayer={false}
+        renderAnnotationLayer={false}
+      >
         <View>
-          <Item
-            value={data.createdByUser?.display_name}
-            label="Name of Inspector"
-          />
-          <Item value={data.nameOfBusiness} label="Business Name" />
-          <Item
-            // value={inspectionForm.dateOfInspection?.toDate().toLocaleDateString()}
-            value={new Date(data.dateOfInspection)?.toLocaleDateString()}
-            label="Date of Inspection"
-          />
-          <Item value={data.timeOfInspection} label="Time of Inspection" />
-          <Item value={data.customerEmail} label="Customer's Email" />
-          <Item
-            value={
-              <View>
-                <View>
-                  <Text>{data.address?.line1}</Text>
-                </View>
-                <View>
-                  {data.address?.line2 && <Text>{data.address?.line2}</Text>}
-                </View>
-                <View>
-                  <Text>
-                    &nbsp;&nbsp;
-                    {data.address?.city}, {data.address?.state}{" "}
-                    {data.address?.zip}
-                  </Text>
-                </View>
-              </View>
-            }
-            label="Address"
-          />
+          <View style={styles.metadataKeysRow}>
+            <View style={styles.metadataItem}>
+              <Item
+                value={data.createdByUser?.display_name}
+                label="Name of Inspector"
+              />
+            </View>
+            <View style={styles.metadataItem}>
+              <Item value={data.nameOfBusiness} label="Business Name" />
+            </View>
+          </View>
+          <View style={styles.metadataKeysRow}>
+            <View style={styles.metadataItem}>
+              <Item
+                // value={inspectionForm.dateOfInspection?.toDate().toLocaleDateString()}
+                value={new Date(data.dateOfInspection)?.toLocaleDateString()}
+                label="Date of Inspection"
+              />
+            </View>
+            <View style={styles.metadataItem}>
+              <Item value={data.timeOfInspection} label="Time of Inspection" />
+            </View>
+          </View>
+          <View style={styles.metadataKeysRow}>
+            <View style={styles.metadataItem}>
+              <Item
+                value={
+                  <View>
+                    <View>
+                      <Text>{data.address?.line1}</Text>
+                    </View>
+                    <View>
+                      {data.address?.line2 && (
+                        <Text>{data.address?.line2}</Text>
+                      )}
+                    </View>
+                    <View>
+                      <Text>
+                        &nbsp;&nbsp;
+                        {data.address?.city}, {data.address?.state}{" "}
+                        {data.address?.zip}
+                      </Text>
+                    </View>
+                  </View>
+                }
+                label="Address"
+              />
+            </View>
+            <View style={styles.metadataItem}>
+              <Item value={data.customerEmail} label="Customer Email" />
+            </View>
+          </View>
 
           {data.form?.pages.map((page, index) => (
             <View key={`section-${index}`} style={styles.section}>
@@ -126,8 +186,9 @@ const QuestionFormPDF = ({ data }: Props) => {
                   {question.imageUrl && (
                     // <ImageItem src={question.imageUrl} label={question.label} />
                     <ImageItem
-                      src={question.imageResult?.image_base64}
+                      src={question.imageResult?.image_base64!}
                       label={question.label}
+                      result={question.imageResult}
                     />
                   )}
                 </View>
@@ -155,16 +216,55 @@ function Item({ value, label }: { value: React.ReactNode; label: string }) {
   );
 }
 
-function ImageItem({ src, label }: { src: any; label: string }) {
+function ImageItem({
+  src,
+  label,
+  result,
+}: {
+  src: string;
+  label: string;
+  result: any;
+}) {
   return (
     <View>
-      <Text style={styles.label2}>{label}:</Text>
-      <Image
-        {...{ alt: "eq-image" }}
-        cache
-        src={`data:image/png;base64,${src}`}
-        style={styles.image}
-      />
+      <Text style={styles.label2}>{/* {label}: */}&nbsp;</Text>
+      <View style={styles.imageRow}>
+        <Image
+          {...{ alt: "eq-image" }}
+          cache
+          src={`data:image/png;base64,${src}`}
+          style={styles.image}
+        />
+        <View style={styles.metadataContainer}>
+          {analysisChecklist.map((o, oidx) => {
+            if (o.keys) {
+              return (
+                <View key={oidx} style={styles.metadataKeysRow}>
+                  {o.keys.map((x, xidx) => {
+                    let output: any = result?.[x.key];
+                    if (typeof output === "boolean") {
+                      output = output ? "Yes" : "No";
+                    }
+                    return (
+                      <View key={xidx} style={styles.metadataItem}>
+                        <Text style={styles.metadataLabel}>{x.label}</Text>
+                        <Text style={styles.metadataValue}>{output}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              );
+            }
+
+            return (
+              <View key={oidx} style={styles.metadataItem}>
+                <Text style={styles.metadataLabel}>{o.label}</Text>
+                <Text style={styles.metadataValue}>{result?.[o.key]}</Text>
+              </View>
+            );
+          })}
+        </View>
+      </View>
     </View>
   );
 }

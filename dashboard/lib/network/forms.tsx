@@ -77,6 +77,7 @@ export interface QuestionPage {
 }
 
 export interface Question {
+  required?: boolean;// some components may not be required for inspection
   label: string;
   key: string;
   value?: string;
@@ -409,6 +410,7 @@ export const runInspection = async (
     }
 
     const responseData: InspectionResult = await response.json(); // Parse the JSON response
+    delete responseData.image_base64;
     return [null, responseData];
   } catch (error: any) {
     // console.error("Error during defect detection: ", error);

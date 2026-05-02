@@ -3,12 +3,14 @@ import { QuestionForm } from "@/lib/network/forms";
 import { USStates } from "@/utils/formUtils";
 import {
   Button,
+  Divider,
   Image,
   Progress,
   Select,
   Text,
   TextInput,
   Textarea,
+  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useMemo, useState } from "react";
@@ -89,7 +91,7 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                 "Comment is required";
             }
 
-            if (!question.imageUrl) {
+            if (!question.imageUrl && question.required) {
               acc[`pages.${currentStep - 1}.questions.${i}.imageUrl`] =
                 "Image / Snapshot is required";
             }
@@ -176,34 +178,44 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
   return (
     <div>
       <form
-        className="max-w-[600px] mx-auto"
+        className="max-w-[600px]x mx-autox"
         onSubmit={handleSubmit(onFormSubmit)}
       >
-        <h2 className="mb-10 text-2xl font-bold uppercase">
-          {currentQuestions ? currentQuestions.name : "Inspection Report"}
-        </h2>
-        <small className="mb-5 block text-sm text-gray-600">
-          {currentStep > 0 && (
-            <>
-              <strong>Step</strong> {currentStep} <strong>of</strong>{" "}
-              {questionForm.pages.length}
-            </>
-          )}
-        </small>
+        <Title size={30}>
+          <h2 className="mb-1 text-2xlx font-boldx uppercasex">
+            {currentQuestions ? currentQuestions.name : "Inspection Report"}
+          </h2>
+          <small className="mb-1 block text-sm text-gray-600">
+            {currentStep > 0 && (
+              <>
+                <strong>Step</strong> {currentStep} <strong>of</strong>{" "}
+                {questionForm.pages.length}
+              </>
+            )}
+            &nbsp;
+          </small>
+        </Title>
+        <Divider className="mb-7" />
         {currentQuestions?.comment && (
           <Text className="mb-4">{currentQuestions.comment}</Text>
         )}{" "}
-        <div className="space-y-5">
+        <div className="space-y-3">
           {currentStep === 0 && (
-            <>
+            <div className="max-w-[600px] grid grid-rows-1 gap-2">
               <TextInput
                 label="Inspector Name"
                 {...getInputProps("inspectorName")}
+                styles={{
+                  label: { fontWeight: "bold" },
+                }}
                 disabled
               />
               <TextInput
                 label="Customer Email"
                 {...getInputProps("customerEmail")}
+                styles={{
+                  label: { fontWeight: "bold" },
+                }}
                 disabled
               />
               <TextInput
@@ -211,9 +223,12 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                 required
                 variant="filled"
                 {...getInputProps("nameOfBusiness")}
+                styles={{
+                  label: { fontWeight: "bold" },
+                }}
               />
               <div>
-                <h2 className="text-sm font-bold">
+                <h2 className="text-sm font-bold mt-2">
                   Address Of Inspection Location:{" "}
                 </h2>
                 <div className="mb-2 space-y-3">
@@ -222,11 +237,17 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                     required
                     variant="filled"
                     {...getInputProps("line1")}
+                    styles={{
+                      label: { fontWeight: "bold" },
+                    }}
                   />
                   <TextInput
                     label="Address Line 2"
                     variant="filled"
                     {...getInputProps("line2")}
+                    styles={{
+                      label: { fontWeight: "bold" },
+                    }}
                   />
                 </div>
               </div>
@@ -234,6 +255,9 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                 <TextInput
                   label="City"
                   {...getInputProps("city")}
+                  styles={{
+                    label: { fontWeight: "bold" },
+                  }}
                   required
                   variant="filled"
                 />
@@ -245,10 +269,16 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                   )}
                   required
                   {...getInputProps("state")}
+                  styles={{
+                    label: { fontWeight: "bold" },
+                  }}
                 />
                 <TextInput
                   label="Zip"
                   {...getInputProps("zip")}
+                  styles={{
+                    label: { fontWeight: "bold" },
+                  }}
                   required
                   variant="filled"
                 />
@@ -271,88 +301,99 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
                   {...getInputProps("timeOfInspection")}
                 />
               </div> */}
-            </>
+            </div>
           )}
-          {currentStep > 0 &&
-            questionForm.pages[currentStep - 1].questions.map((question, i) => (
-              <div
-                className="p-4 space-y-4  border-gray-200 border border-solid"
-                key={question.key}
-              >
-                <>
-                  <UploadFileField
-                    fileName={question.key}
-                    fieldLabel={question.label}
-                    metadata={{ ...metadata!, section: currentQuestions.name }}
-                    onUploadComplete={(url, result) => {
-                      setFieldValue(
-                        `pages.${currentStep - 1}.questions.${i}.imageUrl`,
-                        url,
-                      );
-                      setFieldValue(
-                        `pages.${currentStep - 1}.questions.${i}.imageResult`,
-                        result,
-                      );
-                    }}
-                    onProgress={(progress) => {
-                      setFieldValue(
-                        `pages.${currentStep - 1}.questions.${i}.progress`,
-                        progress,
-                      );
-                    }}
-                    onError={(err) => {
-                      setErrors({
-                        [`pages.${currentStep - 1}.questions.${i}.imageUrl`]:
-                          err,
-                      });
-                    }}
-                    clearFieldError={() =>
-                      clearFieldError(
-                        `pages.${currentStep - 1}.questions.${i}.imageUrl`,
-                      )
-                    }
-                    error={errors[
-                      `pages.${currentStep - 1}.questions.${i}.imageUrl`
-                    ]?.toString()}
-                  />
+          <div className="grid md:grid-cols-2 gap-3">
+            {currentStep > 0 &&
+              questionForm.pages[currentStep - 1].questions.map(
+                (question, i) => (
+                  <div
+                    className="p-4 space-y-4 border-gray-200 border border-solid rounded-md"
+                    key={question.key}
+                  >
+                    <>
+                      <UploadFileField
+                        fileName={question.key}
+                        fieldLabel={question.label}
+                        metadata={{
+                          ...metadata!,
+                          section: currentQuestions.name,
+                        }}
+                        onUploadComplete={(url, result) => {
+                          setFieldValue(
+                            `pages.${currentStep - 1}.questions.${i}.imageUrl`,
+                            url,
+                          );
+                          setFieldValue(
+                            `pages.${currentStep - 1}.questions.${i}.imageResult`,
+                            result,
+                          );
+                        }}
+                        onProgress={(progress) => {
+                          setFieldValue(
+                            `pages.${currentStep - 1}.questions.${i}.progress`,
+                            progress,
+                          );
+                        }}
+                        onError={(err) => {
+                          setErrors({
+                            [`pages.${currentStep - 1}.questions.${i}.imageUrl`]:
+                              err,
+                          });
+                        }}
+                        clearFieldError={() =>
+                          clearFieldError(
+                            `pages.${currentStep - 1}.questions.${i}.imageUrl`,
+                          )
+                        }
+                        error={errors[
+                          `pages.${currentStep - 1}.questions.${i}.imageUrl`
+                        ]?.toString()}
+                      />
 
-                  {progressRange.includes(
-                    values.pages[currentStep - 1]?.questions[i]?.progress ?? 0,
-                  ) && (
-                    <Progress
-                      value={
+                      {progressRange.includes(
                         values.pages[currentStep - 1]?.questions[i]?.progress ??
-                        0
-                      }
-                      striped
-                      animated
-                    />
-                  )}
-                  {values.pages[currentStep - 1].questions[i].imageUrl && (
-                    <Image
-                      {...{ alt: "eq-image" }}
-                      className="mt-4 max-h-5"
-                      src={values.pages[currentStep - 1].questions[i].imageUrl}
-                    />
-                  )}
-                  {/* <SimpleGrid className="mt-4" cols={{ base: 1, sm: 4 }}>
+                          0,
+                      ) && (
+                        <Progress
+                          value={
+                            values.pages[currentStep - 1]?.questions[i]
+                              ?.progress ?? 0
+                          }
+                          className="bg-stone-500"
+                          striped
+                          animated
+                        />
+                      )}
+                      {values.pages[currentStep - 1].questions[i].imageUrl && (
+                        <Image
+                          {...{ alt: "eq-image" }}
+                          className="mt-4 max-h-5"
+                          src={
+                            values.pages[currentStep - 1].questions[i].imageUrl
+                          }
+                        />
+                      )}
+                      {/* <SimpleGrid className="mt-4" cols={{ base: 1, sm: 4 }}>
                    </SimpleGrid> */}
-                </>
-                {values.pages[currentStep - 1].questions[i].value ===
-                  "Issues" && (
-                  <Textarea
-                    label="Comment"
-                    {...getInputProps(
-                      `pages.${currentStep - 1}.questions.${i}.comment`,
+                    </>
+                    {values.pages[currentStep - 1].questions[i].value ===
+                      "Issues" && (
+                      <Textarea
+                        label="Comment"
+                        {...getInputProps(
+                          `pages.${currentStep - 1}.questions.${i}.comment`,
+                        )}
+                      />
                     )}
-                  />
-                )}
-              </div>
-            ))}
+                  </div>
+                ),
+              )}
+          </div>
         </div>
         <div className="pb-10 my-4 space-x-4">
           {currentStep > 0 && (
-            <Button onClick={prevStep} className="bg-blue-700">
+            <Button onClick={prevStep} className="bg-stone-500">
               Previous
             </Button>
           )}
