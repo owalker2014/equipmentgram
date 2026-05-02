@@ -111,8 +111,8 @@ const QuestionFormPDF = ({ data }: Props) => {
       <Page
         size="A4"
         style={styles.page}
-        renderTextLayer={false}
-        renderAnnotationLayer={false}
+        // renderTextLayer={false}
+        // renderAnnotationLayer={false}
       >
         <View>
           <View style={styles.metadataKeysRow}>
@@ -184,12 +184,16 @@ const QuestionFormPDF = ({ data }: Props) => {
                     <Item value={question.comment} label={question.value!} />
                   )}
                   {question.imageUrl && (
-                    // <ImageItem src={question.imageUrl} label={question.label} />
                     <ImageItem
-                      src={question.imageResult?.image_base64!}
+                      src={question.imageUrl}
                       label={question.label}
                       result={question.imageResult}
                     />
+                    // <ImageItem
+                    //   src={question.imageResult?.image_base64!}
+                    //   label={question.label}
+                    //   result={question.imageResult}
+                    // />
                   )}
                 </View>
               ))}
@@ -229,12 +233,7 @@ function ImageItem({
     <View>
       <Text style={styles.label2}>{/* {label}: */}&nbsp;</Text>
       <View style={styles.imageRow}>
-        <Image
-          {...{ alt: "eq-image" }}
-          cache
-          src={`data:image/png;base64,${src}`}
-          style={styles.image}
-        />
+        <Image {...{ alt: "eq-image" }} cache src={src} style={styles.image} />
         <View style={styles.metadataContainer}>
           {analysisChecklist.map((o, oidx) => {
             if (o.keys) {

@@ -47,7 +47,7 @@ const SavedForm: React.FC<{
         <div className="w-full lg:min-w-[40vw] lg:max-w-[650px] mx-auto pb-10">
           {!isPreview && (
             <>
-              <PDFViewer style={{ width: "100%", height: "70vh" }}>
+              <PDFViewer style={{ width: "100%", height: "60vh" }}>
                 <QuestionFormPDF data={data} />
               </PDFViewer>
               <Divider />

@@ -151,7 +151,7 @@ function ImageItem({
                   {o.keys.map((x, xidx) => {
                     let output = result?.[x.key];
                     if (typeof output === "boolean") {
-                      output = !!output ? "Yes" : "No";
+                      output = output ? "Yes" : "No";
                     }
                     return (
                       <div

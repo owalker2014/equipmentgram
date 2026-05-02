@@ -44,7 +44,7 @@ export interface InspectionResult {
   severity: number;
   observations: string;
   recommended_action: string;
-  image_base64: string;
+  image_base64?: string;
 }
 
 export interface ValidationError {
