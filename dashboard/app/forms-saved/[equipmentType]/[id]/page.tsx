@@ -43,8 +43,8 @@ const SavedForm: React.FC<{
       <ReturnButton target={`/forms-saved/${params.equipmentType}`} />
       <Divider className="mb-8" />
 
-      <div className="flex xs:flex-col gap-8">
-        <div className="min-w-[40vw] max-w-[650px] mx-auto pb-10 pt-4x">
+      <div className="flex flex-col lg:flex-row gap-8">
+        <div className="w-full lg:min-w-[40vw] lg:max-w-[650px] mx-auto pb-10">
           {!isPreview && (
             <>
               <PDFViewer style={{ width: "100%", height: "70vh" }}>
@@ -56,7 +56,7 @@ const SavedForm: React.FC<{
 
           {isPreview && <QuestionFormWebPreview data={data} />}
         </div>
-        <div className="flex-grow min-w-[300px] max-w-[30vw] mx-auto pb-10 pt-4x">
+        <div className="w-full lg:flex-grow lg:max-w-[30vw] pb-10">
           <TextInput
             className="mb-2"
             leftSectionPointerEvents="none"
@@ -94,19 +94,21 @@ const SavedForm: React.FC<{
             placeholder="Enter any additional notes here..."
             readOnly
           />
-          <Button className="mt-4 bg-blue-700" onClick={() => {}}>
-            Share
-          </Button>
-          <Button
-            className="mt-4 ml-2 bg-stone-500"
-            onClick={() => {
-              const url = new URL(window.location.href);
-              url.search = isPreview ? "" : "?mode=preview";
-              window.location.assign(url);
-            }}
-          >
-            View {isPreview ? "as PDF" : "on Web"}
-          </Button>
+          <div className="flex flex-wrap gap-2 mt-4">
+            <Button className="bg-blue-700" onClick={() => {}}>
+              Share
+            </Button>
+            <Button
+              className="bg-stone-500"
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.search = isPreview ? "" : "?mode=preview";
+                window.location.assign(url);
+              }}
+            >
+              View {isPreview ? "as PDF" : "on Web"}
+            </Button>
+          </div>
         </div>
       </div>
     </>
