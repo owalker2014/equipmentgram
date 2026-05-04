@@ -7,7 +7,7 @@ import { IconCamera } from "@tabler/icons-react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 
-const MAX_FILE_SIZE_VALUE = 2;
+const MAX_FILE_SIZE_VALUE = 5;
 const MAX_FILE_SIZE = MAX_FILE_SIZE_VALUE * 1024 * 1024; // 2 MB
 
 type Props = {
