@@ -11,7 +11,9 @@ type Props = {
 function CustomLoader({ message, type }: Props) {
   return (
     <Center h="100%" w="100%">
-      <Loader size={30} type={type ?? "bars"}>{message}</Loader>
+      <Loader size={30} type={type ?? "bars"}>
+        {message}
+      </Loader>
     </Center>
   );
 }
@@ -32,7 +34,7 @@ export function ReturnButton({ target }: { target: string }) {
             <IconDoorExit
               aria-label="Back"
               onClick={() => navigation.push(target)}
-              size={50}
+              size={18}
             />
           </ActionIcon>
         </Tooltip>

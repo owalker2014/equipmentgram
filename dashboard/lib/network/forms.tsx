@@ -77,7 +77,7 @@ export interface QuestionPage {
 }
 
 export interface Question {
-  required?: boolean;// some components may not be required for inspection
+  required?: boolean; // some components may not be required for inspection
   label: string;
   key: string;
   value?: string;
@@ -147,7 +147,7 @@ export const useAddFreshInspectionForm = (userId: string) => {
 
       const docRef = await addDoc(
         collection(db, inspectionFormsCollection),
-        inspectionFormWithReferences
+        inspectionFormWithReferences,
       );
       return docRef;
     },
@@ -162,9 +162,11 @@ export const useAddFreshInspectionForm = (userId: string) => {
             message: `Inspection record created successfully for \n
               ${variables.type} > ${variables.manufacturer} > ${variables.model}`,
           },
-          false
+          false,
         );
-        navigation.push(`/forms-saved/${variables.type}/${data.id}?mode=preview`);
+        navigation.push(
+          `/forms-saved/${variables.type}/${data.id}?mode=preview`,
+        );
       },
       onError: (error: any) => {
         // console.error("error adding inspection --> ", error);
@@ -175,16 +177,16 @@ export const useAddFreshInspectionForm = (userId: string) => {
               error.message ??
               "Error on submitting inspection form. Please try again later.",
           },
-          true
+          true,
         );
       },
-    }
+    },
   );
 };
 
 export const useAddNewInspectionForm = (
   inspectionRequestId: string,
-  userId: string
+  userId: string,
 ) => {
   const queryClient = useQueryClient();
   const navigation = useRouter();
@@ -198,13 +200,12 @@ export const useAddNewInspectionForm = (
         const inspectionRequestDoc = doc(
           db,
           inspectionRequestsCollection,
-          inspectionRequestId
+          inspectionRequestId,
         );
         const userDoc = doc(db, usersCollection, userId);
 
-        const inspectionRequestDocSnap = await transaction.get(
-          inspectionRequestDoc
-        );
+        const inspectionRequestDocSnap =
+          await transaction.get(inspectionRequestDoc);
         if (!inspectionRequestDocSnap.exists()) {
           throw new Error("Inspection Request does not exist!");
         }
@@ -218,7 +219,7 @@ export const useAddNewInspectionForm = (
         const requestedByUserDoc = doc(
           db,
           usersCollection,
-          inspectionRequest.user_id
+          inspectionRequest.user_id,
         );
 
         const inspectionFormWithReferences = {
@@ -232,7 +233,7 @@ export const useAddNewInspectionForm = (
 
         await addDoc(
           collection(db, inspectionFormsCollection),
-          inspectionFormWithReferences
+          inspectionFormWithReferences,
         );
       });
     },
@@ -250,17 +251,17 @@ export const useAddNewInspectionForm = (
               error.message ??
               "Error creating inspection form. Please try again later.",
           },
-          true
+          true,
         );
       },
-    }
+    },
   );
 };
 
 export const useGetInspectionFormByType = (
   userId: string,
   equipmentType?: string,
-  isCustomer?: boolean
+  isCustomer?: boolean,
 ) => {
   return useQuery<InspectionFormWithId[], Error>(
     [inspectionFormsCollection, "inspection-forms", equipmentType],
@@ -276,7 +277,7 @@ export const useGetInspectionFormByType = (
             // approved form or all forms if customer
             where("reportStatus", "==", InspectionReportStatus.Approved),
             where("requestedByUserId", "==", userId),
-          ]
+          ],
         );
       } else {
         conditions.push(
@@ -288,7 +289,7 @@ export const useGetInspectionFormByType = (
               InspectionReportStatus.Pending,
             ]),
             where("createdByUserUid", "==", userId),
-          ]
+          ],
         );
       }
       // conditions.push(orderBy("timestamp", "desc"));
@@ -296,13 +297,13 @@ export const useGetInspectionFormByType = (
 
       const snapshot = await getDocs(q);
       const createdByUserUids = snapshot.docs.map(
-        (doc) => doc.data().createdByUserUid
+        (doc) => doc.data().createdByUserUid,
       );
 
       // Fetch user data using a single query
       const userQuery = query(
         collection(db, usersCollection),
-        where("user_id", "in", createdByUserUids)
+        where("user_id", "in", createdByUserUids),
       );
       const userSnapshot = await getDocs(userQuery);
 
@@ -326,6 +327,7 @@ export const useGetInspectionFormByType = (
             model: data.model,
             createdByUserUid: createdByUserUid,
             form: data.form,
+            dateOfInspection: data.dateOfInspection,
             createdByUser: createdByUser,
             id: doc.id,
             reportStatus: data.reportStatus,
@@ -334,11 +336,11 @@ export const useGetInspectionFormByType = (
             userRef: data.userRef,
             inspectionRequestRef: data.inspectionRequestRef,
           };
-        }
+        },
       );
 
       return inspectionForms;
-    }
+    },
   );
 };
 
@@ -378,13 +380,19 @@ export const useGetInspectionFormById = (id: string) => {
       } else {
         throw new Error("Inspection form does not exist");
       }
-    }
+    },
   );
 };
 
 export const runInspection = async (
   file: File,
-  { component, equipment_type, manufacturer, model, section }: InspectionRequest
+  {
+    component,
+    equipment_type,
+    manufacturer,
+    model,
+    section,
+  }: InspectionRequest,
 ) => {
   try {
     const formData = new FormData();
@@ -436,7 +444,7 @@ export const runInspection = async (
         message,
         color,
       },
-      true
+      true,
     );
     return ["Inspection Error", null];
   }

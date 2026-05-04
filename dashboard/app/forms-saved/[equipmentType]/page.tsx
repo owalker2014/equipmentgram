@@ -57,7 +57,7 @@ function ViewSavedFormListByTypePage({
         Overview of Saved Inspection Forms By Equipment Type / Manufacturer /
         Model
       </Text>
-      <Divider className="mb-8" />
+      <Divider className="mb-3" />
 
       <ReturnButton target="/forms-saved" />
 
@@ -125,7 +125,8 @@ function ViewSavedFormListByTypePage({
                 </Table.Td>
                 <Table.Td className="text-center">
                   {new Date(
-                    inspectionForm.form.dateOfInspection, //?.toMillis()
+                    inspectionForm.form.dateOfInspection ||
+                      inspectionForm.dateOfInspection, //?.toMillis()
                   ).toLocaleDateString()}
                 </Table.Td>
                 <Table.Td className="text-center">**Fair**</Table.Td>

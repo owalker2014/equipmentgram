@@ -5,25 +5,76 @@ import QuestionFormPDF from "@/components/QuestionFormPDF";
 import QuestionFormWebPreview from "@/components/QuestionFormWebPreview";
 import { useGetInspectionFormById } from "@/lib/network/forms";
 import {
+  ActionIcon,
   Button,
   Divider,
   Text,
   Textarea,
   TextInput,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import { PDFViewer } from "@react-pdf/renderer";
-import { IconAt } from "@tabler/icons-react";
-import React from "react";
+import { IconAt, IconDownload } from "@tabler/icons-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import React, { useRef, useState } from "react";
 
 const SavedForm: React.FC<{
   params: any;
   searchParams: any;
 }> = ({ params, searchParams }) => {
-  // Destructure the data object to access its properties
   const { data } = useGetInspectionFormById(params.id);
   const isPreview = searchParams?.mode === "preview";
   const icon = <IconAt size={16} />;
+
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    if (!previewRef.current) return;
+    setIsGeneratingPDF(true);
+    try {
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: false,
+        logging: false,
+        imageTimeout: 0,
+      });
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+      const margin = 20;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const contentWidth = pageWidth - margin * 2;
+      const contentHeight = pageHeight - margin * 2;
+      const imgWidth = contentWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let yOffset = 0;
+      let remainingHeight = imgHeight;
+      while (remainingHeight > 0) {
+        pdf.addImage(
+          imgData,
+          "PNG",
+          margin,
+          margin - yOffset,
+          imgWidth,
+          imgHeight,
+        );
+        remainingHeight -= contentHeight;
+        yOffset += contentHeight;
+        if (remainingHeight > 0) pdf.addPage();
+      }
+      pdf.save(`inspection-report-${params.id}.pdf`);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
 
   if (!data || typeof data === "undefined") return <CustomLoader />;
 
@@ -41,10 +92,10 @@ const SavedForm: React.FC<{
       </Text>
       <Divider className="mb-3" />
       <ReturnButton target={`/forms-saved/${params.equipmentType}`} />
-      <Divider className="mb-8" />
+      <Divider className="mb-5" />
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="w-full lg:min-w-[40vw] lg:max-w-[70vw] mx-auto pb-10">
+      <div className="flex flex-col lg:flex-row gap-8 w-full max-w-[1440px]">
+        <div className="w-full lg:shrink-0 lg:w-3/5 pb-10">
           {!isPreview && (
             <>
               <PDFViewer style={{ width: "100%", height: "70vh" }}>
@@ -54,9 +105,13 @@ const SavedForm: React.FC<{
             </>
           )}
 
-          {isPreview && <QuestionFormWebPreview data={data} />}
+          {isPreview && (
+            <div ref={previewRef}>
+              <QuestionFormWebPreview data={data} />
+            </div>
+          )}
         </div>
-        <div className="w-full lg:flex-grow lg:max-w-[30vw] pb-10">
+        <div className="w-full lg:flex-1 pb-10">
           <TextInput
             className="mb-2"
             leftSectionPointerEvents="none"
@@ -108,6 +163,20 @@ const SavedForm: React.FC<{
             >
               View {isPreview ? "as PDF" : "on Web"}
             </Button>
+            {isPreview && (
+              <ActionIcon
+                size="lg"
+                variant="filled"
+                className="bg-stone-700"
+                aria-label="Download PDF"
+                loading={isGeneratingPDF}
+                onClick={handleDownloadPDF}
+              >
+                <Tooltip label="Download PDF">
+                  <IconDownload size={18} />
+                </Tooltip>
+              </ActionIcon>
+            )}
           </div>
         </div>
       </div>
