@@ -25,20 +25,6 @@ const FormsPage = (props: Props) => {
   const [equipment0, setEquipment0] = useState<string | null>(null);
   const [manufacturer0, setManufacturer0] = useState<string | null>(null);
 
-  if (!isLoading && userData?.type !== UserType.inspector) {
-    notify(
-      {
-        title: "Unauthorized",
-        message: "You are not authorized to view this page",
-        clean: true,
-      },
-      true
-    );
-
-    navigation.push("/");
-    return;
-  }
-
   const manufacturerModels = useCallback(
     (equipment: string, link: string, manufacturer: string) =>
       (equipmentsInScope as any)[equipment][manufacturer].models.map(
@@ -50,13 +36,13 @@ const FormsPage = (props: Props) => {
               navigation.push(
                 "/forms"
                   .concat(link.split(" ").join("-"))
-                  .concat(`/${manufacturer}?model=${model}`)
+                  .concat(`/${manufacturer}?model=${model}`),
               );
             }}
           />
-        )
+        ),
       ),
-    []
+    [navigation],
   );
 
   const manufacturers = useCallback(
@@ -80,14 +66,28 @@ const FormsPage = (props: Props) => {
               </div>
             )}
           </EquipmentManufacturerItem>
-        )
+        ),
       ),
-    [manufacturer0]
+    [manufacturer0, manufacturerModels],
   );
 
   useEffect(() => {
     setManufacturer0(null);
   }, [equipment0]);
+
+  useEffect(() => {
+    if (!isLoading && userData?.type !== UserType.inspector) {
+      notify(
+        {
+          title: "Unauthorized",
+          message: "You are not authorized to view this page",
+          clean: true,
+        },
+        true,
+      );
+      navigation.push("/");
+    }
+  }, [isLoading, userData, navigation]);
 
   const items = equipments
     .filter((o: any) => Object.keys(equipmentsInScope).includes(o.title))
