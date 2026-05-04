@@ -80,19 +80,29 @@ export default function Home(props: any) {
       ))}
 
       <Text className="font-bold mt-10">
-        Saved Reports: {savedReportsData?.length ?? 0}
+        Saved Reports:{" "}
+        <span className="text-gray-500 font-normal">
+          {savedReportsData?.length ?? 0}
+        </span>
       </Text>
       <Text className="font-bold">
-        Sent Reports: {sentReportsData?.length ?? 0}
+        Sent Reports:{" "}
+        <span className="text-gray-500 font-normal">
+          {sentReportsData?.length ?? 0}
+        </span>
       </Text>
 
       <h4 className="font-bold mt-7">Recent Notifications</h4>
       {notificationData?.map((note, i) => (
         <List key={`note-${i}`} listStyleType="square">
-          <List.Item>{note.message}</List.Item>
+          <List.Item>
+            <span className="text-gray-500 font-normal">{note.message}</span>
+          </List.Item>
         </List>
       ))}
-      {notificationData?.length === 0 && <>----</>}
+      {notificationData?.length === 0 && (
+        <span className="text-gray-500 font-normal">----</span>
+      )}
     </main>
   );
 }

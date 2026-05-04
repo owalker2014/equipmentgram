@@ -100,7 +100,7 @@ const UploadFileField = ({
       },
       (error) => {
         // Handle unsuccessful uploads
-        console.error("error-uploading --> ", error.code);
+        console.error("error-uploading --> ", error.code); //eslint-disable-line
         onError("Upload failed. Please try again.");
         onProgress(0);
         setLoading(false);
@@ -122,6 +122,11 @@ const UploadFileField = ({
               return;
             }
             onError(err as string);
+            onProgress(0);
+          })
+          .catch((error) => {
+            console.error("error-downloading --> ", error.code); //eslint-disable-line
+            onError(`Hmmm...something isn't right!`);
             onProgress(0);
           })
           .finally(() => setLoading(false));

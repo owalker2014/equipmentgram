@@ -1,6 +1,7 @@
 import { InspectionFormWithId } from "@/lib/network/forms";
 import { analysisChecklist } from "@/utils/constants";
 import { Text } from "@mantine/core";
+import Image from "next/image";
 import React, { Fragment } from "react";
 
 type Props = {
@@ -37,11 +38,11 @@ const QuestionFormWebPreview = ({ data }: Props) => {
           <Item
             value={
               <>
-                <Text size="md">{data.address?.line1}</Text>
+                <Text size="sm">{data.address?.line1}</Text>
                 {data.address?.line2 && (
-                  <Text size="md">{data.address?.line2}</Text>
+                  <Text size="sm">{data.address?.line2}</Text>
                 )}
-                <Text size="md">
+                <Text size="sm">
                   {data.address?.city}, {data.address?.state}{" "}
                   {data.address?.zip}
                 </Text>
@@ -129,9 +130,9 @@ function ImageItem({
         {/* {label}: */}&nbsp;
       </Text>
       <div className="flex flex-row gap-3 m-1">
-        <img
+        <Image
           alt="eq-image"
-          width={250}
+          width={200}
           height={200}
           style={{
             padding: 10,

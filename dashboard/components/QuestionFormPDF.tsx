@@ -51,15 +51,22 @@ const styles = StyleSheet.create({
     fontWeight: "black",
   },
   pageInfoContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 4,
     fontWeight: "bold",
     backgroundColor: "#dbeafe",
   },
   pageTitle: {
     fontFamily: "Helvetica-Bold",
+    paddingHorizontal: 5,
+    paddingVertical: 3,
     fontSize: 12,
     fontWeight: "bold",
+  },
+  pageComment: {
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    color: "#6b7280",
+    fontSize: 10,
+    backgroundColor: "#ffffff",
   },
   value: {
     paddingLeft: 7,
@@ -172,7 +179,9 @@ const QuestionFormPDF = ({ data }: Props) => {
             <View key={`section-${index}`} style={styles.section}>
               <View style={styles.pageInfoContainer}>
                 <Text style={styles.pageTitle}>{page.name}</Text>
-                {page?.comment && <Text>{page.comment}</Text>}
+                {page?.comment && (
+                  <Text style={styles.pageComment}>{page.comment}</Text>
+                )}
               </View>
 
               {page.questions.map((question, index) => (

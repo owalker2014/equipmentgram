@@ -30,7 +30,7 @@ function ViewSavedFormListByTypePage({
       <Text size="sm" className="mb-2 text-gray-500">
         Overview of Sent Inspection Reports By Equipment Type
       </Text>
-      <Divider className="mb-8" />
+      <Divider className="mb-3" />
 
       <ReturnButton target="/forms-sent" />
 
