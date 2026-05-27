@@ -255,7 +255,7 @@ function ImageItem({
                     }
                     return (
                       <View key={xidx} style={styles.metadataItem}>
-                        <Text style={styles.metadataLabel}>{x.label}</Text>
+                        <Text style={styles.metadataLabel}>{x.label}:</Text>
                         <Text style={styles.metadataValue}>{output}</Text>
                       </View>
                     );
@@ -266,7 +266,7 @@ function ImageItem({
 
             return (
               <View key={oidx} style={styles.metadataItem}>
-                <Text style={styles.metadataLabel}>{o.label}</Text>
+                <Text style={styles.metadataLabel}>{o.label}:</Text>
                 <Text style={styles.metadataValue}>{result?.[o.key]}</Text>
               </View>
             );

@@ -2,7 +2,7 @@
 
 import { signOut, useAuth } from "@/lib/authContext";
 import { useGetUser } from "@/lib/network/users";
-import { Badge } from "@mantine/core";
+import { Badge, Divider, Skeleton } from "@mantine/core";
 import {
   IconBell,
   IconFileDownload,
@@ -35,28 +35,30 @@ export function SideNav() {
   const pathname = usePathname(); // Reads the current URL pathname
 
   const { user } = useAuth();
-  const { data: userData } = useGetUser(user?.uid as string);
+  const { data: userData, isLoading } = useGetUser(user?.uid as string);
 
-  // if (isLoading)
-  //   return (
-  //     <>
-  //       <Center>
-  //         <Skeleton height={100} circle mb="xl" />
-  //       </Center>
-  //       <Skeleton height={10} radius="xl" />
-  //       <Skeleton height={10} mt={6} radius="xl" />
-  //       <Divider my={10} />
-  //       <Skeleton height={30} mt={10} width="100%" />
-  //       <Skeleton height={30} mt={10} width="100%" />
-  //       <Skeleton height={30} mt={10} width="100%" />
-  //       <Skeleton height={30} mt={10} width="100%" />
-  //     </>
-  //   );
+  if (isLoading)
+    return (
+      <>
+        <Skeleton height={10} width="30%" mb={30} />
+        {/* <Center>
+          <Skeleton height={100} circle mb="xl" />
+        </Center> */}
+        <Skeleton height={30} mt={10} width="100%" />
+        <Skeleton height={30} mt={10} width="100%" /*  radius="xl" */ />
+        <Skeleton height={30} mt={10} width="100%" />
+        <Skeleton height={30} mt={10} width="100%" />
+        <Skeleton height={30} mt={10} width="100%" />
+        <Skeleton height={30} mt={10} width="100%" />
+        <Divider my={30} />
+        <Skeleton height={30} mt={10} width="100%" />
+      </>
+    );
 
   const links = data
     .filter((item) =>
       item.hasAccessTo
-        ? item.hasAccessTo.toUpperCase() === userData?.type.toUpperCase()
+        ? item.hasAccessTo.toUpperCase() === userData?.type?.toUpperCase()
         : true,
     )
     .map((item) => (

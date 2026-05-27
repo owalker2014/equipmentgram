@@ -7,14 +7,31 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
 export async function POST(request: Request) {
-  const { createdByUserUid, form, id, type, createdByUser, sentFrom, sendTo } =
-    (await request.json()) as InspectionFormEmailProps;
+  const {
+    createdByUserUid,
+    form,
+    id,
+    type,
+    createdByUser,
+    sentFrom,
+    sendTo,
+    pdfBase64,
+  } = (await request.json()) as InspectionFormEmailProps;
 
   try {
-    await resend.sendEmail({
+    const recipients = Array.isArray(sendTo) ? sendTo : [sendTo];
+    const { error } = await resend.batch.send(recipients.map((recipient) => ({
       from: `${process.env.NEXT_PUBLIC_REPORT_SENT_FORM}`,
-      to: sendTo,
+      to: recipient,
       subject: `New report form ${sentFrom.toLowerCase()}`,
+      attachments: [
+        {
+          filename: `inspection-report-${id}-${decodeURI(type)
+            .replace(/\s+/g, "-")
+            .toLowerCase()}-${Date.now()}.pdf`,
+          content: pdfBase64,
+        },
+      ],
       react: InspectionFormEmail({
         createdByUserUid,
         form,
@@ -22,30 +39,30 @@ export async function POST(request: Request) {
         type,
         createdByUser,
         sentFrom,
-        sendTo,
+        recipient,
       }),
-    });
-    console.log(`Email sent with id: ${id}`);
+    })));
 
-    return NextResponse.json(
-      {
-        status: "Ok",
-      },
-      {
-        status: 200,
-      }
-    );
+    if (error) {
+      console.log(`Failed to send email: ${error.message}`); // eslint-disable-line
+      return NextResponse.json(
+        { error: "Failed to send email.", details: error.message },
+        { status: 500 },
+      );
+    }
+    // console.log(`Email sent with id: ${id}`);
+
+    return NextResponse.json({ status: "Ok", success: true }, { status: 200 });
   } catch (e: unknown) {
     if (e instanceof Error) {
-      console.log(`Failed to send email: ${e.message}`);
+      console.log(`Failed to send email: ${e.message}`); // eslint-disable-line
     }
     return NextResponse.json(
       {
         error: "Internal server error.",
+        details: e instanceof Error ? e.message : "Unknown error",
       },
-      {
-        status: 500,
-      }
+      { status: 500 },
     );
   }
 }
