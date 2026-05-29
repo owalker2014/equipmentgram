@@ -8,7 +8,7 @@ const withPWA = require("next-pwa")({
   // aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
   // swcMinify: true,
-  disable: process.env.NODE_ENV === "development",
+  // disable: process.env.NODE_ENV === "development",
   disableDevLogs: true,
 });
 

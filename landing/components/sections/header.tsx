@@ -1,4 +1,4 @@
-import { Button, Divider } from "@mantine/core";
+import { Button, Divider, Text } from "@mantine/core";
 import Link from "next/link";
 import { HowItWorksSection } from "./how-it-works";
 import WhatWeDo from "./about-us/what-we-do";
