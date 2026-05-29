@@ -13,7 +13,7 @@ const ContactSales = () => {
         <div className="container mx-auto max-w-7xl px-4 py-8">
           <div id="calendly-sales">
             <h2 className="font-heading font-bold tracking-tight text-gray-900 text-3xl sm:text-3xl">
-              Let's Talk
+              Let&apos;s Talk
             </h2>
             <h4 className="mb-5 mt-0 font-medium text-gray-500">
               Schedule a meeting with a Sales Executive

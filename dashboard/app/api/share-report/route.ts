@@ -20,28 +20,30 @@ export async function POST(request: Request) {
 
   try {
     const recipients = Array.isArray(sendTo) ? sendTo : [sendTo];
-    const { error } = await resend.batch.send(recipients.map((recipient) => ({
-      from: `${process.env.NEXT_PUBLIC_REPORT_SENT_FORM}`,
-      to: recipient,
-      subject: `New report form ${sentFrom.toLowerCase()}`,
-      attachments: [
-        {
-          filename: `inspection-report-${id}-${decodeURI(type)
-            .replace(/\s+/g, "-")
-            .toLowerCase()}-${Date.now()}.pdf`,
-          content: pdfBase64,
-        },
-      ],
-      react: InspectionFormEmail({
-        createdByUserUid,
-        form,
-        id,
-        type,
-        createdByUser,
-        sentFrom,
-        recipient,
-      }),
-    })));
+    const { data, error } = await resend.batch.send(
+      recipients.map((recipient) => ({
+        from: `${process.env.NEXT_PUBLIC_REPORT_SENT_FORM}`,
+        to: recipient,
+        subject: `New report form ${sentFrom.toLowerCase()}`,
+        attachments: [
+          {
+            filename: `inspection-report-${id}-${decodeURI(type)
+              .replace(/\s+/g, "-")
+              .toLowerCase()}-${Date.now()}.pdf`,
+            content: pdfBase64,
+          },
+        ],
+        react: InspectionFormEmail({
+          createdByUserUid,
+          form,
+          id,
+          type,
+          createdByUser,
+          sentFrom,
+          recipient,
+        }),
+      })),
+    );
 
     if (error) {
       console.log(`Failed to send email: ${error.message}`); // eslint-disable-line
@@ -52,7 +54,10 @@ export async function POST(request: Request) {
     }
     // console.log(`Email sent with id: ${id}`);
 
-    return NextResponse.json({ status: "Ok", success: true }, { status: 200 });
+    return NextResponse.json(
+      { status: "Ok", success: true, data },
+      { status: 200 },
+    );
   } catch (e: unknown) {
     if (e instanceof Error) {
       console.log(`Failed to send email: ${e.message}`); // eslint-disable-line

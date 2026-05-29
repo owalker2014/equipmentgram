@@ -14,6 +14,9 @@ const withPWA = require("next-pwa")({
 
 const nextConfig = withPWA({
   reactStrictMode: true,
+  experimental: {
+    serverComponentsExternalPackages: ["resend"],
+  },
   images: {
     remotePatterns: [
       {

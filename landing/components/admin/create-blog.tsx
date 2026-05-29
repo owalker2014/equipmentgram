@@ -52,7 +52,8 @@ const CreateBlog = ({}: Props) => {
           data={categories?.map((category) => category.name)}
           onChange={(value) => setCategory(value)}
         />
-        {imageUrl && <img className="max-h-[200px]" src={imageUrl} />}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {imageUrl && <img className="max-h-[200px]" src={imageUrl} alt="" />}
       </div>
 
       <div>

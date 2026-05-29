@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export function toTitleCase(str: string) {
   return str.replace(/\b\w/g, function (match) {
-    return match.toUpperCase();
+    return match?.toUpperCase();
   });
 }
 
@@ -18,11 +18,13 @@ export function usePersistentState<T>(
 
   useEffect(() => {
     const storedValue = window?.localStorage.getItem(key);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValue(
       storedValue !== null && storedValue !== undefined
         ? JSON.parse(storedValue)
         : initialValue
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function wipeValue() {
@@ -48,6 +50,7 @@ export function useQueryState<T>(
   useEffect(() => {
     const storedValue = router.query[key];
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setValue(
         storedValue !== null && storedValue !== undefined
           ? JSON.parse(storedValue as string)
@@ -60,6 +63,7 @@ export function useQueryState<T>(
           : initialValue
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function wipeValue() {

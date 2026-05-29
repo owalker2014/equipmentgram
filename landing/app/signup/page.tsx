@@ -85,7 +85,7 @@ const Home: NextPage = () => {
           photoURL: user?.photoURL!,
           phoneNumber: user?.phoneNumber!,
           emailVerified: user?.emailVerified!,
-          type: UserType.customer,
+          type: UserType.inspector,
         });
 
         if (!user.emailVerified) {

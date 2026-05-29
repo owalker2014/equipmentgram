@@ -18,7 +18,7 @@ const Header = ({}) => {
                 <h1 className="text-dark mb-3 text-4xl font-bold leading-snug sm:text-[42px] lg:text-[40px] xl:text-[42px]">
                   Streamline Your Excavator Inspections and Record-Keeping
                 </h1>
-                <p className="mb-8 text-base">
+                <Text c="dimmed" className="mb-8 text-base">
                   EquipmentGram improves the buying and selling experience for
                   excavator owners, buyers, and sellers by enabling easy
                   creation, management, and distribution of inspection reports

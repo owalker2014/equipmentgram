@@ -119,7 +119,7 @@ export function FeaturesGrid({
   return (
     <div className="bg-gray-100 py-10 px-4 flex flex-col items-center">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-4">
-        <Title className="text-center">EquipmentGram's Benefits</Title>
+        <Title className="text-center">EquipmentGram&apos;s Benefits</Title>
 
         <Text size="sm" className="text-center text-gray-600">
           Below are some benefits that come with using EquipmentGram reports
@@ -149,7 +149,11 @@ export function FeaturesGrid({
         {isLanding && (
           <div className="mt-5 flex flex-row justify-end">
             <Link href="/pricing">
-              <Button fullWidth size="md" className="rounded-s-full">
+              <Button
+                fullWidth
+                size="md"
+                className="rounded-s-full bg-blue-700"
+              >
                 Check Pricing
               </Button>
             </Link>

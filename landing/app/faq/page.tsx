@@ -21,7 +21,7 @@ const faqItems = [
     answer: (
       <>
         Users capture images of equipment components with a smartphone or
-        tablet. EquipmentGram's AI analyzes those images and produces structured
+        tablet. EquipmentGram&apos;s AI analyzes those images and produces structured
         inspection reports.
       </>
     ),
@@ -77,7 +77,7 @@ const faqItems = [
     answer: (
       <>
         Inspections are performed by users capturing images in the field using
-        their smartphones or tablets, which are then analyzed by EquipmentGram's
+        their smartphones or tablets, which are then analyzed by EquipmentGram&apos;s
         AI inspection system.
       </>
     ),
