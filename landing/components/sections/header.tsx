@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Divider, Text } from "@mantine/core";
 import Link from "next/link";
 import { HowItWorksSection } from "./how-it-works";
