@@ -14,6 +14,9 @@ const withPWA = require("next-pwa")({
 
 const nextConfig = withPWA({
   reactStrictMode: true,
+  experimental: {
+    serverComponentsExternalPackages: ["resend"],
+  },
   images: {
     remotePatterns: [
       {
@@ -22,6 +25,29 @@ const nextConfig = withPWA({
       },
     ],
   },
+  // async headers() {
+  //   return [
+  //     {
+  //       // Apply these headers to all routes under /api
+  //       source: "/api/:path*",
+  //       headers: [
+  //         {
+  //           key: "Access-Control-Allow-Origin",
+  //           value: "*", // Replace * with your domain
+  //         },
+  //         {
+  //           key: "Access-Control-Allow-Methods",
+  //           value: "GET,POST,PUT,DELETE,OPTIONS",
+  //         },
+  //         {
+  //           key: "Access-Control-Allow-Headers",
+  //           value:
+  //             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
+  //         },
+  //       ],
+  //     },
+  //   ];
+  // },
 });
 
 module.exports = nextConfig;

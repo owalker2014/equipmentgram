@@ -1,3 +1,5 @@
+"use client";
+
 import CustomLoader from "@/components/CustomLoader";
 import { MantineProvider } from "@mantine/core";
 import {

@@ -20,7 +20,7 @@ export default function CategoryRoute({ params }: { params: { category: string }
       <h1 className="text-4xl text-center mt-10 font-bold">{category}</h1>
       <div className="grid grid-cols-1 md:grid-cols-3  gap-10 max-w-screen-xl mx-auto container px-4 my-20">
         {data?.map((article) => {
-          return <ArticleCard {...article} />;
+          return <ArticleCard key={article.id} {...article} />;
         })}
       </div>
     </div>

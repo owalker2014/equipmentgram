@@ -1,25 +1,7 @@
-import {
-  addDoc,
-  collection,
-  QueryConstraint,
-  serverTimestamp,
-} from "@firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  DocumentReference,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  runTransaction,
-  where,
-} from "firebase/firestore";
-import { db } from "../firebaseConfig/init";
-import { UserWithId, usersCollection } from "./users";
-import { DocumentData } from "firebase-admin/firestore";
 import { useRouter } from "next/navigation";
-import { inspectionRequestsCollection } from "./inspection-requests";
 import { notify } from "../utils";
+import { UserWithId } from "./users";
 
 export const inspectionFormsCollection = "inspection-forms";
 
@@ -31,13 +13,13 @@ export interface InspectionRequest {
   component: string;
 }
 
-export interface InspectionResult {
-  id: string;
-  equipment_type: string;
-  manufacturer: string;
-  model: string;
-  section: string;
-  component: string;
+export interface InspectionResult extends InspectionRequest {
+  id?: string;
+  // equipment_type: string;
+  // manufacturer: string;
+  // model: string;
+  // section: string;
+  // component: string;
   timestamp: string;
   defect_present: boolean;
   defect_type: string;
@@ -47,8 +29,33 @@ export interface InspectionResult {
   image_base64?: string;
 }
 
+export interface InspectionResultBatch {
+  batch_id?: string;
+  equipment_type: string;
+  manufacturer: string;
+  model: string;
+  section: string;
+  component_results: {
+    component: string;
+    success: boolean;
+    error: string;
+    defect_present: boolean;
+    defect_type: string;
+    severity: number;
+    observations: string;
+    recommended_action: string;
+    // image_base64?: string;
+    condition: string;
+    component_score: number;
+    risk_level: string;
+  }[];
+  timestamp: string;
+  section_score: number;
+  section_risk_level: string;
+}
+
 export interface ValidationError {
-  loc: any;
+  loc: unknown;
   msg: string;
   type: string;
 }
@@ -84,6 +91,7 @@ export interface Question {
   imageUrl?: string;
   progress?: number;
   imageResult?: InspectionResult;
+  file?: File;
   comment?: string;
 }
 
@@ -119,9 +127,9 @@ export interface InspectionForm {
   dateOfInspection?: any;
   timeOfInspection?: any;
   inspectorName?: string;
-  requestedByUserRef?: DocumentReference<DocumentData>;
+  requestedByUserRef?: unknown;
   requestedByUserId?: string;
-  userRef?: DocumentReference<DocumentData>;
+  userRef?: unknown;
   // inspectionRequestRef?: DocumentReference<DocumentData>;
 }
 
@@ -135,21 +143,12 @@ export const useAddFreshInspectionForm = (userId: string) => {
 
   return useMutation(
     async (inspectionForm: InspectionForm): Promise<any> => {
-      const userDoc = doc(db, usersCollection, userId);
-
-      const inspectionFormWithReferences = {
-        ...inspectionForm,
-        userRef: userDoc, // inspector
-        reportStatus: InspectionReportStatus.FilledForm,
-        reportID: crypto.randomUUID(),
-        timestamp: serverTimestamp(),
-      };
-
-      const docRef = await addDoc(
-        collection(db, inspectionFormsCollection),
-        inspectionFormWithReferences,
-      );
-      return docRef;
+      const res = await fetch("/api/inspections/forms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...inspectionForm, userId }),
+      });
+      return res.json();
     },
     {
       onSuccess: (data, variables) => {
@@ -193,48 +192,14 @@ export const useAddNewInspectionForm = (
 
   return useMutation(
     async (inspectionForm: InspectionForm): Promise<void> => {
-      // Add a reference to the inspectionRequestDoc and userDoc in the inspectionForm
-
-      // update the inspection request status to "Inspection Form Created" when the inspection form is created
-      await runTransaction(db, async (transaction) => {
-        const inspectionRequestDoc = doc(
-          db,
-          inspectionRequestsCollection,
-          inspectionRequestId,
-        );
-        const userDoc = doc(db, usersCollection, userId);
-
-        const inspectionRequestDocSnap =
-          await transaction.get(inspectionRequestDoc);
-        if (!inspectionRequestDocSnap.exists()) {
-          throw new Error("Inspection Request does not exist!");
-        }
-
-        const inspectionRequest = inspectionRequestDocSnap.data();
-
-        transaction.update(inspectionRequestDoc, {
-          reportStatus: InspectionReportStatus.FilledForm,
-        });
-
-        const requestedByUserDoc = doc(
-          db,
-          usersCollection,
-          inspectionRequest.user_id,
-        );
-
-        const inspectionFormWithReferences = {
+      await fetch("/api/inspections/forms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           ...inspectionForm,
-          inspectionRequestRef: inspectionRequestDoc,
-          userRef: userDoc,
-          reportStatus: InspectionReportStatus.FilledForm,
-          requestedByUserRef: requestedByUserDoc,
-          requestedByUserId: inspectionRequestDocSnap.data().user_id,
-        };
-
-        await addDoc(
-          collection(db, inspectionFormsCollection),
-          inspectionFormWithReferences,
-        );
+          userId,
+          inspectionRequestId,
+        }),
       });
     },
     {
@@ -243,12 +208,12 @@ export const useAddNewInspectionForm = (
         queryClient.refetchQueries([inspectionFormsCollection]);
         navigation.push("/forms");
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         notify(
           {
             title: "Inspection Submission Error",
             message:
-              error.message ??
+              (error as Error).message ??
               "Error creating inspection form. Please try again later.",
           },
           true,
@@ -266,120 +231,22 @@ export const useGetInspectionFormByType = (
   return useQuery<InspectionFormWithId[], Error>(
     [inspectionFormsCollection, "inspection-forms", equipmentType],
     async () => {
-      const conditions: QueryConstraint[] = [];
-      if (equipmentType) {
-        conditions.push(where("type", "==", equipmentType));
-      }
-
-      if (isCustomer) {
-        conditions.push(
-          ...[
-            // approved form or all forms if customer
-            where("reportStatus", "==", InspectionReportStatus.Approved),
-            where("requestedByUserId", "==", userId),
-          ],
-        );
-      } else {
-        conditions.push(
-          ...[
-            where("reportStatus", "in", [
-              InspectionReportStatus.Approved,
-              InspectionReportStatus.FilledForm,
-              InspectionReportStatus.Rejected,
-              InspectionReportStatus.Pending,
-            ]),
-            where("createdByUserUid", "==", userId),
-          ],
-        );
-      }
-      // conditions.push(orderBy("timestamp", "desc"));
-      const q = query(collection(db, inspectionFormsCollection), ...conditions);
-
-      const snapshot = await getDocs(q);
-      const createdByUserUids = snapshot.docs.map(
-        (doc) => doc.data().createdByUserUid,
-      );
-
-      // Fetch user data using a single query
-      const userQuery = query(
-        collection(db, usersCollection),
-        where("user_id", "in", createdByUserUids),
-      );
-      const userSnapshot = await getDocs(userQuery);
-
-      // Create a map of users by UID for efficient lookup
-      const userMap = new Map();
-      userSnapshot.forEach((userDoc) => {
-        const userData = userDoc.data();
-        userMap.set(userData.user_id, userData);
-      });
-
-      // Map the QueryDocumentSnapshot objects to InspectionForm objects
-      const inspectionForms: InspectionFormWithId[] = snapshot.docs.map(
-        (doc) => {
-          const data = doc.data();
-          const createdByUserUid = data.createdByUserUid;
-          const createdByUser = userMap.get(createdByUserUid);
-
-          return {
-            type: data.type,
-            manufacturer: data.manufacturer,
-            model: data.model,
-            createdByUserUid: createdByUserUid,
-            form: data.form,
-            dateOfInspection: data.dateOfInspection,
-            createdByUser: createdByUser,
-            id: doc.id,
-            reportStatus: data.reportStatus,
-            requestedByUserRef: data.requestedByUserRef,
-            requestedByUserId: data.requestedByUserId,
-            userRef: data.userRef,
-            inspectionRequestRef: data.inspectionRequestRef,
-          };
-        },
-      );
-
-      return inspectionForms;
+      const params = new URLSearchParams({ userId });
+      if (equipmentType) params.set("equipmentType", equipmentType);
+      if (isCustomer) params.set("isCustomer", "true");
+      const res = await fetch(`/api/inspections/forms?${params}`);
+      return res.json();
     },
   );
 };
 
 export const useGetInspectionFormById = (id: string) => {
   return useQuery<InspectionFormWithId, Error>(
-    [inspectionFormsCollection, "inspection-forms"],
+    [inspectionFormsCollection, id],
     async () => {
-      const docRef = doc(db, inspectionFormsCollection, id);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const createdByUserUid = data.createdByUserUid;
-
-        const userDocRef = doc(db, usersCollection, createdByUserUid);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-          const createdByUser = userDocSnap.data() as UserWithId; // Cast the user document to UserWithId type
-
-          return {
-            id: data.id,
-            type: data.type,
-            createdByUserUid: createdByUserUid,
-            address: data.address,
-            nameOfBusiness: data.nameOfBusiness,
-            customerEmail: data.customerEmail,
-            dateOfInspection: data.dateOfInspection,
-            timeOfInspection: data.timeOfInspection,
-            inspectorName: data.inspectorName,
-            form: data.form,
-            createdByUser: createdByUser as UserWithId, // Cast the createdByUser property to UserWithId type
-          };
-        } else {
-          throw new Error("User does not exist");
-        }
-      } else {
-        throw new Error("Inspection form does not exist");
-      }
+      const res = await fetch(`/api/inspections/forms/${id}`);
+      if (!res.ok) throw new Error("Inspection form not found");
+      return res.json();
     },
   );
 };
@@ -413,39 +280,33 @@ export const runInspection = async (
         const validationErrors: { detail: string } = await response.json();
         throw new Error(validationErrors?.detail ?? "Unknown Error");
       }
-
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const responseData: InspectionResult = await response.json(); // Parse the JSON response
     delete responseData.image_base64;
     return [null, responseData];
-  } catch (error: any) {
+  } catch (error: unknown) {
     // console.error("Error during defect detection: ", error);
-
-    let message = error.message;
+    const err = error as Error & {
+      loc?: unknown;
+      msg?: unknown;
+      type?: unknown;
+    };
+    let message = err.message;
     let color = "red";
 
     if (
-      error &&
-      typeof error === "object" &&
-      "loc" in error &&
-      "msg" in error &&
-      "type" in error
+      err.loc !== undefined &&
+      err.msg !== undefined &&
+      err.type !== undefined
     ) {
       // Handle ValidationError
       message = `Error occurred on analyzing for ${component}`;
       color = "yellow";
     }
 
-    notify(
-      {
-        title: "Inspection Error",
-        message,
-        color,
-      },
-      true,
-    );
+    notify({ title: "Inspection Error", message, color }, true);
     return ["Inspection Error", null];
   }
 };

@@ -26,7 +26,7 @@ const BlogPage = (props: Props) => {
       {/* <div className="text-center font-bold text-4xl">Blog</div> */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-screen-xl mx-auto container px-4 my-20">
         {data?.map((article) => {
-          return <ArticleCard {...article} />;
+          return <ArticleCard key={article.id} {...article} />;
         })}
       </div>
     </div>

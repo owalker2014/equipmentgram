@@ -2,12 +2,11 @@
 
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "@mantine/core/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
-
 import {
   MantineProvider,
   ColorSchemeScript,
@@ -18,13 +17,17 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SideNav } from "@/components/Nav/SideNav";
-
 import { AuthContextProvider } from "../lib/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
-import React from 'react';
+import React from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const roboto = Roboto({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-roboto",
+});
 
 const metadata: Metadata = {
   title: "EquipmentGram",
@@ -74,7 +77,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <ColorSchemeScript />
       </head>
-      <body>
+      <body className={roboto.variable}>
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
             <MantineProvider theme={theme}>

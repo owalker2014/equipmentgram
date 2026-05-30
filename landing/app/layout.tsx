@@ -5,7 +5,7 @@ import Footer from "@/components/sections/footer";
 import FirebaseProvider from "@/lib/authContext";
 import { ColorSchemeScript, MantineProvider, Title } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import colors from "tailwindcss/colors";
 
 import "@mantine/core/styles.css";
@@ -17,10 +17,15 @@ import "./globals.css";
 import { Notifications } from "@mantine/notifications";
 import { Metadata } from "next";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-roboto",
+});
 const queryClient = new QueryClient();
 
-const metadata = {
+const metadata: Metadata = {
   title: "EquipmentGram",
   description:
     "EquipmentGram is a platform for conducting pre-purchase equipment-defect verification.",
@@ -31,6 +36,14 @@ const metadata = {
     title: "EquipmentGram",
   },
 };
+
+// Define the function globally
+// window.initMap = function() {
+//   const map = new google.maps.Map(document.getElementById("map"), {
+//     center: { lat: -34.397, lng: 150.644 },
+//     zoom: 8,
+//   });
+// };
 
 export default function RootLayout({
   children,
@@ -43,7 +56,7 @@ export default function RootLayout({
         <script
           async
           defer
-          src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDa5QyoPFwUz6X6U2znLg88tBWDenn3KTs&libraries=places`}
+          src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDa5QyoPFwUz6X6U2znLg88tBWDenn3KTs&libraries=places&callbackx=initMap&loading=async`}
         />
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -59,7 +72,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <ColorSchemeScript />
       </head>
-      <body className={inter.className}>
+      <body className={roboto.variable}>
         <QueryClientProvider client={queryClient}>
           <FirebaseProvider>
             <MantineProvider

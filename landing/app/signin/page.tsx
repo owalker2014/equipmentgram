@@ -73,7 +73,7 @@ const Home: NextPage = () => {
         } catch (e) {
           console.error(
             "[loginWithGoogle][updateUserAfterLogin] error --> ",
-            e
+            e,
           );
           throw e;
         }
@@ -96,8 +96,8 @@ const Home: NextPage = () => {
     const snapshot = await getDoc(docRef);
 
     const userType = snapshot.exists()
-      ? snapshot?.data()?.type ?? UserType.customer
-      : UserType.customer;
+      ? (snapshot?.data()?.type ?? UserType.inspector)
+      : UserType.inspector;
 
     await mutateAsync({
       user_id: user.uid,

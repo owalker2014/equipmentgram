@@ -92,9 +92,9 @@ const Footer = (props: Props) => {
           <div className="px-4 py-6 md:flex md:items-center md:justify-between mx-auto max-w-screen-xl">
             <span className="text-sm flex gap-2 text-gray-500  sm:text-center">
               © 2023{" "}
-              <a href="/">
+              <Link href="/">
                 <div className="font-extrabold ">EquipmentGram</div>
-              </a>
+              </Link>
               All Rights Reserved.
             </span>
             <div className="flex mt-4 space-x-5 sm:justify-center md:mt-0">

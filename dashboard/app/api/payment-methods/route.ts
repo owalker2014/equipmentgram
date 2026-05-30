@@ -1,3 +1,4 @@
+import { requireAuth } from "@/lib/api-auth";
 import { db } from "@/lib/firebaseConfig/init";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -28,6 +29,9 @@ async function getOrCreateStripeCustomer(
 }
 
 export async function GET(req: NextRequest) {
+  const auth = await requireAuth(req);
+  if (auth instanceof NextResponse) return auth;
+
   const userId = req.nextUrl.searchParams.get("userId");
   if (!userId) {
     return NextResponse.json({ paymentMethod: null }, { status: 400 });
@@ -62,6 +66,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth(req);
+  if (auth instanceof NextResponse) return auth;
+
   const { userId, email } = await req.json();
 
   const stripeCustomerId = await getOrCreateStripeCustomer(userId, email);

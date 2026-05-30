@@ -13,8 +13,10 @@ import { Tailwind } from "@react-email/tailwind";
 import {} from "../../utils/equipment";
 
 export interface InspectionFormEmailProps extends InspectionFormWithId {
-  sendTo: string;
+  sendTo: string | string[];
+  recipient?: string;
   sentFrom: string;
+  pdfBase64?: string;
 }
 
 export default function InspectionFormEmail({
@@ -25,11 +27,12 @@ export default function InspectionFormEmail({
   createdByUser,
   sentFrom,
   address,
+  recipient,
   nameOfBusiness,
   customerEmail,
   dateOfInspection,
   timeOfInspection,
-}: InspectionFormEmailProps) {
+}: Omit<InspectionFormEmailProps, "sendTo" | "pdfBase64">) {
   return (
     <Html>
       <Head />
@@ -37,12 +40,17 @@ export default function InspectionFormEmail({
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Text className="text-[18px] font-normal p-0 my-[30px] mx-0">
+              {recipient && (
+                <Text className="text-[18px] font-normal p-0 my-[20px] mx-0">
+                  Hello {recipient},
+                </Text>
+              )}
               {sentFrom} has sent you a new inspection report for{" "}
               {nameOfBusiness} . Please review the report and take any necessary
               action.
             </Text>
 
-            <Section className="border border-solid divide-y">
+            {/* <Section className="border border-solid divide-y">
               <Item
                 value={createdByUser?.display_name}
                 label="Name of Inspector"
@@ -101,7 +109,7 @@ export default function InspectionFormEmail({
                   </Section>
                 </Section>
               ))}
-            </Section>
+            </Section> */}
           </Container>
         </Body>
       </Tailwind>

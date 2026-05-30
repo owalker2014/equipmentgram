@@ -33,6 +33,7 @@ export function UserItem(props: UserProps) {
         <div className="flex items-center px-2 py-4 sm:px-6">
           <div className="flex items-center flex-1 min-w-0">
             <div className="flex-shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className="hidden w-12 h-12 rounded-full md:block" src={user?.photoURL || ""} alt="" />
             </div>
             <div className="flex-1 min-w-0 px-4 md:grid md:grid-cols-2 md:gap-4">

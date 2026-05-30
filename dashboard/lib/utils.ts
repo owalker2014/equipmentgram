@@ -1,10 +1,12 @@
+"use client"
+
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 
 export function toTitleCase(str: string) {
   return str.replace(/\b\w/g, function (match) {
-    return match.toUpperCase();
+    return match?.toUpperCase();
   });
 }
 

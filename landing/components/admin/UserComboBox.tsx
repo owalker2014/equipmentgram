@@ -71,6 +71,7 @@ export function UserComboBox(props: Props) {
                 {({ active, selected }) => (
                   <>
                     <div className="flex items-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={person.photoURL} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                       <span className={classNames("ml-3 truncate", selected && "font-semibold")}>
                         {person.displayName}

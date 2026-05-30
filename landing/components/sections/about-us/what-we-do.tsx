@@ -39,8 +39,8 @@ const WhatWeDo: React.FC<Props> = ({ isLanding = false }) => {
             <Title className="text-blue-700">Our Mission</Title>
 
             <Text c="dimmed" className="">
-              EquipmentGram's mission is to simplify excavator inspections by
-              allowing anyone with a smartphone or tablet to produce an
+              EquipmentGram&apos;s mission is to simplify excavator inspections
+              by allowing anyone with a smartphone or tablet to produce an
               inspection report. We aim to reduce uncertainty, save time and
               cost, and help customers get more value from their excavator
               investments.

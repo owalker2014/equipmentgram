@@ -93,7 +93,7 @@ export default function Home(props: any) {
       </Text>
 
       <h4 className="font-bold mt-7">Recent Notifications</h4>
-      {notificationData?.map((note, i) => (
+      {notificationData?.map?.((note, i) => (
         <List key={`note-${i}`} listStyleType="square">
           <List.Item>
             <span className="text-gray-500 font-normal">{note.message}</span>

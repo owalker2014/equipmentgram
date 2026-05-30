@@ -159,7 +159,7 @@ function ImageItem({
                         key={xidx}
                         className="pt-0 pl-2 pr-2 pb-1 border border-gray-200 rounded"
                       >
-                        <label className="font-bold text-xs">{x.label}</label>
+                        <label className="font-bold text-xs">{x.label}:</label>
                         <div className="text-gray-500 text-xs">
                           {output}&nbsp;
                         </div>
@@ -175,7 +175,7 @@ function ImageItem({
                 key={oidx}
                 className="pt-0 pl-2 pr-2 pb-1 border border-gray-200 rounded"
               >
-                <label className="font-bold text-xs">{o.label}</label>
+                <label className="font-bold text-xs">{o.label}:</label>
                 <div className="text-gray-500 text-xs">
                   {result?.[o.key]}&nbsp;
                 </div>
