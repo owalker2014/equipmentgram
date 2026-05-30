@@ -61,8 +61,9 @@ const InspectionRequest = () => {
   const [step, setStep] = useState<Step>(Step.Request);
 
   // Modify the step based on server side state
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    // If use is not logged in, or has not inspection requests, they are in the request state
+    // If user is not logged in, or has no inspection requests, they are in the request state
     if (inspectionRequestsForUser && inspectionRequestsForUser?.length === 0) {
       setStep(Step.Request);
     } else {
@@ -91,6 +92,7 @@ const InspectionRequest = () => {
     }
   }, [inspectionRequestsForUser]);
 
+  /* eslint-enable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (inspectionRequest?.inspectorRef) {
       getDoc(inspectionRequest.inspectorRef).then((doc) =>

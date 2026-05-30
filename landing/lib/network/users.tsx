@@ -136,22 +136,22 @@ export const useUpdateUser = () => {
   );
 };
 
-export const updateUser = () => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    ({ user_id, user }: { user_id: string; user: Partial<User> }) => {
-      return updateDoc(doc(db, UsersCollection, user_id), {
-        ...user,
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([UsersCollection]);
-        queryClient.refetchQueries([UsersCollection]);
-      },
-    }
-  );
-};
+// export const updateUser = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation(
+//     ({ user_id, user }: { user_id: string; user: Partial<User> }) => {
+//       return updateDoc(doc(db, UsersCollection, user_id), {
+//         ...user,
+//       });
+//     },
+//     {
+//       onSuccess: () => {
+//         queryClient.invalidateQueries([UsersCollection]);
+//         queryClient.refetchQueries([UsersCollection]);
+//       },
+//     }
+//   );
+// };
 
 export const useSetUserType = () => {
   const queryClient = useQueryClient();

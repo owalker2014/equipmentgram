@@ -3,7 +3,9 @@
 import CustomLoader, { ReturnButton } from "@/components/CustomLoader";
 import QuestionFormPDF from "@/components/QuestionFormPDF";
 import QuestionFormWebPreview from "@/components/QuestionFormWebPreview";
+import { useAuth } from "@/lib/authContext";
 import { useGetInspectionFormById } from "@/lib/network/forms";
+import { notify } from "@/lib/utils";
 import {
   ActionIcon,
   Button,
@@ -14,7 +16,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { PDFViewer } from "@react-pdf/renderer";
+import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { IconAt, IconDownload } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -25,11 +27,69 @@ const SavedForm: React.FC<{
   searchParams: any;
 }> = ({ params, searchParams }) => {
   const { data } = useGetInspectionFormById(params.id);
+  const { user } = useAuth();
   const isPreview = searchParams?.mode === "preview";
   const icon = <IconAt size={16} />;
 
   const previewRef = useRef<HTMLDivElement>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const [isSharing, setIsSharing] = useState(false);
+  const [recipient1, setRecipient1] = useState("");
+  const [recipient2, setRecipient2] = useState("");
+  const [recipient3, setRecipient3] = useState("");
+  const [notes, setNotes] = useState("");
+
+  const handleShare = async () => {
+    if (!data || !recipient1) return;
+    setIsSharing(true);
+    try {
+      const blob = await pdf(<QuestionFormPDF data={data} />).toBlob();
+      const pdfBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(",")[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+
+      const sendTo = [recipient1, recipient2, recipient3].filter(Boolean);
+      const sentFrom = user?.displayName || user?.email || "EquipmentGram";
+
+      const res = await fetch("/api/share-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, sendTo, sentFrom, pdfBase64, notes }),
+      });
+
+      if (res.ok) {
+        notify(
+          {
+            title: "Report Shared",
+            message: "Inspection report sent successfully.",
+          },
+          false,
+        );
+      } else {
+        notify(
+          {
+            title: "Share Failed",
+            message: "Could not send the report. Please try again.",
+          },
+          true,
+        );
+      }
+    } catch {
+      notify(
+        { title: "Share Failed", message: "An unexpected error occurred." },
+        true,
+      );
+    } finally {
+      setIsSharing(false);
+    }
+  };
 
   const handleDownloadPDF = async () => {
     if (!previewRef.current) return;
@@ -120,6 +180,8 @@ const SavedForm: React.FC<{
             variant="filled"
             aria-label="Recipient 1"
             placeholder="Recipient 1"
+            value={recipient1}
+            onChange={(e) => setRecipient1(e.currentTarget.value)}
             required
           />
           <TextInput
@@ -130,6 +192,8 @@ const SavedForm: React.FC<{
             variant="filled"
             aria-label="Recipient 2"
             placeholder="Recipient 2: (Optional)"
+            value={recipient2}
+            onChange={(e) => setRecipient2(e.currentTarget.value)}
           />
           <TextInput
             className="mb-4"
@@ -139,18 +203,25 @@ const SavedForm: React.FC<{
             variant="filled"
             aria-label="Recipient 3"
             placeholder="Recipient 3: (Optional)"
+            value={recipient3}
+            onChange={(e) => setRecipient3(e.currentTarget.value)}
           />
           <Textarea
-            value={""}
+            value={notes}
+            onChange={(e) => setNotes(e.currentTarget.value)}
             variant="filled"
             rows={7}
             maxLength={200}
             aria-label="Notes"
             placeholder="Enter any additional notes here..."
-            readOnly
           />
           <div className="flex flex-wrap gap-2 mt-4">
-            <Button className="bg-blue-700" onClick={() => {}}>
+            <Button
+              className="bg-blue-700"
+              loading={isSharing}
+              disabled={!recipient1}
+              onClick={handleShare}
+            >
               Share
             </Button>
             <Button

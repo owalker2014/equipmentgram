@@ -16,7 +16,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="max-w-2xl mx-auto text-center">
           <Title className="text-center">How It Works</Title>
-  
+
           <Text size="sm" className="text-center text-gray-600">
             Below are the steps for generating an inspection report by anyone
             using their tablet or smartphone.

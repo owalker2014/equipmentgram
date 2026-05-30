@@ -12,9 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import React, { forwardRef } from "react";
 
-type Props = {};
-
-const NavUserMenu = (props: Props) => {
+const NavUserMenu = () => {
   const { user } = useAuth();
   const { data: userData } = useGetUser(user?.claims.user_id as string);
   const router = useRouter();
@@ -112,3 +110,5 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
     </UnstyledButton>
   )
 );
+
+UserButton.displayName = "UserButton";

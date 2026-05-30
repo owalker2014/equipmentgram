@@ -76,7 +76,10 @@ const Navbar = ({}: Props) => {
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button aria-label="Sign Up" className="rounded-full">
+                  <Button
+                    aria-label="Sign Up"
+                    className="rounded-full bg-blue-700"
+                  >
                     Sign Up
                   </Button>
                 </Link>
@@ -104,11 +107,11 @@ const Navbar = ({}: Props) => {
         position="right"
       >
         <div className="flex justify-between">
-          <a href="/">
+          <Link href="/">
             <div className="text-xl font-extrabold text-blue-700">
               EquipmentGram
             </div>
-          </a>
+          </Link>
           <CloseButton aria-label="Close" onClick={close} />
         </div>
         <ul className="flex flex-col gap-4 mt-4 font-medium ">

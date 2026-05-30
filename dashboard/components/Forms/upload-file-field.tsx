@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { storage } from "@/lib/firebaseConfig/init";
 import { InspectionResult, runInspection } from "@/lib/network/forms";
