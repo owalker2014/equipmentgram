@@ -25,7 +25,7 @@ const Header = ({}) => {
                   excavator owners, buyers, and sellers by enabling easy
                   creation, management, and distribution of inspection reports
                   directly through a phone app.
-                </p>
+                </Text>
                 <div className="grid grid-cols-2 justify-items-stretch">
                   <div>
                     <Link href={dashboardUrl}>
