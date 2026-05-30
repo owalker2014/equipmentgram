@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
   },
   section: {
     // paddingHorizontal: 10,
-    marginTop: 5,
+    marginTop: 3,
     border: 1,
     borderTop: "none",
     borderStyle: "solid",
     borderColor: "#e5e7eb",
   },
   label: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 3,
     paddingVertical: 3,
     fontFamily: "Helvetica-Bold",
     fontSize: 10,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 1,
     fontFamily: "Helvetica-Bold",
-    fontSize: 9,
+    fontSize: 7,
     backgroundColor: "rgba(243 244 246, 1)",
     fontWeight: "black",
   },
@@ -69,34 +69,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   value: {
-    paddingLeft: 7,
-    paddingRight: 7,
-    paddingVertical: 5,
+    paddingLeft: 3,
+    paddingRight: 5,
+    paddingVertical: 3,
     color: "#6b7280",
   },
   image: {
     // width: "100%",
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 125,
     objectFit: "contain",
     padding: 10,
   },
   imageRow: {
     flexDirection: "row",
     gap: 12,
-    margin: 4,
+    margin: 2,
   },
   metadataContainer: {
     flex: 1,
-    gap: 4,
+    gap: 2,
   },
   metadataKeysRow: {
     flexDirection: "row",
-    gap: 4,
+    gap: 2,
   },
   metadataItem: {
     flex: 1,
-    padding: 4,
+    padding: 3,
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#e5e7eb",
@@ -176,7 +176,7 @@ const QuestionFormPDF = ({ data }: Props) => {
           </View>
 
           {data.form?.pages.map((page, index) => (
-            <View key={`section-${index}`} style={styles.section}>
+            <View key={`section-${index}`} style={styles.section} wrap={false}>
               <View style={styles.pageInfoContainer}>
                 <Text style={styles.pageTitle}>{page.name}</Text>
                 {page?.comment && (
@@ -198,11 +198,6 @@ const QuestionFormPDF = ({ data }: Props) => {
                       label={question.label}
                       result={question.imageResult}
                     />
-                    // <ImageItem
-                    //   src={question.imageResult?.image_base64!}
-                    //   label={question.label}
-                    //   result={question.imageResult}
-                    // />
                   )}
                 </View>
               ))}
@@ -242,7 +237,12 @@ function ImageItem({
     <View>
       <Text style={styles.label2}>{/* {label}: */}&nbsp;</Text>
       <View style={styles.imageRow}>
-        <Image {...{ alt: "eq-image" }} cache src={src} style={styles.image} />
+        <Image
+          {...{ alt: `eq-image-${label?.replace(/\s+/gi, "-")}` }}
+          cache
+          src={src}
+          style={styles.image}
+        />
         <View style={styles.metadataContainer}>
           {analysisChecklist.map((o, oidx) => {
             if (o.keys) {
@@ -256,7 +256,9 @@ function ImageItem({
                     return (
                       <View key={xidx} style={styles.metadataItem}>
                         <Text style={styles.metadataLabel}>{x.label}:</Text>
-                        <Text style={styles.metadataValue}>{output}</Text>
+                        <Text style={styles.metadataValue}>
+                          {output ?? "n/a"}
+                        </Text>
                       </View>
                     );
                   })}
@@ -267,7 +269,9 @@ function ImageItem({
             return (
               <View key={oidx} style={styles.metadataItem}>
                 <Text style={styles.metadataLabel}>{o.label}:</Text>
-                <Text style={styles.metadataValue}>{result?.[o.key]}</Text>
+                <Text style={styles.metadataValue}>
+                  {result?.[o.key] ?? result?.[o.altKey!] ?? "n/a"}
+                </Text>
               </View>
             );
           })}

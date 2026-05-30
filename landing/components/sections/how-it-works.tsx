@@ -1,5 +1,5 @@
 import { Text, Title } from "@mantine/core";
-import React from "react";
+import Image from "next/image";
 
 type HowItWorksSectionProps = {
   isLanding?: boolean;
@@ -27,10 +27,13 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
             <div className="rounded-md bg-white shadow-md p-8">
               <div className="text-4xl font-bold text-blue-700 mb-4">01</div>
               {/* <h3 className="text-2xl font-bold mb-4">Feature 1</h3> */}
-              <img
-                src="how-it-works-1.png"
+              <Image
+                src="/how-it-works-1.png"
                 alt="how-it-works-1"
-                className="max-w-full lg:ml-auto rounded-lg"
+                width={400}
+                height={300}
+                style={{ width: "100%", height: "auto" }}
+                className="lg:ml-auto rounded-lg"
               />
             </div>
           </div>
@@ -39,10 +42,13 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
             <div className="rounded-md bg-white shadow-md p-8">
               <div className="text-4xl font-bold text-blue-700 mb-4">02</div>
               {/* <h3 className="text-2xl font-bold mb-4">Feature 2</h3> */}
-              <img
-                src="how-it-works-2.png"
+              <Image
+                src="/how-it-works-2.png"
                 alt="how-it-works-2"
-                className="max-w-full lg:ml-auto rounded-lg"
+                width={400}
+                height={300}
+                style={{ width: "100%", height: "auto" }}
+                className="lg:ml-auto rounded-lg"
               />
             </div>
           </div>
@@ -51,10 +57,13 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
             <div className="rounded-md bg-white shadow-md p-8">
               <div className="text-4xl font-bold text-blue-700 mb-4">03</div>
               {/* <h3 className="text-2xl font-bold mb-4">Feature 3</h3> */}
-              <img
-                src="how-it-works-3.png"
+              <Image
+                src="/how-it-works-3.png"
                 alt="how-it-works-3"
-                className="max-w-full lg:ml-auto rounded-lg"
+                width={400}
+                height={300}
+                style={{ width: "100%", height: "auto" }}
+                className="lg:ml-auto rounded-lg"
               />
             </div>
           </div>
@@ -63,10 +72,13 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({
             <div className="rounded-md bg-white shadow-md p-8">
               <div className="text-4xl font-bold text-blue-700 mb-4">04</div>
               {/* <h3 className="text-2xl font-bold mb-4">Feature 4</h3> */}
-              <img
-                src="how-it-works-4.png"
+              <Image
+                src="/how-it-works-4.png"
                 alt="how-it-works-4"
-                className="max-w-full lg:ml-auto rounded-lg"
+                width={400}
+                height={300}
+                style={{ width: "100%", height: "auto" }}
+                className="lg:ml-auto rounded-lg"
               />
             </div>
           </div>

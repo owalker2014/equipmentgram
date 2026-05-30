@@ -3,7 +3,7 @@ import { db } from "@/lib/firebaseConfig/init";
 import {
   inspectionFormsCollection,
   InspectionFormWithId,
-} from "@/lib/network/forms";
+} from "@/lib/network/forms.shared";
 import { usersCollection, UserWithId } from "@/lib/network/users";
 import { doc, getDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";

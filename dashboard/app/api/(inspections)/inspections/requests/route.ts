@@ -1,6 +1,6 @@
 import { requireAuth } from "@/lib/api-auth";
 import { db } from "@/lib/firebaseConfig/init";
-import { InspectionReportStatus } from "@/lib/network/forms";
+import { InspectionReportStatus } from "@/lib/network/forms.shared";
 import {
   InspectionRequestObjectWithId,
   inspectionRequestsCollection,

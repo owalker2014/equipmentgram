@@ -15,6 +15,7 @@
     "email": "email dev --dir components/emails"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@mantine/core": "^7.1.2",
     "@mantine/dates": "^7.1.2",
     "@mantine/dropzone": "^7.1.2",
@@ -36,8 +37,7 @@
     "html2canvas": "^1.4.1",
     "immer": "^11.1.8",
     "jspdf": "^2.5.1",
-    "next": "13.5.4",
-    "next-pwa": "^5.6.0",
+    "next": "^14.2.35",
     "nookies": "^2.5.2",
     "pdfkit": "^0.13.0",
     "postcss": "^8.4.31",
@@ -60,7 +60,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.0.0",
-    "eslint-config-next": "13.5.4",
+    "eslint-config-next": "^14.2.35",
     "eslint-plugin-react-hooks": "^7.1.1",
     "postcss-preset-mantine": "^1.8.0",
     "postcss-simple-vars": "^7.0.1",
