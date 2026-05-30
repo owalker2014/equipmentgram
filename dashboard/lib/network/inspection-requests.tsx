@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { InspectionReportStatus } from "./forms";
+import { InspectionReportStatus } from "./forms.shared";
 import { EquipmentManufacturer, EquipmentType } from "@/utils/formUtils";
 
 export enum Step {

@@ -16,8 +16,9 @@ export const analysisChecklist = [
     ],
   },
   {
-    label: "Observations",
+    label: "Observations / Errors",
     key: "observations",
+    altKey: "error",
   },
   {
     label: "Recommended Action",

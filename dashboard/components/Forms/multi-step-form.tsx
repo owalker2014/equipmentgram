@@ -1,21 +1,23 @@
+import { produce, setAutoFreeze } from "immer";
 import { useAuth } from "@/lib/authContext";
-import { QuestionForm } from "@/lib/network/forms";
+import { QuestionForm, runInspections } from "@/lib/network/forms";
 import { USStates } from "@/utils/formUtils";
 import {
   Button,
   Divider,
-  Image,
-  Progress,
   Select,
   Text,
   TextInput,
-  Textarea,
-  Title,
+  Title
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useEffect, useMemo, useState } from "react";
-import UploadFileField from "./upload-file-field";
+import { useEffect, useState } from "react";
 import { getTimeString, notify } from "@/lib/utils";
+import { ComponentCaptureBox } from "./component-capture-box";
+
+// very important to prevent immer from freezing our form state,
+// which causes mantine form's getInputProps to break when we set values after file upload
+setAutoFreeze(false);
 
 type Props = {
   questionForm: QuestionForm;
@@ -37,19 +39,18 @@ interface QF extends QuestionForm {
 
 const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [nextStepLoading, setNextStepLoading] = useState(false);
   const { user } = useAuth();
-  const progressRange = useMemo(
-    () => Array.from({ length: 99 }, (_v, i) => 1 + i),
-    [],
-  );
 
   const {
     getInputProps,
     onSubmit: handleSubmit,
+    setValues,
     setFieldValue,
     validate,
     errors,
     setErrors,
+    setFieldError,
     clearFieldError,
     values,
   } = useForm<QF>({
@@ -123,21 +124,87 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
 
   const nextStep = async () => {
     const { hasErrors } = validate();
+    if (hasErrors) return;
 
-    setCurrentStep((prevStep) => {
-      if (hasErrors) {
-        return prevStep;
+    if (currentStep > 0) {
+      const sectionSubmissions = values.pages[currentStep - 1];
+      const isLastStep = currentStep === questionForm.pages.length;
+
+      const data: Record<string, { file: File; component: string }> = {};
+      sectionSubmissions.questions.reduce((a, q, i) => {
+        if (q.file) {
+          a[`pages.${currentStep - 1}.questions.${i}`] = {
+            file: q.file,
+            component: q.label,
+          };
+        }
+        return a;
+      }, data);
+
+      if (Object.keys(data).length === 0) {
+        if (isLastStep) return; // because of onFormSubmit handler
+        setCurrentStep((prev) => prev + 1);
+        return;
       }
 
-      return prevStep + 1;
-    });
+      setNextStepLoading(true);
+      try {
+        const { errors: batchErrors, results } = await runInspections(
+          Object.values(data).map((q) => q.file),
+          Object.values(data).map((q) => q.component),
+          { ...metadata!, section: sectionSubmissions.name },
+        );
+
+        if (batchErrors || !results) {
+          // setErrors({
+          //   [`pages.${currentStep - 1}.questions.${i}.imageUrl`]: err,
+          // });
+          setErrors(
+            sectionSubmissions.questions.reduce(
+              (acc: Record<string, string>, question, i) => {
+                if (!data[`pages.${currentStep - 1}.questions.${i}`])
+                  return acc;
+                acc[`pages.${currentStep - 1}.questions.${i}.imageUrl`] =
+                  `Inspection Error [${question.label}]`;
+                return acc;
+              },
+              {},
+            ),
+          );
+          return;
+        }
+
+        if (results) {
+          const { component_results, ...otherData } = results;
+          let submittedIndex = 0;
+          const sectionResponses = sectionSubmissions.questions.map((q, i) => {
+            delete q.file;
+            q.imageResult = !data[`pages.${currentStep - 1}.questions.${i}`]
+              ? undefined
+              : { ...component_results?.[submittedIndex++], ...otherData };
+            return q;
+          });
+          setValues(
+            produce((draft) => {
+              draft.pages![currentStep - 1].questions = sectionResponses;
+            }),
+          );
+        }
+      } finally {
+        setNextStepLoading(false);
+      }
+
+      if (isLastStep) return; // because of onFormSubmit handler
+    }
+
+    setCurrentStep((prev) => prev + 1);
   };
 
   const prevStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
-  const onFormSubmit = (data: QF) => {
+  const onFormSubmit = async (data: QF) => {
     const { hasErrors } = validate();
 
     if (hasErrors) {
@@ -150,6 +217,8 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
       );
       return;
     }
+
+    await nextStep(); // run inspection on last section before submitting
 
     const currentDateTime = new Date().toISOString().split("T");
     onSubmit({
@@ -182,9 +251,9 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
         onSubmit={handleSubmit(onFormSubmit)}
       >
         <Title size={30}>
-          <h2 className="mb-1 text-2xlx font-boldx uppercasex">
+          <span className="mb-1 text-2xlx font-boldx uppercasex">
             {currentQuestions ? currentQuestions.name : "Inspection Report"}
-          </h2>
+          </span>
           <small className="mb-1 block text-sm text-gray-600">
             {currentStep > 0 && (
               <>
@@ -305,105 +374,54 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
           )}
           <div className="grid md:grid-cols-2 gap-3">
             {currentStep > 0 &&
-              questionForm.pages[currentStep - 1].questions.map(
-                (question, i) => (
-                  <div
-                    className="p-4 space-y-4 border-gray-200 border border-solid rounded-md"
-                    key={question.key}
-                  >
-                    <>
-                      <UploadFileField
-                        fileName={question.key}
-                        fieldLabel={question.label}
-                        metadata={{
-                          ...metadata!,
-                          section: currentQuestions.name,
-                        }}
-                        onUploadComplete={(url, result) => {
-                          setFieldValue(
-                            `pages.${currentStep - 1}.questions.${i}.imageUrl`,
-                            url,
-                          );
-                          setFieldValue(
-                            `pages.${currentStep - 1}.questions.${i}.imageResult`,
-                            result,
-                          );
-                        }}
-                        onProgress={(progress) => {
-                          setFieldValue(
-                            `pages.${currentStep - 1}.questions.${i}.progress`,
-                            progress,
-                          );
-                        }}
-                        onError={(err) => {
-                          setErrors({
-                            [`pages.${currentStep - 1}.questions.${i}.imageUrl`]:
-                              err,
-                          });
-                        }}
-                        clearFieldError={() =>
-                          clearFieldError(
-                            `pages.${currentStep - 1}.questions.${i}.imageUrl`,
-                          )
-                        }
-                        error={errors[
-                          `pages.${currentStep - 1}.questions.${i}.imageUrl`
-                        ]?.toString()}
-                      />
-
-                      {progressRange.includes(
-                        values.pages[currentStep - 1]?.questions[i]?.progress ??
-                          0,
-                      ) && (
-                        <Progress
-                          value={
-                            values.pages[currentStep - 1]?.questions[i]
-                              ?.progress ?? 0
-                          }
-                          className="bg-stone-700"
-                          striped
-                          animated
-                        />
-                      )}
-                      {values.pages[currentStep - 1].questions[i].imageUrl && (
-                        <Image
-                          {...{ alt: "eq-image" }}
-                          className="mt-4 max-h-5"
-                          src={
-                            values.pages[currentStep - 1].questions[i].imageUrl
-                          }
-                        />
-                      )}
-                      {/* <SimpleGrid className="mt-4" cols={{ base: 1, sm: 4 }}>
-                   </SimpleGrid> */}
-                    </>
-                    {values.pages[currentStep - 1].questions[i].value ===
-                      "Issues" && (
-                      <Textarea
-                        label="Comment"
-                        {...getInputProps(
-                          `pages.${currentStep - 1}.questions.${i}.comment`,
-                        )}
-                      />
-                    )}
-                  </div>
-                ),
-              )}
+              currentQuestions.questions.map((question, i) => (
+                <ComponentCaptureBox
+                  key={question.key}
+                  question={question}
+                  currentStep={currentStep}
+                  metadata={metadata!}
+                  currentQuestions={currentQuestions}
+                  form={{
+                    getInputProps,
+                    setValues,
+                    setFieldValue,
+                    errors,
+                    setFieldError,
+                    clearFieldError,
+                    values,
+                  }}
+                  questionIndex={i}
+                />
+              ))}
           </div>
         </div>
         <div className="pb-10 my-4 space-x-4">
           {currentStep > 0 && (
-            <Button onClick={prevStep} className="bg-stone-700">
+            <Button
+              onClick={prevStep}
+              className="bg-stone-700"
+              disabled={nextStepLoading}
+            >
               Previous
             </Button>
           )}
           {currentStep < questionForm.pages.length && (
-            <Button onClick={nextStep} className="bg-blue-700">
+            <Button
+              onClick={nextStep}
+              className="bg-blue-700"
+              loading={nextStepLoading}
+              disabled={nextStepLoading}
+            >
               Next
             </Button>
           )}
           {currentStep === questionForm.pages.length && (
-            <Button type="submit" className="bg-blue-700">
+            <Button
+              type="submit"
+              className="bg-blue-700"
+              loading={nextStepLoading}
+              disabled={nextStepLoading}
+            >
               Submit
             </Button>
           )}

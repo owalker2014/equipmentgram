@@ -131,7 +131,7 @@ function ImageItem({
       </Text>
       <div className="flex flex-row gap-3 m-1">
         <Image
-          alt="eq-image"
+          alt={`eq-image-${label?.replace(/\s+/gi, "-")}`}
           width={200}
           height={200}
           style={{
@@ -161,7 +161,7 @@ function ImageItem({
                       >
                         <label className="font-bold text-xs">{x.label}:</label>
                         <div className="text-gray-500 text-xs">
-                          {output}&nbsp;
+                          {output ?? "n/a"}&nbsp;
                         </div>
                       </div>
                     );
@@ -177,7 +177,7 @@ function ImageItem({
               >
                 <label className="font-bold text-xs">{o.label}:</label>
                 <div className="text-gray-500 text-xs">
-                  {result?.[o.key]}&nbsp;
+                  {result?.[o.key] ?? result?.[o.altKey!] ?? "n/a"}&nbsp;
                 </div>
               </div>
             );

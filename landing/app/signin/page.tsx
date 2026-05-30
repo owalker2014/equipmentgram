@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useAuth } from "@/lib/authContext";
 import { db } from "@/lib/firebaseConfig/init";
 import { UserType, UsersCollection, useSetUser } from "@/lib/network/users";
@@ -161,9 +162,11 @@ const Home: NextPage = () => {
               title="Sign in with Google"
               onClick={() => loginWithGoogle()}
             >
-              <img
+              <Image
                 src="/logo-google.png"
                 alt="google logo"
+                width={25.5}
+                height={20}
                 className="inline h-5 mr-2"
               />
             </Button>

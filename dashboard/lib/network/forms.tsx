@@ -1,141 +1,19 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { notify } from "../utils";
 import { UserWithId } from "./users";
 
-export const inspectionFormsCollection = "inspection-forms";
-
-export interface InspectionRequest {
-  equipment_type: string;
-  manufacturer: string;
-  model: string;
-  section: string;
-  component: string;
-}
-
-export interface InspectionResult extends InspectionRequest {
-  id?: string;
-  // equipment_type: string;
-  // manufacturer: string;
-  // model: string;
-  // section: string;
-  // component: string;
-  timestamp: string;
-  defect_present: boolean;
-  defect_type: string;
-  severity: number;
-  observations: string;
-  recommended_action: string;
-  image_base64?: string;
-}
-
-export interface InspectionResultBatch {
-  batch_id?: string;
-  equipment_type: string;
-  manufacturer: string;
-  model: string;
-  section: string;
-  component_results: {
-    component: string;
-    success: boolean;
-    error: string;
-    defect_present: boolean;
-    defect_type: string;
-    severity: number;
-    observations: string;
-    recommended_action: string;
-    // image_base64?: string;
-    condition: string;
-    component_score: number;
-    risk_level: string;
-  }[];
-  timestamp: string;
-  section_score: number;
-  section_risk_level: string;
-}
-
-export interface ValidationError {
-  loc: unknown;
-  msg: string;
-  type: string;
-}
-
-export interface QuestionForm {
-  pages: QuestionPage[];
-  nameOfBusiness?: string;
-  customerEmail?: string;
-  address?: {
-    state: string;
-    zip: string;
-    city: string;
-    line1: string;
-    line2: string;
-  };
-  dateOfInspection?: any;
-  timeOfInspection?: any;
-  inspectorName?: string;
-}
-
-export interface QuestionPage {
-  name: string;
-  comment?: string;
-  key: string;
-  questions: Question[];
-}
-
-export interface Question {
-  required?: boolean; // some components may not be required for inspection
-  label: string;
-  key: string;
-  value?: string;
-  imageUrl?: string;
-  progress?: number;
-  imageResult?: InspectionResult;
-  file?: File;
-  comment?: string;
-}
-
-export enum InspectionReportStatus {
-  Pending = "Pending",
-  Approved = "Approved",
-  Rejected = "Rejected",
-  FilledForm = "FilledForm",
-}
-
-export interface InspectionForm {
-  type: string;
-  createdByUserUid: string;
-  createdByUser?: UserWithId;
-  form: QuestionForm;
-  reportStatus?: InspectionReportStatus;
-  reportID?: string;
-  equipmentType?: string;
-  manufacturer?: string;
-  equipmentManufacturer?: string;
-  equipmentSerialNumber?: string;
-  model?: string;
-  equipmentModel?: string;
-  nameOfBusiness?: string;
-  address?: {
-    state: string;
-    zip: string;
-    city: string;
-    line1: string;
-    line2: string;
-  };
-  customerEmail?: string;
-  dateOfInspection?: any;
-  timeOfInspection?: any;
-  inspectorName?: string;
-  requestedByUserRef?: unknown;
-  requestedByUserId?: string;
-  userRef?: unknown;
-  // inspectionRequestRef?: DocumentReference<DocumentData>;
-}
-
-export interface InspectionFormWithId extends InspectionForm {
-  id: string;
-}
+export * from "./forms.shared";
+import { inspectionFormsCollection } from "./forms.shared";
+import type {
+  InspectionForm,
+  InspectionFormWithId,
+  InspectionRequest,
+  InspectionResult,
+  InspectionResultBatch,
+} from "./forms.shared";
 
 export const useAddFreshInspectionForm = (userId: string) => {
   const queryClient = useQueryClient();
@@ -308,5 +186,75 @@ export const runInspection = async (
 
     notify({ title: "Inspection Error", message, color }, true);
     return ["Inspection Error", null];
+  }
+};
+
+/**
+ * Run inspection for multiple components and images in batch (By Section)
+ *
+ * @param mediaFiles The list of images submited
+ * @param components THe components with pictures
+ * @param param2 
+ * @returns 
+ */
+export const runInspections = async (
+  mediaFiles: File[],
+  components: string[],
+  {
+    equipment_type,
+    manufacturer,
+    model,
+    section,
+  }: Omit<InspectionRequest, "component">,
+) => {
+  try {
+    if (!mediaFiles.length || !components.length) {
+      throw new Error("No components/media files provided");
+    }
+
+    const formData = new FormData();
+    formData.append("equipment_type", equipment_type);
+    formData.append("manufacturer", manufacturer);
+    formData.append("model", model);
+    formData.append("section", section);
+    formData.append("component_names", components.join(","));
+    mediaFiles.forEach((file) => formData.append("images", file)); // Append the array of files
+
+    const url = `${process.env.NEXT_PUBLIC_DEFECT_DETECTION_URL}/inspect/batch`;
+    const response = await fetch(url, { method: "POST", body: formData });
+
+    // Check if the request was successful (status in the 2xx range)
+    if (!response.ok) {
+      if ([400, 422].includes(response.status)) {
+        // Validation Error
+        const validationErrors: { detail: string } = await response.json();
+        throw new Error(validationErrors?.detail ?? "Unknown Error");
+      }
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData: InspectionResultBatch = await response.json(); // Parse the JSON response
+    return { errors: null, results: responseData };
+  } catch (error: unknown) {
+    const err = error as Error & {
+      loc?: unknown;
+      msg?: unknown;
+      type?: unknown;
+    };
+    let message = err.message;
+    let color = "red";
+
+    if (
+      err.loc !== undefined &&
+      err.msg !== undefined &&
+      err.type !== undefined
+    ) {
+      // Handle ValidationError
+      message = `Error occurred on analyzing for ${components}`;
+      color = "yellow";
+    }
+
+    notify({ title: "Inspection Error", message, color }, true);
+    return { message: "Inspection Error", errors: null, results: null };
   }
 };
