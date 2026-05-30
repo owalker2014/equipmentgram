@@ -27,7 +27,7 @@ const Notifications = (props: Props) => {
               <Notification
                 key={`note-${i}`}
                 onClick={() => {
-                  console.log("clicked");
+                  console.log("clicked");// eslint-disable-line
                 }}
                 styles={{
                   root: {

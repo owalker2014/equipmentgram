@@ -409,8 +409,6 @@ const BackhoeLoaderFormPage: React.FC<{
   };
 
   const handleSubmit = (data: QuestionForm) => {
-    console.log("+++++ FORM DATA ++++++", data);
-
     if (!user) return;
 
     add.mutate({

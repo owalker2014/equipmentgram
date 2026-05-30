@@ -4,7 +4,7 @@ import {
   inspectionFormsCollection,
   InspectionFormWithId,
   InspectionReportStatus,
-} from "@/lib/network/forms";
+} from "@/lib/network/forms.shared";
 import { inspectionRequestsCollection } from "@/lib/network/inspection-requests";
 import { usersCollection, UserWithId } from "@/lib/network/users";
 import {

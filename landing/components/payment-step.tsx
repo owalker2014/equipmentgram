@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useAuth } from "@/lib/authContext";
 import { InspectionRequestObjectWithId } from "@/lib/network/inspection-requests";
 import { Button } from "@mantine/core";
@@ -38,7 +39,7 @@ const PaymentStep = ({ inspectionRequest }: Props) => {
         <div className="container mx-auto">
           <div className="mx-auto max-w-[600px] rounded-[10px] bg-white p-10 text-center shadow-card md:py-[55px] md:px-[70px]">
             <div className="mx-auto text-center mb-14">
-              <img src="/payment.svg" alt="Payment image" className="w-full max-w-full mx-auto" />
+              <Image src="/payment.svg" alt="Payment image" width={400} height={300} style={{ width: "100%", height: "auto" }} />
             </div>
             <h2 className="mb-3 text-2xl font-semibold text-black sm:text-3xl">Payment</h2>
             <p className="mb-5 text-base text-body-color">

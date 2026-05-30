@@ -6,7 +6,7 @@ import {
   IconReceipt,
 } from "@tabler/icons-react";
 import { EquipmentType } from "./formUtils";
-import { InspectionFormWithId } from "../lib/network/forms";
+import { InspectionFormWithId } from "../lib/network/forms.shared";
 import { UserType } from "../lib/network/users";
 
 export const equipments = [

@@ -4,6 +4,7 @@ import CustomLoader from "@/components/Loader";
 import { InspectionRequestForm } from "@/components/forms/InspectionRequestForm";
 import PaymentStep from "@/components/payment-step";
 import { getDoc } from "@firebase/firestore";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Step, StepWidget } from "../../components/forms/StepWidget";
 import { useAuth } from "../../lib/authContext";
@@ -15,41 +16,6 @@ import { User } from "../../lib/network/users";
 
 const InspectionRequest = () => {
   const { user, loading } = useAuth();
-
-  if (loading) return <CustomLoader />;
-
-  if (!user) {
-    return (
-      <div className="container px-4 mx-auto max-w-screen-xl">
-        <section className="overflow-hidden py-10 lg:py-[80px]">
-          <div className="px-4 mx-auto sm:container">
-            <StepWidget step={Step.Request} />
-          </div>
-        </section>
-        <section className="flex items-center justify-center py-2 bg-gray">
-          <div className="container mx-auto">
-            <div className="mx-auto max-w-[600px] rounded-[10px] bg-white p-10 text-center shadow-card md:py-[55px] md:px-[70px]">
-              <div className="mx-auto text-center mb-14">
-                <img
-                  src="/schedule.svg"
-                  alt="Schedule image"
-                  className="w-full max-w-full mx-auto"
-                />
-              </div>
-              <h2 className="mb-3 text-2xl font-semibold text-black sm:text-3xl">
-                Please log in to continue.
-              </h2>
-              <p className="mb-5 text-base text-body-color">
-                You must be logged in to request an inspection. Please log in to
-                continue.
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
   const {
     data: inspectionRequestsForUser,
     isLoading: inspectionRequestsForUserLoading,
@@ -96,10 +62,46 @@ const InspectionRequest = () => {
   useEffect(() => {
     if (inspectionRequest?.inspectorRef) {
       getDoc(inspectionRequest.inspectorRef).then((doc) =>
-        setInspector(doc.data() as User)
+        setInspector(doc.data() as User),
       );
     }
   }, [inspectionRequest]);
+
+  if (loading) return <CustomLoader />;
+
+  if (!user) {
+    return (
+      <div className="container px-4 mx-auto max-w-screen-xl">
+        <section className="overflow-hidden py-10 lg:py-[80px]">
+          <div className="px-4 mx-auto sm:container">
+            <StepWidget step={Step.Request} />
+          </div>
+        </section>
+        <section className="flex items-center justify-center py-2 bg-gray">
+          <div className="container mx-auto">
+            <div className="mx-auto max-w-[600px] rounded-[10px] bg-white p-10 text-center shadow-card md:py-[55px] md:px-[70px]">
+              <div className="mx-auto text-center mb-14">
+                <Image
+                  src="/schedule.svg"
+                  alt="Schedule image"
+                  width={400}
+                  height={300}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+              <h2 className="mb-3 text-2xl font-semibold text-black sm:text-3xl">
+                Please log in to continue.
+              </h2>
+              <p className="mb-5 text-base text-body-color">
+                You must be logged in to request an inspection. Please log in to
+                continue.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   if (inspectionRequestsForUserLoading) return <CustomLoader />;
 
@@ -119,10 +121,12 @@ const InspectionRequest = () => {
           <div className="container mx-auto">
             <div className="mx-auto max-w-[600px] rounded-[10px] bg-white p-10 text-center shadow-card md:py-[55px] md:px-[70px]">
               <div className="mx-auto text-center mb-14">
-                <img
+                <Image
                   src="/schedule.svg"
                   alt="Schedule image"
-                  className="w-full max-w-full mx-auto"
+                  width={400}
+                  height={300}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
               <h2 className="mb-3 text-2xl font-semibold text-black sm:text-3xl">
@@ -143,10 +147,12 @@ const InspectionRequest = () => {
           <div className="container mx-auto">
             <div className="mx-auto max-w-[600px] rounded-[10px] bg-white p-10 text-center shadow-card md:py-[55px] md:px-[70px]">
               <div className="mx-auto text-center mb-14">
-                <img
+                <Image
                   src="/inspector.svg"
                   alt="Inspector image"
-                  className="w-full max-w-full mx-auto"
+                  width={400}
+                  height={300}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
               <h2 className="mb-3 text-2xl font-semibold text-black sm:text-3xl">

@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-const withPWA = require("next-pwa")({
+const withPWAInit = require("@ducanh2912/next-pwa").default;
+const withPWA = withPWAInit({
   dest: "public",
   register: true,
   skipWaiting: true,
@@ -8,14 +9,20 @@ const withPWA = require("next-pwa")({
   // aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
   // swcMinify: true,
-  // disable: process.env.NODE_ENV === "development",
+  disable: process.env.NODE_ENV === "development",
   disableDevLogs: true,
 });
 
 const nextConfig = withPWA({
   reactStrictMode: true,
   experimental: {
-    serverComponentsExternalPackages: ["resend"],
+    serverComponentsExternalPackages: [
+      "resend",
+      "@react-email/render",
+      "@react-email/components",
+      "@react-email/html",
+      "@react-email/button",
+    ],
   },
   images: {
     remotePatterns: [
