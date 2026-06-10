@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { notify } from "../utils";
+import { UserWithId } from "./users";
 
 export * from "./forms.shared";
 import { inspectionFormsCollection } from "./forms.shared";
