@@ -48,7 +48,7 @@ const metadata: Metadata = {
 //   maximumScale: 1,
 // };
 
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 const theme = createTheme({
   scale: 1,
@@ -60,6 +60,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [opened, { toggle }] = useDisclosure();
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          // queries: {
+          //   staleTime: 60 * 1000, // Keep data fresh for 1 minute
+          // },
+        },
+      }),
+  );
+
   return (
     <html lang="en">
       <head>
