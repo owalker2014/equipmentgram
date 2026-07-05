@@ -4,7 +4,7 @@ import {
   inspectionFormsCollection,
   InspectionFormWithId,
 } from "@/lib/network/forms.shared";
-import { usersCollection, UserWithId } from "@/lib/network/users";
+import { usersCollection, UserWithId } from "@/lib/network/users.shared";
 import { doc, getDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 

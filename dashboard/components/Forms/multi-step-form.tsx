@@ -2,14 +2,7 @@ import { produce, setAutoFreeze } from "immer";
 import { useAuth } from "@/lib/authContext";
 import { QuestionForm, runInspections } from "@/lib/network/forms";
 import { USStates } from "@/utils/formUtils";
-import {
-  Button,
-  Divider,
-  Select,
-  Text,
-  TextInput,
-  Title
-} from "@mantine/core";
+import { Button, Divider, Select, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { getTimeString, notify } from "@/lib/utils";
@@ -149,13 +142,18 @@ const MultiStepForm = ({ questionForm, onSubmit, metadata }: Props) => {
 
       setNextStepLoading(true);
       try {
-        const { errors: batchErrors, results } = await runInspections(
+        const {
+          errors: batchErrors,
+          results,
+          notifyError,
+        } = await runInspections(
           Object.values(data).map((q) => q.file),
           Object.values(data).map((q) => q.component),
           { ...metadata!, section: sectionSubmissions.name },
         );
 
         if (batchErrors || !results) {
+          if (notifyError) notify(notifyError, true);
           // setErrors({
           //   [`pages.${currentStep - 1}.questions.${i}.imageUrl`]: err,
           // });

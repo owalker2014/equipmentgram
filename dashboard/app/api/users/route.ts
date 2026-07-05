@@ -1,6 +1,6 @@
 import { requireAuth } from "@/lib/api-auth";
 import { db } from "@/lib/firebaseConfig/init";
-import { usersCollection, UserWithId } from "@/lib/network/users";
+import { usersCollection, UserWithId } from "@/lib/network/users.shared";
 import {
   collection,
   doc,
@@ -32,6 +32,10 @@ export async function POST(req: NextRequest) {
   if (auth instanceof NextResponse) return auth;
 
   const user = await req.json();
+  if (!user?.user_id) {
+    return NextResponse.json({ error: "user_id is required" }, { status: 400 });
+  }
+
   await setDoc(doc(db, usersCollection, user.user_id), user);
   return NextResponse.json({ success: true });
 }

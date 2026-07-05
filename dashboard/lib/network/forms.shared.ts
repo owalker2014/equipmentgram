@@ -68,6 +68,7 @@ export interface QuestionForm {
 }
 
 export interface QuestionPage {
+  id?: string;
   name: string;
   comment?: string;
   key: string;
@@ -95,6 +96,7 @@ export enum InspectionReportStatus {
 
 export interface InspectionForm {
   type: string;
+  type_id?: string;
   createdByUserUid: string;
   createdByUser?: UserWithId;
   form: QuestionForm;
@@ -102,9 +104,11 @@ export interface InspectionForm {
   reportID?: string;
   equipmentType?: string;
   manufacturer?: string;
+  manufacturer_id?: string;
   equipmentManufacturer?: string;
   equipmentSerialNumber?: string;
   model?: string;
+  model_id?: string;
   equipmentModel?: string;
   nameOfBusiness?: string;
   address?: {
