@@ -1,3 +1,16 @@
+export enum EquipmentType {
+  Backhoe = 'Backhoe',
+  CompactLoaders = 'Compact Loaders',
+  Dozers = 'Dozers',
+  WheelLoaders = 'Wheel Loaders',
+  Excavators = 'Excavators',
+  MiniExcavators = 'Mini Excavators',
+  CompactExcavator = 'Compact Excavator',
+  Skidsteers = 'Skidsteers',
+  Telehandlers = 'Telehandlers',
+  MotorGraders = 'Motor Graders',
+}
+
 export enum USStates {
   ALABAMA = "Alabama",
   ALASKA = "Alaska",
@@ -51,42 +64,80 @@ export enum USStates {
   WYOMING = "Wyoming",
 }
 
-// export const equipmentsInScope: Record<
-//   string,
-//   Record<string, { models: string[] }>
-// > = {
-//   [EquipmentType.MiniExcavators]: {
-//     [EquipmentManufacturer.CATERPILLAR_CE]: {
-//       models: ["300.9D", "302CR", "303.5E2CR", "305E2CR", "307.5CR"],
-//     },
-//     [EquipmentManufacturer.BOBCAT]: {
-//       models: ['E10', 'E20', 'E26', 'E32', 'E35'],
-//     },
-//     [EquipmentManufacturer.DEERE]: {
-//       models: ['17G', '26G', '35G', '50G', '60G'],
-//     },
-//     // [EquipmentManufacturer.JCB_CE]: {
-//     //   models: ['8018 CTS', '8026 CTS', '8030 CTS', '8035 CTS', '8045 CTS'],
-//     // },
-//     // [EquipmentManufacturer.KOMATSU_CE]: {
-//     //   models: ['PC45MR-5', 'PC55MR-5', 'PC65MR-5'],
-//     // },
-//     // [EquipmentManufacturer.KUBOTA]: {
-//     //   models: ['K008-3', 'KX018-4', 'KX030-4', 'KX040-4', 'KX057-4'],
-//     // },
-//   },
-//   [EquipmentType.CompactExcavator]: {
-//     [EquipmentManufacturer.CATERPILLAR_CE]: {
-//       models: ["300.9D", "302CR", "303.5E2CR", "305E2CR", "307.5CR"],
-//     },
-//     [EquipmentManufacturer.BOBCAT]: {
-//       models: ['E10', 'E20', 'E26', 'E32', 'E35'],
-//     },
-//     [EquipmentManufacturer.DEERE]: {
-//       models: ['17G', '26G', '35G', '50G', '60G'],
-//     },
-//   },
-// };
+export enum EquipmentManufacturer {
+  CAT = 'Caterpillar',
+  KOMATSU = 'Komatsu',
+  DEERE = 'John Deere',
+  BOBCAT = 'Bobcat',
+  VOLVO = 'Volvo',
+  JCB = 'JCB',
+  CASE = 'Case',
+  HITACHI = 'Hitachi',
+  HYUNDAI = 'Hyundai',
+  KOBELCO = 'Kobelco',
+  DOOSAN = 'Doosan',
+  KUBOTA = 'Kubota',
+  NEW_HOLLAND = 'New Holland',
+  TAKEUCHI = 'Takeuchi',
+  TEREX = 'Terex',
+  YANMAR = 'Yanmar',
+  SANY = 'Sany',
+  LIEBHERR = 'Liebherr',
+  SDLG = 'SDLG',
+  XCMG = 'XCMG',
+  VOLVO_CE = 'Volvo CE',
+  ATLAS = 'Atlas',
+  CASE_CE = 'Case CE',
+  CATERPILLAR_CE = 'Caterpillar CE',
+  HITACHI_CE = 'Hitachi CE',
+  HYUNDAI_CE = 'Hyundai CE',
+  JCB_CE = 'JCB CE',
+  KOBELCO_CE = 'Kobelco CE',
+  KOMATSU_CE = 'Komatsu CE',
+  LIEBHERR_CE = 'Liebherr CE',
+  NEW_HOLLAND_CE = 'New Holland CE',
+  SANY_CE = 'Sany CE',
+  TAKEUCHI_CE = 'Takeuchi CE',
+  TEREX_CE = 'Terex CE',
+  YANMAR_CE = 'Yanmar CE',
+}
+
+export const equipmentsInScope: Record<
+  string,
+  Record<string, { models: string[] }>
+> = {
+  [EquipmentType.MiniExcavators]: {
+    [EquipmentManufacturer.CATERPILLAR_CE]: {
+      models: ["300.9D", "302CR", "303.5E2CR", "305E2CR", "307.5CR"],
+    },
+    [EquipmentManufacturer.BOBCAT]: {
+      models: ['E10', 'E20', 'E26', 'E32', 'E35'],
+    },
+    [EquipmentManufacturer.DEERE]: {
+      models: ['17G', '26G', '35G', '50G', '60G'],
+    },
+    // [EquipmentManufacturer.JCB_CE]: {
+    //   models: ['8018 CTS', '8026 CTS', '8030 CTS', '8035 CTS', '8045 CTS'],
+    // },
+    // [EquipmentManufacturer.KOMATSU_CE]: {
+    //   models: ['PC45MR-5', 'PC55MR-5', 'PC65MR-5'],
+    // },
+    // [EquipmentManufacturer.KUBOTA]: {
+    //   models: ['K008-3', 'KX018-4', 'KX030-4', 'KX040-4', 'KX057-4'],
+    // },
+  },
+  [EquipmentType.CompactExcavator]: {
+    [EquipmentManufacturer.CATERPILLAR_CE]: {
+      models: ["300.9D", "302CR", "303.5E2CR", "305E2CR", "307.5CR"],
+    },
+    [EquipmentManufacturer.BOBCAT]: {
+      models: ['E10', 'E20', 'E26', 'E32', 'E35'],
+    },
+    [EquipmentManufacturer.DEERE]: {
+      models: ['17G', '26G', '35G', '50G', '60G'],
+    },
+  },
+};
 
 export const unslugify = (slug: string): string =>
   slug.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
