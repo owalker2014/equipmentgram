@@ -33,5 +33,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/api/:path*", // Only apply to API routes
+  // matcher: "/api/:path*", // Only apply to API routes
+  matcher: "/api/((?!docs$).*)", // All API routes except /api/docs
 };

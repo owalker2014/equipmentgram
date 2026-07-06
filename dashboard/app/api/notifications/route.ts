@@ -7,6 +7,57 @@ import {
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/notifications:
+ *   get:
+ *     summary: List notifications for a user by email
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Array of notifications
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: email is required
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Create a notification
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Notification created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ */
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
