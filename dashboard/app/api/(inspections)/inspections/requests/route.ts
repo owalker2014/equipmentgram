@@ -4,8 +4,8 @@ import { InspectionReportStatus } from "@/lib/network/forms.shared";
 import {
   InspectionRequestObjectWithId,
   inspectionRequestsCollection,
-} from "@/lib/network/inspection-requests";
-import { usersCollection } from "@/lib/network/users";
+} from "@/lib/network/inspection-requests.shared";
+import { usersCollection } from "@/lib/network/users.shared";
 import {
   addDoc,
   collection,

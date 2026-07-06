@@ -6,12 +6,13 @@ import React from "react";
 type Props = {
   message?: string;
   type?: string;
+  size?: number;
 };
 
-function CustomLoader({ message, type }: Props) {
+function CustomLoader({ message, type, size = 30 }: Props) {
   return (
     <Center h="100%" w="100%">
-      <Loader size={30} type={type ?? "bars"}>
+      <Loader size={size} type={type ?? "bars"}>
         {message}
       </Loader>
     </Center>

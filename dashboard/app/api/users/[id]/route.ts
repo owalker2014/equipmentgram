@@ -1,6 +1,6 @@
 import { requireAuth } from "@/lib/api-auth";
 import { db } from "@/lib/firebaseConfig/init";
-import { usersCollection } from "@/lib/network/users";
+import { usersCollection } from "@/lib/network/users.shared";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 

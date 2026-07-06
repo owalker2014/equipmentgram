@@ -1,22 +1,10 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const notificationsCollection = "notifications";
-
-export interface Notification {
-  message: string;
-  icon: string;
-  click_action: string;
-  type: NotificationType;
-  from: string;
-  to: string;
-}
-
-export enum NotificationType {
-  Report = "report",
-  Message = "message",
-  Inspection = "inspection",
-  InspectionResponse = "inspection-response",
-}
+export * from "./notification.shared";
+import { notificationsCollection } from "./notification.shared";
+import type { Notification } from "./notification.shared";
 
 export const useAddNewNotification = () => {
   const queryClient = useQueryClient();

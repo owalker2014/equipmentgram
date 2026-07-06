@@ -1,22 +1,51 @@
 import { requireAuth } from "@/lib/api-auth";
 import { db } from "@/lib/firebaseConfig/init";
 import {
+  EquipmentMetadata,
+  equipmentTypesCollection,
+} from "@/lib/network/equipment.shared";
+import {
   notificationsCollection,
   NotificationType,
-} from "@/lib/network/notification";
-import { SentReport, sentReportsCollection } from "@/lib/network/sent-reports";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+} from "@/lib/network/notification.shared";
+import {
+  SentReport,
+  sentReportsCollection,
+} from "@/lib/network/sent-reports.shared";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
-  const equipmentType = req.nextUrl.searchParams.get("equipmentType");
+  const equipmentTypeId = req.nextUrl.searchParams.get("equipmentType");
+
+  let equipmentTypeLabel: string | undefined;
+  if (equipmentTypeId) {
+    const typesnapshot = await getDoc(
+      doc(db, equipmentTypesCollection, equipmentTypeId),
+    );
+    if (!typesnapshot.exists()) {
+      return NextResponse.json(
+        { error: "Equipment not found" },
+        { status: 404 },
+      );
+    }
+    equipmentTypeLabel = (typesnapshot.data() as EquipmentMetadata).label;
+  }
 
   const ref = collection(db, sentReportsCollection);
-  const q = equipmentType
-    ? query(ref, where("type", "==", equipmentType))
+  const q = equipmentTypeLabel
+    ? query(ref, where("type", "==", equipmentTypeLabel))
     : query(ref);
 
   const snapshot = await getDocs(q);

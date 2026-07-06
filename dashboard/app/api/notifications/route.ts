@@ -3,7 +3,7 @@ import { db } from "@/lib/firebaseConfig/init";
 import {
   Notification,
   notificationsCollection,
-} from "@/lib/network/notification";
+} from "@/lib/network/notification.shared";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 

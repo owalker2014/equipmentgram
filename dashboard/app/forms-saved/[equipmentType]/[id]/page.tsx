@@ -18,8 +18,6 @@ import {
 } from "@mantine/core";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { IconAt, IconDownload } from "@tabler/icons-react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import React, { useRef, useState } from "react";
 
 const SavedForm: React.FC<{
@@ -92,45 +90,16 @@ const SavedForm: React.FC<{
   };
 
   const handleDownloadPDF = async () => {
-    if (!previewRef.current) return;
+    if (!data) return;
     setIsGeneratingPDF(true);
     try {
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 3,
-        useCORS: true,
-        allowTaint: false,
-        logging: false,
-        imageTimeout: 0,
-      });
-      const imgData = canvas.toDataURL("image/png", 1.0);
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "pt",
-        format: "a4",
-      });
-      const margin = 20;
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const contentWidth = pageWidth - margin * 2;
-      const contentHeight = pageHeight - margin * 2;
-      const imgWidth = contentWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let yOffset = 0;
-      let remainingHeight = imgHeight;
-      while (remainingHeight > 0) {
-        pdf.addImage(
-          imgData,
-          "PNG",
-          margin,
-          margin - yOffset,
-          imgWidth,
-          imgHeight,
-        );
-        remainingHeight -= contentHeight;
-        yOffset += contentHeight;
-        if (remainingHeight > 0) pdf.addPage();
-      }
-      pdf.save(`inspection-report-${params.id}.pdf`);
+      const blob = await pdf(<QuestionFormPDF data={data} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `inspection-report-${params.id}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
     } finally {
       setIsGeneratingPDF(false);
     }

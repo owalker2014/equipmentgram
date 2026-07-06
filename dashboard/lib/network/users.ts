@@ -1,62 +1,10 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const usersCollection = "users";
-
-export enum UserType {
-  admin = "admin",
-  inspector = "inspector",
-  customer = "customer",
-}
-
-export type User = {
-  user_id: string;
-  type: UserType;
-  email?: string;
-  display_name?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: {
-    city?: string;
-    state?: string;
-    zip?: string;
-    line1?: string;
-    line2?: string;
-  };
-  nameOfBusiness?: string;
-  jobTitle?: string;
-  emailVerified?: boolean;
-  phoneNumber?: string;
-  photoURL?: string;
-  signatureUrl?: string;
-  stripe_customer_id?: string;
-};
-
-export type UpdateUser = {
-  user_id: string;
-  type?: UserType;
-  email?: string;
-  display_name?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: {
-    city?: string;
-    state?: string;
-    zip?: string;
-    line1?: string;
-    line2?: string;
-  };
-  nameOfBusiness?: string;
-  jobTitle?: string;
-  emailVerified?: boolean;
-  phoneNumber?: string;
-  photoURL?: string;
-  signatureUrl?: string;
-  stripe_customer_id?: string;
-};
-
-export type UserWithId = User & {
-  id: string;
-};
+export * from "./users.shared";
+import type { User, UpdateUser, UserWithId } from "./users.shared";
+import { usersCollection, UserType } from "./users.shared";
 
 export const useUsers = () => {
   return useQuery<UserWithId[], Error>([usersCollection], async () => {
@@ -72,10 +20,7 @@ export const useGetUser = (user_id: string | undefined) => {
       const res = await fetch(`/api/users/${user_id}`);
       return res.json();
     },
-    {
-      enabled: !!user_id,
-      staleTime: Infinity,
-    },
+    { enabled: !!user_id, staleTime: Infinity },
   );
 };
 
