@@ -1,9 +1,6 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { notify } from "../utils";
-import { UserWithId } from "./users";
 
 export * from "./forms.shared";
 import { inspectionFormsCollection } from "./forms.shared";
@@ -15,9 +12,14 @@ import type {
   InspectionResultBatch,
 } from "./forms.shared";
 
-export const useAddFreshInspectionForm = (userId: string) => {
+export const useAddFreshInspectionForm = (
+  userId: string,
+  callbacks: {
+    onSuccess?: (data: any, variables: InspectionForm) => void;
+    onError?: (error: any) => void;
+  } = {},
+) => {
   const queryClient = useQueryClient();
-  const navigation = useRouter();
 
   return useMutation(
     async (inspectionForm: InspectionForm): Promise<any> => {
@@ -32,30 +34,10 @@ export const useAddFreshInspectionForm = (userId: string) => {
       onSuccess: (data, variables) => {
         queryClient.invalidateQueries([inspectionFormsCollection]);
         queryClient.refetchQueries([inspectionFormsCollection]);
-
-        notify(
-          {
-            title: "Inspection Submission Successful",
-            message: `Inspection record created successfully for \n
-              ${variables.type} > ${variables.manufacturer} > ${variables.model}`,
-          },
-          false,
-        );
-        navigation.push(
-          `/forms-saved/${variables.type}/${data.id}?mode=preview`,
-        );
+        callbacks.onSuccess?.(data, variables);
       },
       onError: (error: any) => {
-        // console.error("error adding inspection --> ", error);
-        notify(
-          {
-            title: "Inspection Submission Error",
-            message:
-              error.message ??
-              "Error on submitting inspection form. Please try again later.",
-          },
-          true,
-        );
+        callbacks.onError?.(error);
       },
     },
   );
@@ -64,9 +46,12 @@ export const useAddFreshInspectionForm = (userId: string) => {
 export const useAddNewInspectionForm = (
   inspectionRequestId: string,
   userId: string,
+  callbacks: {
+    onSuccess?: () => void;
+    onError?: (error: unknown) => void;
+  } = {},
 ) => {
   const queryClient = useQueryClient();
-  const navigation = useRouter();
 
   return useMutation(
     async (inspectionForm: InspectionForm): Promise<void> => {
@@ -84,18 +69,10 @@ export const useAddNewInspectionForm = (
       onSuccess: () => {
         queryClient.invalidateQueries([inspectionFormsCollection]);
         queryClient.refetchQueries([inspectionFormsCollection]);
-        navigation.push("/forms");
+        callbacks.onSuccess?.();
       },
       onError: (error: unknown) => {
-        notify(
-          {
-            title: "Inspection Submission Error",
-            message:
-              (error as Error).message ??
-              "Error creating inspection form. Please try again later.",
-          },
-          true,
-        );
+        callbacks.onError?.(error);
       },
     },
   );
@@ -148,21 +125,18 @@ export const runInspection = async (
     formData.append("component", component);
     formData.append("image", file);
 
-    const url = `${process.env.NEXT_PUBLIC_DEFECT_DETECTION_URL}/inspect`;
-    const response = await fetch(url, { method: "POST", body: formData });
+    const response = await fetch("/api/inspections/mono", {
+      method: "POST",
+      body: formData,
+    });
 
     // Check if the request was successful (status in the 2xx range)
     if (!response.ok) {
-      if ([400, 422].includes(response.status)) {
-        // Validation Error
-        const validationErrors: { detail: string } = await response.json();
-        throw new Error(validationErrors?.detail ?? "Unknown Error");
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const body: { error?: string } = await response.json();
+      throw new Error(body.error ?? `HTTP error! status: ${response.status}`);
     }
 
     const responseData: InspectionResult = await response.json(); // Parse the JSON response
-    delete responseData.image_base64;
     return [null, responseData];
   } catch (error: unknown) {
     // console.error("Error during defect detection: ", error);
@@ -184,8 +158,7 @@ export const runInspection = async (
       color = "yellow";
     }
 
-    notify({ title: "Inspection Error", message, color }, true);
-    return ["Inspection Error", null];
+    return [{ title: "Inspection Error", message, color }, null];
   }
 };
 
@@ -194,8 +167,8 @@ export const runInspection = async (
  *
  * @param mediaFiles The list of images submited
  * @param components THe components with pictures
- * @param param2 
- * @returns 
+ * @param param2
+ * @returns
  */
 export const runInspections = async (
   mediaFiles: File[],
@@ -217,20 +190,18 @@ export const runInspections = async (
     formData.append("manufacturer", manufacturer);
     formData.append("model", model);
     formData.append("section", section);
-    formData.append("component_names", components.join(","));
+    formData.append("components", components.join(","));
     mediaFiles.forEach((file) => formData.append("images", file)); // Append the array of files
 
-    const url = `${process.env.NEXT_PUBLIC_DEFECT_DETECTION_URL}/inspect/batch`;
-    const response = await fetch(url, { method: "POST", body: formData });
+    const response = await fetch("/api/inspections", {
+      method: "POST",
+      body: formData,
+    });
 
     // Check if the request was successful (status in the 2xx range)
     if (!response.ok) {
-      if ([400, 422].includes(response.status)) {
-        // Validation Error
-        const validationErrors: { detail: string } = await response.json();
-        throw new Error(validationErrors?.detail ?? "Unknown Error");
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const body: { error?: string } = await response.json();
+      throw new Error(body.error ?? `HTTP error! status: ${response.status}`);
     }
 
     const responseData: InspectionResultBatch = await response.json(); // Parse the JSON response
@@ -254,7 +225,10 @@ export const runInspections = async (
       color = "yellow";
     }
 
-    notify({ title: "Inspection Error", message, color }, true);
-    return { message: "Inspection Error", errors: null, results: null };
+    return {
+      notifyError: { title: "Inspection Error", message, color },
+      errors: null,
+      results: null,
+    };
   }
 };

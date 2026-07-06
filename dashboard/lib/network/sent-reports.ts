@@ -1,13 +1,11 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../authContext";
-import { InspectionFormWithId } from "./forms";
 
-export const sentReportsCollection = "sent-reports";
-
-export interface SentReport extends InspectionFormWithId {
-  sentTo: string;
-  inspectionFormId: string;
-}
+export * from "./sent-reports.shared";
+import { sentReportsCollection } from "./sent-reports.shared";
+import type { SentReport } from "./sent-reports.shared";
 
 export const useAddNewSentReport = () => {
   const queryClient = useQueryClient();

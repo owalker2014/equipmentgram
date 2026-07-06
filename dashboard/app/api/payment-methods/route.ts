@@ -71,6 +71,10 @@ export async function POST(req: NextRequest) {
 
   const { userId, email } = await req.json();
 
+  if (!userId) {
+    return NextResponse.json({ error: "userId is required" }, { status: 400 });
+  }
+
   const stripeCustomerId = await getOrCreateStripeCustomer(userId, email);
 
   const session = await stripe.billingPortal.sessions.create({

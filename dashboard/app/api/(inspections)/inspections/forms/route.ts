@@ -1,16 +1,21 @@
 import { requireAuth } from "@/lib/api-auth";
 import { db } from "@/lib/firebaseConfig/init";
 import {
+  EquipmentMetadata,
+  equipmentTypesCollection,
+} from "@/lib/network/equipment.shared";
+import {
   inspectionFormsCollection,
   InspectionFormWithId,
   InspectionReportStatus,
 } from "@/lib/network/forms.shared";
-import { inspectionRequestsCollection } from "@/lib/network/inspection-requests";
-import { usersCollection, UserWithId } from "@/lib/network/users";
+import { inspectionRequestsCollection } from "@/lib/network/inspection-requests.shared";
+import { usersCollection, UserWithId } from "@/lib/network/users.shared";
 import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   QueryConstraint,
@@ -25,7 +30,7 @@ export async function GET(req: NextRequest) {
   if (auth instanceof NextResponse) return auth;
 
   const userId = req.nextUrl.searchParams.get("userId");
-  const equipmentType = req.nextUrl.searchParams.get("equipmentType");
+  const equipmentTypeId = req.nextUrl.searchParams.get("equipmentType");
   const isCustomer = req.nextUrl.searchParams.get("isCustomer") === "true";
 
   if (!userId) {
@@ -33,8 +38,19 @@ export async function GET(req: NextRequest) {
   }
 
   const conditions: QueryConstraint[] = [];
-  if (equipmentType) {
-    conditions.push(where("type", "==", equipmentType));
+  if (equipmentTypeId) {
+    const typesnapshot = await getDoc(
+      doc(db, equipmentTypesCollection, equipmentTypeId),
+    );
+    if (!typesnapshot.exists()) {
+      return NextResponse.json(
+        { error: "Equipment not found" },
+        { status: 404 },
+      );
+    }
+
+    const equipmentType = typesnapshot.data() as EquipmentMetadata;
+    conditions.push(where("type", "==", equipmentType.label));
   }
 
   if (isCustomer) {
@@ -69,12 +85,15 @@ export async function GET(req: NextRequest) {
 
   const userMap = new Map<string, unknown>();
   if (createdByUserUids.length > 0) {
-    const userSnapshot = await getDocs(
-      query(collection(db, "users"), where("user_id", "in", createdByUserUids)),
+    const usersnapshot = await getDocs(
+      query(
+        collection(db, usersCollection),
+        where("user_id", "in", createdByUserUids),
+      ),
     );
 
     // Create a map of users by UID for efficient lookup
-    userSnapshot.forEach((userDoc) => {
+    usersnapshot.forEach((userDoc) => {
       const data = userDoc.data();
       userMap.set(data.user_id, data);
     });
@@ -124,7 +143,7 @@ export async function POST(req: NextRequest) {
         reportStatus: InspectionReportStatus.FilledForm,
       });
 
-      await addDoc(collection(db, inspectionFormsCollection), {
+      docRef = await addDoc(collection(db, inspectionFormsCollection), {
         ...inspectionForm,
         inspectionRequestRef: inspectionRequestRef,
         userRef, // inspector

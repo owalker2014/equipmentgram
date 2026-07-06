@@ -1,46 +1,16 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { InspectionReportStatus } from "./forms.shared";
-import { EquipmentManufacturer, EquipmentType } from "@/utils/formUtils";
 
-export enum Step {
-  Request = "Request",
-  Schedule = "Schedule",
-  Inspection = "Inspection",
-  Results = "Results",
-  Complete = "Complete",
-}
-
-export type InspectionRequestObject = {
-  user_id: string;
-  inspectorRef: unknown;
-  inspectorId?: string;
-  firstName: string;
-  lastName: string;
-  businessName?: string;
-  email: string;
-  mobile: string;
-  streetAddress: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  date: Date;
-  equipmentType: EquipmentType;
-  equipmentManufacturer: EquipmentManufacturer;
-  equipmentModel?: string;
-  equipmentSerialNumber: string;
-  readFAQReceipt: boolean;
-  notes?: string;
-  step: Step;
-  created?: unknown;
-  canceled: boolean;
-  reportStatus: InspectionReportStatus;
-};
-
-export const inspectionRequestsCollection = "inspection-requests";
-
-export type InspectionRequestObjectWithId = Partial<InspectionRequestObject> & {
-  id: string;
-};
+export * from "./inspection-requests.shared";
+import type {
+  InspectionRequestObject,
+  InspectionRequestObjectWithId,
+} from "./inspection-requests.shared";
+import {
+  inspectionRequestsCollection,
+  Step,
+} from "./inspection-requests.shared";
 
 export const useInspectionRequests = () => {
   return useQuery<InspectionRequestObjectWithId[], Error>(

@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import admin from "firebase-admin";
+import { getStorage, getDownloadURL } from "firebase-admin/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -24,3 +25,4 @@ if (!admin.apps.length) {
 }
 
 export default admin;
+export { getStorage, getDownloadURL }

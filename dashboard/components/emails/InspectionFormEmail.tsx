@@ -10,7 +10,6 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import {} from "../../utils/equipment";
 
 export interface InspectionFormEmailProps extends InspectionFormWithId {
   sendTo: string | string[];

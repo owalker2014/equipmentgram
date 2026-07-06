@@ -1,5 +1,5 @@
 import { storage } from "@/lib/firebaseConfig/init";
-import { InspectionResult, runInspection } from "@/lib/network/forms";
+import { InspectionResult } from "@/lib/network/forms";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 
@@ -103,7 +103,8 @@ export function useMediaCapture({
             onProgress(100);
             // return;
             // }
-            // onError(err as string);
+            // notify(err, true);
+            // onError(err.message);
             // onProgress(0);
           })
           .catch((error) => {
