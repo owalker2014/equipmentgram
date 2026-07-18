@@ -23,6 +23,13 @@ const nextConfig = withPWA({
       "@react-email/html",
       "@react-email/button",
     ],
+    // swagger-jsdoc scans "app/api" from disk at runtime, which defeats
+    // static file tracing and pulls the entire project dir (incl. the
+    // ~650MB .next/cache) into the /api/docs function — past Vercel's
+    // 250MB unzipped function limit.
+    outputFileTracingExcludes: {
+      "/api/docs": ["./.next/cache/**"],
+    },
   },
   images: {
     remotePatterns: [
