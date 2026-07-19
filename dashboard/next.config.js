@@ -31,6 +31,7 @@ const nextConfig = withPWA({
       "/api/docs": ["./.next/cache/**"],
     },
   },
+  transpilePackages: ['swagger-ui-react', 'swagger-jsdoc'],
   images: {
     remotePatterns: [
       {
