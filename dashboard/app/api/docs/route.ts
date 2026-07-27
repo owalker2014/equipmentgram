@@ -2,9 +2,9 @@ import { createSwaggerSpec } from "next-swagger-doc";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
-  if (process.env.NODE_ENV === "production") {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   return NextResponse.json({ error: "Not found" }, { status: 404 });
+  // }
 
   const spec = createSwaggerSpec({
     apiFolder: "app/api",
