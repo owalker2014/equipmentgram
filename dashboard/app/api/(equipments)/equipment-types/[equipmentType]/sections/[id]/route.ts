@@ -1,3 +1,4 @@
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   equipmentSectionQuestionsCollection,
@@ -40,26 +41,27 @@ import { NextRequest, NextResponse } from "next/server";
  *       404:
  *         description: Section not found
  */
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const { id } = params;
+export const GET = withApiErrorHandling(
+  "GET /api/equipment-types/[equipmentType]/sections/[id]",
+  async (_req: NextRequest, { params }: { params: { id: string } }) => {
+    const { id } = params;
 
-  const ref = doc(db, equipmentSectionsCollection, id);
-  const snapshot = await getDoc(ref);
+    const ref = doc(db, equipmentSectionsCollection, id);
+    const snapshot = await getDoc(ref);
 
-  if (!snapshot.exists()) {
-    return NextResponse.json({ error: "Section not found" }, { status: 404 });
-  }
+    if (!snapshot.exists()) {
+      return NextResponse.json({ error: "Section not found" }, { status: 404 });
+    }
 
-  const questionsRef = collection(ref, equipmentSectionQuestionsCollection);
-  const questionsSnap = await getDocs(questionsRef);
-  const questions = questionsSnap.docs.map((q) => ({ id: q.id, ...q.data() }));
+    const questionsRef = collection(ref, equipmentSectionQuestionsCollection);
+    const questionsSnap = await getDocs(questionsRef);
+    const questions = questionsSnap.docs.map((q) => ({ id: q.id, ...q.data() }));
 
-  return NextResponse.json({
-    id: snapshot.id,
-    ...snapshot.data(),
-    questions,
-  });
-}
+    return NextResponse.json({
+      id: snapshot.id,
+      ...snapshot.data(),
+      questions,
+    });
+  },
+  "Error fetching equipment section",
+);

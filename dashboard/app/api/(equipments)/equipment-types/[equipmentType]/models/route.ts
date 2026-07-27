@@ -1,3 +1,4 @@
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   EquipmentMetadata,
@@ -34,62 +35,66 @@ import { NextRequest, NextResponse } from "next/server";
  *                   items:
  *                     type: object
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { equipmentType: string } },
-) {
-  const { equipmentType: equipmentTypeOrId } = params;
+export const GET = withApiErrorHandling(
+  "GET /api/equipment-types/[equipmentType]/models",
+  async (
+    _req: NextRequest,
+    { params }: { params: { equipmentType: string } },
+  ) => {
+    const { equipmentType: equipmentTypeOrId } = params;
 
-  const junctionRef = collection(db, equipmentTypeManufacturersCollection);
-  const junctionSnapshot = await getDocs(
-    query(junctionRef, where("type_id", "==", equipmentTypeOrId)),
-  );
-
-  if (!junctionSnapshot.empty) {
-    const allModels = (
-      await Promise.all(
-        junctionSnapshot.docs.map((junctionDoc) => {
-          const modelsRef = collection(
-            db,
-            equipmentTypeManufacturersCollection,
-            junctionDoc.id,
-            equipmentModelsCollection,
-          );
-          return getDocs(query(modelsRef, where("supported", "==", true)));
-        }),
-      )
-    ).flatMap((snapshot) =>
-      snapshot.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as EquipmentMetadata,
-      ),
+    const junctionRef = collection(db, equipmentTypeManufacturersCollection);
+    const junctionSnapshot = await getDocs(
+      query(junctionRef, where("type_id", "==", equipmentTypeOrId)),
     );
 
-    const seen = new Set<string>();
-    const models = allModels.filter((m) => {
-      if (seen.has(m.id!)) return false;
-      seen.add(m.id!);
-      return true;
-    });
+    if (!junctionSnapshot.empty) {
+      const allModels = (
+        await Promise.all(
+          junctionSnapshot.docs.map((junctionDoc) => {
+            const modelsRef = collection(
+              db,
+              equipmentTypeManufacturersCollection,
+              junctionDoc.id,
+              equipmentModelsCollection,
+            );
+            return getDocs(query(modelsRef, where("supported", "==", true)));
+          }),
+        )
+      ).flatMap((snapshot) =>
+        snapshot.docs.map(
+          (doc) => ({ id: doc.id, ...doc.data() }) as EquipmentMetadata,
+        ),
+      );
 
-    return NextResponse.json(models);
-  }
+      const seen = new Set<string>();
+      const models = allModels.filter((m) => {
+        if (seen.has(m.id!)) return false;
+        seen.add(m.id!);
+        return true;
+      });
 
-  // const equipmentData =
-  //   (equipmentsInScope as any)?.[
-  //     <EquipmentType>decodeURIComponent(equipmentTypeOrId)
-  //   ] || {};
+      return NextResponse.json(models);
+    }
 
-  // const allModelNames = Object.values(equipmentData).flatMap(
-  //   (manufacturerData: any) => manufacturerData?.models || [],
-  // );
-  // const models = Array.from(new Set<string>(allModelNames)).map(
-  //   (o: string) => ({
-  //     id: o,
-  //     label: o,
-  //     slug: o.toLowerCase(),
-  //   }),
-  // );
-  // const models = Array.from({ length: 1 }, (v, k) => ({ [`model-${k}`]: v }));
+    // const equipmentData =
+    //   (equipmentsInScope as any)?.[
+    //     <EquipmentType>decodeURIComponent(equipmentTypeOrId)
+    //   ] || {};
 
-  return NextResponse.json([]);
-}
+    // const allModelNames = Object.values(equipmentData).flatMap(
+    //   (manufacturerData: any) => manufacturerData?.models || [],
+    // );
+    // const models = Array.from(new Set<string>(allModelNames)).map(
+    //   (o: string) => ({
+    //     id: o,
+    //     label: o,
+    //     slug: o.toLowerCase(),
+    //   }),
+    // );
+    // const models = Array.from({ length: 1 }, (v, k) => ({ [`model-${k}`]: v }));
+
+    return NextResponse.json([]);
+  },
+  "Error fetching equipment-type models",
+);

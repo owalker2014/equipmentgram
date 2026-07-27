@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   Notification,
@@ -58,35 +59,43 @@ import { NextRequest, NextResponse } from "next/server";
  *       401:
  *         description: Unauthorized
  */
-export async function GET(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/notifications",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const email = req.nextUrl.searchParams.get("email");
-  if (!email) {
-    return NextResponse.json({ error: "email is required" }, { status: 400 });
-  }
+    const email = req.nextUrl.searchParams.get("email");
+    if (!email) {
+      return NextResponse.json({ error: "email is required" }, { status: 400 });
+    }
 
-  const q = query(
-    collection(db, notificationsCollection),
-    where("to", "==", email),
-  );
-  const snapshot = await getDocs(q);
-  const notifications = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...(doc.data() as Notification),
-  }));
-  return NextResponse.json(notifications);
-}
+    const q = query(
+      collection(db, notificationsCollection),
+      where("to", "==", email),
+    );
+    const snapshot = await getDocs(q);
+    const notifications = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as Notification),
+    }));
+    return NextResponse.json(notifications);
+  },
+  "Error fetching notifications",
+);
 
-export async function POST(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const POST = withApiErrorHandling(
+  "POST /api/notifications",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const notification = await req.json();
-  const docRef = await addDoc(
-    collection(db, notificationsCollection),
-    notification,
-  );
-  return NextResponse.json({ id: docRef.id });
-}
+    const notification = await req.json();
+    const docRef = await addDoc(
+      collection(db, notificationsCollection),
+      notification,
+    );
+    return NextResponse.json({ id: docRef.id });
+  },
+  "Error creating notification",
+);

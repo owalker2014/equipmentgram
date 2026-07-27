@@ -1,3 +1,4 @@
+import { withApiErrorHandling } from "@/lib/api-errors";
 import admin, { getDownloadURL } from "@/lib/firebaseConfig/init-admin";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -45,8 +46,9 @@ const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
  *       500:
  *         description: Internal server error
  */
-export async function POST(req: NextRequest) {
-  try {
+export const POST = withApiErrorHandling(
+  "POST /api/inspections/preprocess",
+  async (req: NextRequest) => {
     const incoming = await req.formData();
 
     const file = incoming.get("file") as File | null;
@@ -77,8 +79,6 @@ export async function POST(req: NextRequest) {
     const downloadURL = await getDownloadURL(fileRef);
 
     return NextResponse.json({ downloadURL });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unexpected error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
-}
+  },
+  "Error uploading component image",
+);

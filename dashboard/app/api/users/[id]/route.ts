@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import { usersCollection } from "@/lib/network/users.shared";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -55,28 +56,30 @@ import { NextRequest, NextResponse } from "next/server";
  *       401:
  *         description: Unauthorized
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/users/[id]",
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const snapshot = await getDoc(doc(db, usersCollection, params.id));
-  if (!snapshot.exists()) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-  return NextResponse.json({ id: snapshot.id, ...snapshot.data() });
-}
+    const snapshot = await getDoc(doc(db, usersCollection, params.id));
+    if (!snapshot.exists()) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    return NextResponse.json({ id: snapshot.id, ...snapshot.data() });
+  },
+  "Error fetching user",
+);
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const PATCH = withApiErrorHandling(
+  "PATCH /api/users/[id]",
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const user = await req.json();
-  await updateDoc(doc(db, usersCollection, params.id), user);
-  return NextResponse.json({ success: true });
-}
+    const user = await req.json();
+    await updateDoc(doc(db, usersCollection, params.id), user);
+    return NextResponse.json({ success: true });
+  },
+  "Error updating user",
+);

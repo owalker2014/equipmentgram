@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   inspectionFormsCollection,
@@ -30,36 +31,39 @@ import { NextRequest, NextResponse } from "next/server";
  *       404:
  *         description: Inspection form not found
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/inspections/forms/[id]",
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const snapshot = await getDoc(doc(db, inspectionFormsCollection, params.id));
+    const snapshot = await getDoc(doc(db, inspectionFormsCollection, params.id));
 
-  if (!snapshot.exists()) {
-    return NextResponse.json(
-      { error: "Inspection form not found" },
-      { status: 404 },
+    if (!snapshot.exists()) {
+      return NextResponse.json(
+        { error: "Inspection form not found" },
+        { status: 404 },
+      );
+    }
+
+    const data = snapshot.data();
+    const createdByUserUid: string = data.createdByUserUid;
+
+    const usersnapshot = await getDoc(
+      doc(db, usersCollection, createdByUserUid),
     );
-  }
+    const createdByUser = (
+      usersnapshot.exists() ? usersnapshot.data() : null
+    ) as UserWithId;
 
-  const data = snapshot.data();
-  const createdByUserUid: string = data.createdByUserUid;
-
-  const usersnapshot = await getDoc(doc(db, usersCollection, createdByUserUid));
-  const createdByUser = (
-    usersnapshot.exists() ? usersnapshot.data() : null
-  ) as UserWithId;
-
-  return NextResponse.json({
-    id: snapshot.id,
-    ...data,
-    createdByUser,
-    userRef: undefined,
-    requestedByUserRef: undefined,
-    inspectionRequestRef: undefined,
-  } as unknown as InspectionFormWithId);
-}
+    return NextResponse.json({
+      id: snapshot.id,
+      ...data,
+      createdByUser,
+      userRef: undefined,
+      requestedByUserRef: undefined,
+      inspectionRequestRef: undefined,
+    } as unknown as InspectionFormWithId);
+  },
+  "Error fetching inspection form",
+);

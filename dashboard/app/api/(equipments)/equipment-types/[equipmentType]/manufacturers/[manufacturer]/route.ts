@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   EquipmentMetadata,
@@ -81,61 +82,65 @@ import { NextRequest, NextResponse } from "next/server";
  *       404:
  *         description: Equipment type or manufacturer not found
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { equipmentType: string; manufacturer: string } },
-) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/equipment-types/[equipmentType]/manufacturers/[manufacturer]",
+  async (
+    req: NextRequest,
+    { params }: { params: { equipmentType: string; manufacturer: string } },
+  ) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const { equipmentType: equipmentTypeId, manufacturer: manufacturerId } =
-    params;
+    const { equipmentType: equipmentTypeId, manufacturer: manufacturerId } =
+      params;
 
-  const [typeSnap, manufacturerSnap] = await Promise.all([
-    getDoc(doc(db, equipmentTypesCollection, equipmentTypeId)),
-    getDoc(doc(db, equipmentManufacturersCollection, manufacturerId)),
-  ]);
+    const [typeSnap, manufacturerSnap] = await Promise.all([
+      getDoc(doc(db, equipmentTypesCollection, equipmentTypeId)),
+      getDoc(doc(db, equipmentManufacturersCollection, manufacturerId)),
+    ]);
 
-  if (!typeSnap.exists()) {
-    return NextResponse.json(
-      { error: "Equipment type not found" },
-      { status: 404 },
-    );
-  }
+    if (!typeSnap.exists()) {
+      return NextResponse.json(
+        { error: "Equipment type not found" },
+        { status: 404 },
+      );
+    }
 
-  if (!manufacturerSnap.exists()) {
-    return NextResponse.json(
-      { error: "Manufacturer not found" },
-      { status: 404 },
-    );
-  }
+    if (!manufacturerSnap.exists()) {
+      return NextResponse.json(
+        { error: "Manufacturer not found" },
+        { status: 404 },
+      );
+    }
 
-  const equipmentType = {
-    id: typeSnap.id,
-    ...typeSnap.data(),
-  } as EquipmentMetadata;
+    const equipmentType = {
+      id: typeSnap.id,
+      ...typeSnap.data(),
+    } as EquipmentMetadata;
 
-  const manufacturer = {
-    id: manufacturerSnap.id,
-    ...manufacturerSnap.data(),
-  } as EquipmentMetadata;
+    const manufacturer = {
+      id: manufacturerSnap.id,
+      ...manufacturerSnap.data(),
+    } as EquipmentMetadata;
 
-  const junctionKey = `${manufacturerId}__${equipmentTypeId}`;
-  const modelsSnap = await getDocs(
-    query(
-      collection(
-        db,
-        equipmentTypeManufacturersCollection,
-        junctionKey,
-        equipmentModelsCollection,
+    const junctionKey = `${manufacturerId}__${equipmentTypeId}`;
+    const modelsSnap = await getDocs(
+      query(
+        collection(
+          db,
+          equipmentTypeManufacturersCollection,
+          junctionKey,
+          equipmentModelsCollection,
+        ),
+        where("supported", "==", true),
       ),
-      where("supported", "==", true),
-    ),
-  );
+    );
 
-  const models = modelsSnap.docs.map(
-    (d) => ({ id: d.id, ...d.data() }) as EquipmentMetadata,
-  );
+    const models = modelsSnap.docs.map(
+      (d) => ({ id: d.id, ...d.data() }) as EquipmentMetadata,
+    );
 
-  return NextResponse.json({ ...manufacturer, equipmentType, models });
-}
+    return NextResponse.json({ ...manufacturer, equipmentType, models });
+  },
+  "Error fetching manufacturer",
+);
