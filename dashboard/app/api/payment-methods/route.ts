@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -96,59 +97,70 @@ async function getOrCreateStripeCustomer(
 //  *       401:
 //  *         description: Unauthorized
 //  */
-export async function GET(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/payment-methods",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const userId = req.nextUrl.searchParams.get("userId");
-  if (!userId) {
-    return NextResponse.json({ paymentMethod: null }, { status: 400 });
-  }
+    const userId = req.nextUrl.searchParams.get("userId");
+    if (!userId) {
+      return NextResponse.json({ paymentMethod: null }, { status: 400 });
+    }
 
-  const snapshot = await getDoc(doc(db, "users", userId));
-  const stripeCustomerId: string | undefined =
-    snapshot.data()?.stripe_customer_id;
+    const snapshot = await getDoc(doc(db, "users", userId));
+    const stripeCustomerId: string | undefined =
+      snapshot.data()?.stripe_customer_id;
 
-  if (!stripeCustomerId) {
-    return NextResponse.json({ paymentMethod: null });
-  }
+    if (!stripeCustomerId) {
+      return NextResponse.json({ paymentMethod: null });
+    }
 
-  const paymentMethods = await stripe.paymentMethods.list({
-    customer: stripeCustomerId,
-    type: "card",
-    limit: 1,
-  });
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: stripeCustomerId,
+      type: "card",
+      limit: 1,
+    });
 
-  const pm = paymentMethods.data[0] ?? null;
+    const pm = paymentMethods.data[0] ?? null;
 
-  return NextResponse.json({
-    paymentMethod: pm
-      ? {
-          brand: pm.card!.brand,
-          last4: pm.card!.last4,
-          exp_month: pm.card!.exp_month,
-          exp_year: pm.card!.exp_year,
-        }
-      : null,
-  });
-}
+    return NextResponse.json({
+      paymentMethod: pm
+        ? {
+            brand: pm.card!.brand,
+            last4: pm.card!.last4,
+            exp_month: pm.card!.exp_month,
+            exp_year: pm.card!.exp_year,
+          }
+        : null,
+    });
+  },
+  "Error fetching payment method",
+);
 
-export async function POST(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const POST = withApiErrorHandling(
+  "POST /api/payment-methods",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const { userId, email } = await req.json();
+    const { userId, email } = await req.json();
 
-  if (!userId) {
-    return NextResponse.json({ error: "userId is required" }, { status: 400 });
-  }
+    if (!userId) {
+      return NextResponse.json(
+        { error: "userId is required" },
+        { status: 400 },
+      );
+    }
 
-  const stripeCustomerId = await getOrCreateStripeCustomer(userId, email);
+    const stripeCustomerId = await getOrCreateStripeCustomer(userId, email);
 
-  const session = await stripe.billingPortal.sessions.create({
-    customer: stripeCustomerId,
-    return_url: `${rootUrl}/settings`,
-  });
+    const session = await stripe.billingPortal.sessions.create({
+      customer: stripeCustomerId,
+      return_url: `${rootUrl}/settings`,
+    });
 
-  return NextResponse.json({ url: session.url });
-}
+    return NextResponse.json({ url: session.url });
+  },
+  "Error creating billing portal session",
+);

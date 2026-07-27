@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import { inspectionRequestsCollection } from "@/lib/network/inspection-requests.shared";
 import { usersCollection } from "@/lib/network/users.shared";
@@ -42,22 +43,23 @@ import { NextRequest, NextResponse } from "next/server";
  *       401:
  *         description: Unauthorized
  */
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const PATCH = withApiErrorHandling(
+  "PATCH /api/inspections/requests/[id]",
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const body = await req.json();
-  const { inspectorId, ...rest } = body;
+    const body = await req.json();
+    const { inspectorId, ...rest } = body;
 
-  const update: Record<string, unknown> = { ...rest };
+    const update: Record<string, unknown> = { ...rest };
 
-  if (inspectorId) {
-    update.inspectorRef = doc(db, usersCollection, inspectorId);
-  }
+    if (inspectorId) {
+      update.inspectorRef = doc(db, usersCollection, inspectorId);
+    }
 
-  await updateDoc(doc(db, inspectionRequestsCollection, params.id), update);
-  return NextResponse.json({ success: true });
-}
+    await updateDoc(doc(db, inspectionRequestsCollection, params.id), update);
+    return NextResponse.json({ success: true });
+  },
+  "Error updating inspection request",
+);

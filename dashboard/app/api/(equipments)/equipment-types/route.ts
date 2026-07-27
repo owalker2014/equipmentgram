@@ -1,4 +1,5 @@
 // import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   EquipmentMetadata,
@@ -32,11 +33,12 @@ import { NextRequest, NextResponse } from "next/server";
  *                   slug:
  *                     type: string
  */
-export async function GET(req: NextRequest) {
-  // const auth = await requireAuth(req);
-  // if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/equipment-types",
+  async (_req: NextRequest) => {
+    // const auth = await requireAuth(req);
+    // if (auth instanceof NextResponse) return auth;
 
-  try {
     const ref = collection(db, equipmentTypesCollection);
     const snapshot = await getDocs(query(ref, where("supported", "==", true)));
 
@@ -46,19 +48,15 @@ export async function GET(req: NextRequest) {
       );
       return NextResponse.json(equipmentTypes);
     }
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Error fetching equipments", details: error },
-      { status: 500 },
-    );
-  }
 
-  // const equipmentTypes = equipments
-  //   .filter((o: any) => Object.keys(equipmentsInScope).includes(o.title))
-  //   .map((o) => ({
-  //     id: o.title,
-  //     label: o.title,
-  //     slug: o.title.toLowerCase(),
-  //   }));
-  return NextResponse.json([]);
-}
+    // const equipmentTypes = equipments
+    //   .filter((o: any) => Object.keys(equipmentsInScope).includes(o.title))
+    //   .map((o) => ({
+    //     id: o.title,
+    //     label: o.title,
+    //     slug: o.title.toLowerCase(),
+    //   }));
+    return NextResponse.json([]);
+  },
+  "Error fetching equipment-types",
+);
