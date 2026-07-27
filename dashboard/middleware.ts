@@ -1,9 +1,7 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",")
-  : [];
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") ?? [];
 // console.log("Allowed origins: ", allowedOrigins); // eslint-disable-line
 
 export function middleware(request: NextRequest) {
@@ -33,5 +31,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/api/:path*", // Only apply to API routes
+  // matcher: "/api/:path*", // Only apply to API routes
+  matcher: "/api/((?!docs$).*)", // All API routes except /api/docs
 };

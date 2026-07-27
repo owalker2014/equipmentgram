@@ -1,76 +1,76 @@
-import {
-  IconBackhoe,
-  IconBulldozer,
-  IconCrane,
-  IconFiretruck,
-  IconReceipt,
-} from "@tabler/icons-react";
-import { EquipmentType } from "./formUtils";
-import { InspectionFormWithId } from "../lib/network/forms.shared";
-import { UserType } from "../lib/network/users.shared";
+// import {
+//   IconBackhoe,
+//   IconBulldozer,
+//   IconCrane,
+//   IconFiretruck,
+//   IconReceipt,
+// } from "@tabler/icons-react";
+// import { EquipmentType } from "./formUtils";
+// import { InspectionFormWithId } from "../lib/network/forms.shared";
+// import { UserType } from "../lib/network/users.shared";
 
-export const equipments = [
-  {
-    title: EquipmentType.Backhoe,
-    icon: IconBackhoe,
-    link: "/Backhoe",
-    color: "indigo",
-  },
-  {
-    title: EquipmentType.CompactLoaders,
-    icon: IconBackhoe,
-    link: "/Compact Loaders",
-    color: "blue",
-  },
-  {
-    title: EquipmentType.Dozers,
-    icon: IconBulldozer,
-    link: "/Dozers",
-    color: "green",
-  },
-  {
-    title: EquipmentType.WheelLoaders,
-    icon: IconReceipt,
-    link: "/Wheel Loaders",
-    color: "teal",
-  },
-  {
-    title: EquipmentType.Excavators,
-    icon: IconFiretruck,
-    link: "/Excavators",
-    color: "teal",
-  },
-  {
-    title: EquipmentType.MiniExcavators,
-    icon: IconCrane,
-    link: "/Mini Excavators",
-    color: "cyan",
-  },
-  {
-    title: EquipmentType.CompactExcavator,
-    icon: IconCrane,
-    link: "/Compact Excavator",
-    color: "cyan",
-  },
-  {
-    title: EquipmentType.Skidsteers,
-    icon: IconBackhoe,
-    link: "/Skidsteers",
-    color: "pink",
-  },
-  {
-    title: EquipmentType.Telehandlers,
-    icon: IconBackhoe,
-    link: "/Telehandlers",
-    color: "red",
-  },
-  {
-    title: EquipmentType.MotorGraders,
-    icon: IconBackhoe,
-    link: "/Motor Graders",
-    color: "orange",
-  },
-];
+// export const equipments = [
+//   {
+//     title: EquipmentType.Backhoe,
+//     icon: IconBackhoe,
+//     link: "/Backhoe",
+//     color: "indigo",
+//   },
+//   {
+//     title: EquipmentType.CompactLoaders,
+//     icon: IconBackhoe,
+//     link: "/Compact Loaders",
+//     color: "blue",
+//   },
+//   {
+//     title: EquipmentType.Dozers,
+//     icon: IconBulldozer,
+//     link: "/Dozers",
+//     color: "green",
+//   },
+//   {
+//     title: EquipmentType.WheelLoaders,
+//     icon: IconReceipt,
+//     link: "/Wheel Loaders",
+//     color: "teal",
+//   },
+//   {
+//     title: EquipmentType.Excavators,
+//     icon: IconFiretruck,
+//     link: "/Excavators",
+//     color: "teal",
+//   },
+//   {
+//     title: EquipmentType.MiniExcavators,
+//     icon: IconCrane,
+//     link: "/Mini Excavators",
+//     color: "cyan",
+//   },
+//   {
+//     title: EquipmentType.CompactExcavator,
+//     icon: IconCrane,
+//     link: "/Compact Excavator",
+//     color: "cyan",
+//   },
+//   {
+//     title: EquipmentType.Skidsteers,
+//     icon: IconBackhoe,
+//     link: "/Skidsteers",
+//     color: "pink",
+//   },
+//   {
+//     title: EquipmentType.Telehandlers,
+//     icon: IconBackhoe,
+//     link: "/Telehandlers",
+//     color: "red",
+//   },
+//   {
+//     title: EquipmentType.MotorGraders,
+//     icon: IconBackhoe,
+//     link: "/Motor Graders",
+//     color: "orange",
+//   },
+// ];
 
 // export const demoForm: InspectionFormWithId = {
 //   id: "demo",
