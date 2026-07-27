@@ -6,6 +6,55 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
+// /**
+//  * @swagger
+//  * /api/share-report:
+//  *   post:
+//  *     summary: Email an inspection report PDF to one or more recipients
+//  *     tags: [Reports]
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             required: [createdByUserUid, form, id, type, createdByUser, sentFrom, sendTo, pdfBase64]
+//  *             properties:
+//  *               createdByUserUid:
+//  *                 type: string
+//  *               form:
+//  *                 type: object
+//  *               id:
+//  *                 type: string
+//  *               type:
+//  *                 type: string
+//  *               createdByUser:
+//  *                 type: object
+//  *               sentFrom:
+//  *                 type: string
+//  *               sendTo:
+//  *                 oneOf:
+//  *                   - type: string
+//  *                   - type: array
+//  *                     items:
+//  *                       type: string
+//  *               pdfBase64:
+//  *                 type: string
+//  *     responses:
+//  *       200:
+//  *         description: Emails sent successfully
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 status:
+//  *                   type: string
+//  *                 success:
+//  *                   type: boolean
+//  *       500:
+//  *         description: Failed to send email
+//  */
 export async function POST(request: Request) {
   const {
     createdByUserUid,

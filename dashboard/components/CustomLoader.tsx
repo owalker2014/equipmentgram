@@ -1,5 +1,5 @@
 import { ActionIcon, Center, Loader, Tooltip } from "@mantine/core";
-import { IconDoorExit } from "@tabler/icons-react";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -32,7 +32,7 @@ export function ReturnButton({ target }: { target: string }) {
             size="md"
             gradient={{ from: "blue", to: "cyan", deg: 90 }}
           >
-            <IconDoorExit
+            <IconArrowLeft
               aria-label="Back"
               onClick={() => navigation.push(target)}
               size={18}

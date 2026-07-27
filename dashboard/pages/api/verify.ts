@@ -19,7 +19,9 @@ export default async function handler(
     }
 
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const customToken = await admin.auth().createCustomToken(decodedToken.uid);
+    const customToken = decodedToken
+      ? await admin.auth().createCustomToken(decodedToken?.uid)
+      : undefined;
 
     res.status(200).json({ token: customToken });
   } catch (error) {

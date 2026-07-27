@@ -25,6 +25,76 @@ import {
 } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/inspections/forms:
+ *   get:
+ *     summary: List inspection forms for a user
+ *     tags: [Inspection Forms]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: equipmentType
+ *         schema:
+ *           type: string
+ *         description: Filter by equipment type
+ *       - in: query
+ *         name: isCustomer
+ *         schema:
+ *           type: boolean
+ *         description: When true, returns only approved forms requested by this user
+ *     responses:
+ *       200:
+ *         description: Array of inspection forms with creator info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: userId is required
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Create an inspection form
+ *     tags: [Inspection Forms]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [userId]
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               inspectionRequestId:
+ *                 type: string
+ *                 description: If provided, links this form to an existing inspection request
+ *     responses:
+ *       201:
+ *         description: Form created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 id:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ */
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
@@ -163,5 +233,5 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  return NextResponse.json({ success: true, id: docRef?.id });
+  return NextResponse.json({ success: true, id: docRef?.id }, { status: 201 });
 }

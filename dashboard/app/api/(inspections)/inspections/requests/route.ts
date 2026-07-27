@@ -17,6 +17,69 @@ import {
 } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/inspections/requests:
+ *   get:
+ *     summary: List inspection requests, filtered by customer or inspector
+ *     tags: [Inspection Requests]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         description: Returns non-canceled requests for this customer
+ *       - in: query
+ *         name: inspectorId
+ *         schema:
+ *           type: string
+ *         description: Inspector ID — must be combined with equipmentType
+ *       - in: query
+ *         name: equipmentType
+ *         schema:
+ *           type: string
+ *         description: Filter pending requests by equipment type for an inspector
+ *     responses:
+ *       200:
+ *         description: Array of inspection requests
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Create an inspection request
+ *     tags: [Inspection Requests]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               inspectorId:
+ *                 type: string
+ *                 description: If provided, links the request to an inspector
+ *     responses:
+ *       200:
+ *         description: Request created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ */
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;

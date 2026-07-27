@@ -8,6 +8,28 @@ import { usersCollection, UserWithId } from "@/lib/network/users.shared";
 import { doc, getDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/inspections/forms/{id}:
+ *   get:
+ *     summary: Get a single inspection form by ID, including creator info
+ *     tags: [Inspection Forms]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Inspection form with creator user
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Inspection form not found
+ */
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },

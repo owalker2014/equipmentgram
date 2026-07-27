@@ -28,6 +28,74 @@ async function getOrCreateStripeCustomer(
   return stripeCustomerId;
 }
 
+// /**
+//  * @swagger
+//  * /api/payment-methods:
+//  *   get:
+//  *     summary: Get the saved card payment method for a user
+//  *     tags: [Payments]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     parameters:
+//  *       - in: query
+//  *         name: userId
+//  *         required: true
+//  *         schema:
+//  *           type: string
+//  *     responses:
+//  *       200:
+//  *         description: Payment method details or null
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 paymentMethod:
+//  *                   type: object
+//  *                   nullable: true
+//  *                   properties:
+//  *                     brand:
+//  *                       type: string
+//  *                     last4:
+//  *                       type: string
+//  *                     exp_month:
+//  *                       type: integer
+//  *                     exp_year:
+//  *                       type: integer
+//  *       400:
+//  *         description: userId is required
+//  *       401:
+//  *         description: Unauthorized
+//  *   post:
+//  *     summary: Create a Stripe billing portal session for a user
+//  *     tags: [Payments]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             required: [userId]
+//  *             properties:
+//  *               userId:
+//  *                 type: string
+//  *               email:
+//  *                 type: string
+//  *     responses:
+//  *       200:
+//  *         description: Stripe billing portal URL
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 url:
+//  *                   type: string
+//  *       401:
+//  *         description: Unauthorized
+//  */
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;

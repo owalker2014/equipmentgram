@@ -23,6 +23,74 @@ import {
 } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/inspections/reports:
+ *   get:
+ *     summary: List sent inspection reports, optionally filtered by equipment type
+ *     tags: [Inspection Reports]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: equipmentType
+ *         schema:
+ *           type: string
+ *         description: Filter reports by equipment type
+ *     responses:
+ *       200:
+ *         description: Array of sent reports
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   inspectionFormId:
+ *                     type: string
+ *                   type:
+ *                     type: string
+ *                   sentTo:
+ *                     type: string
+ *                   createdByUserUid:
+ *                     type: string
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Record a sent report and notify the recipient
+ *     tags: [Inspection Reports]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [sentReport, senderName, senderEmail]
+ *             properties:
+ *               sentReport:
+ *                 type: object
+ *               senderName:
+ *                 type: string
+ *               senderEmail:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Report recorded and notification sent
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       401:
+ *         description: Unauthorized
+ */
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
