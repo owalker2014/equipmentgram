@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   EquipmentMetadata,
@@ -95,143 +96,166 @@ import { NextRequest, NextResponse } from "next/server";
  *       401:
  *         description: Unauthorized
  */
-export async function GET(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/inspections/forms",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const userId = req.nextUrl.searchParams.get("userId");
-  const equipmentTypeId = req.nextUrl.searchParams.get("equipmentType");
-  const isCustomer = req.nextUrl.searchParams.get("isCustomer") === "true";
+    const userId = req.nextUrl.searchParams.get("userId");
+    const equipmentTypeId = req.nextUrl.searchParams.get("equipmentType");
+    const isCustomer = req.nextUrl.searchParams.get("isCustomer") === "true";
 
-  if (!userId) {
-    return NextResponse.json({ error: "userId is required" }, { status: 400 });
-  }
-
-  const conditions: QueryConstraint[] = [];
-  if (equipmentTypeId) {
-    const typesnapshot = await getDoc(
-      doc(db, equipmentTypesCollection, equipmentTypeId),
-    );
-    if (!typesnapshot.exists()) {
+    if (!userId) {
       return NextResponse.json(
-        { error: "Equipment not found" },
-        { status: 404 },
+        { error: "userId is required" },
+        { status: 400 },
       );
     }
 
-    const equipmentType = typesnapshot.data() as EquipmentMetadata;
-    conditions.push(where("type", "==", equipmentType.label));
-  }
+    const conditions: QueryConstraint[] = [];
+    if (equipmentTypeId) {
+      const typesnapshot = await getDoc(
+        doc(db, equipmentTypesCollection, equipmentTypeId),
+      );
+      if (!typesnapshot.exists()) {
+        return NextResponse.json(
+          { error: "Equipment not found" },
+          { status: 404 },
+        );
+      }
 
-  if (isCustomer) {
-    conditions.push(
-      ...[
-        // approved form or all forms if customer
-        where("reportStatus", "==", InspectionReportStatus.Approved),
-        where("requestedByUserId", "==", userId),
-      ],
-    );
-  } else {
-    conditions.push(
-      ...[
-        where("reportStatus", "in", [
-          InspectionReportStatus.Approved,
-          InspectionReportStatus.FilledForm,
-          InspectionReportStatus.Rejected,
-          InspectionReportStatus.Pending,
-        ]),
-        where("createdByUserUid", "==", userId),
-      ],
-    );
-  }
+      const equipmentType = typesnapshot.data() as EquipmentMetadata;
+      conditions.push(where("type", "==", equipmentType.label));
+    }
 
-  // conditions.push(orderBy("timestamp", "desc"));
-  const ref = collection(db, inspectionFormsCollection);
-  const snapshot = await getDocs(query(ref, ...conditions));
+    if (isCustomer) {
+      conditions.push(
+        ...[
+          // approved form or all forms if customer
+          where("reportStatus", "==", InspectionReportStatus.Approved),
+          where("requestedByUserId", "==", userId),
+        ],
+      );
+    } else {
+      conditions.push(
+        ...[
+          where("reportStatus", "in", [
+            InspectionReportStatus.Approved,
+            InspectionReportStatus.FilledForm,
+            InspectionReportStatus.Rejected,
+            InspectionReportStatus.Pending,
+          ]),
+          where("createdByUserUid", "==", userId),
+        ],
+      );
+    }
 
-  const createdByUserUids = Array.from(
-    new Set(snapshot.docs.map((doc) => doc.data().createdByUserUid as string)),
-  );
+    // conditions.push(orderBy("timestamp", "desc"));
+    const ref = collection(db, inspectionFormsCollection);
+    const snapshot = await getDocs(query(ref, ...conditions));
 
-  const userMap = new Map<string, unknown>();
-  if (createdByUserUids.length > 0) {
-    const usersnapshot = await getDocs(
-      query(
-        collection(db, usersCollection),
-        where("user_id", "in", createdByUserUids),
+    const createdByUserUids = Array.from(
+      new Set(
+        snapshot.docs.map((doc) => doc.data().createdByUserUid as string),
       ),
     );
 
-    // Create a map of users by UID for efficient lookup
-    usersnapshot.forEach((userDoc) => {
-      const data = userDoc.data();
-      userMap.set(data.user_id, data);
-    });
-  }
-
-  const inspectionForms = snapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      ...data,
-      createdByUser: (userMap.get(data.createdByUserUid) ?? null) as UserWithId,
-      userRef: data.userRef,
-      requestedByUserRef: data.requestedByUserRef,
-      inspectionRequestRef: data.inspectionRequestRef,
-    } as unknown as InspectionFormWithId;
-  });
-
-  return NextResponse.json(inspectionForms);
-}
-
-export async function POST(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
-
-  const body = await req.json();
-  const { inspectionRequestId, userId, ...inspectionForm } = body;
-
-  let docRef;
-  const userRef = doc(db, usersCollection, userId);
-  if (inspectionRequestId) {
-    await runTransaction(db, async (transaction) => {
-      const inspectionRequestRef = doc(
-        db,
-        inspectionRequestsCollection,
-        inspectionRequestId,
+    const userMap = new Map<string, unknown>();
+    if (createdByUserUids.length > 0) {
+      const usersnapshot = await getDocs(
+        query(
+          collection(db, usersCollection),
+          where("user_id", "in", createdByUserUids),
+        ),
       );
 
-      const snapshot = await transaction.get(inspectionRequestRef);
-      if (!snapshot.exists()) {
-        throw new Error("Inspection request not found");
-      }
+      // Create a map of users by UID for efficient lookup
+      usersnapshot.forEach((userDoc) => {
+        const data = userDoc.data();
+        userMap.set(data.user_id, data);
+      });
+    }
 
-      const requestedByUserId: string = snapshot.data().user_id;
-      const requestedByUserRef = doc(db, usersCollection, requestedByUserId);
+    const inspectionForms = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdByUser: (userMap.get(data.createdByUserUid) ??
+          null) as UserWithId,
+        userRef: data.userRef,
+        requestedByUserRef: data.requestedByUserRef,
+        inspectionRequestRef: data.inspectionRequestRef,
+      } as unknown as InspectionFormWithId;
+    });
 
-      transaction.update(inspectionRequestRef, {
-        reportStatus: InspectionReportStatus.FilledForm,
+    return NextResponse.json(inspectionForms);
+  },
+  "Error fetching inspection forms",
+);
+
+export const POST = withApiErrorHandling(
+  "POST /api/inspections/forms",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
+
+    const body = await req.json();
+    const { inspectionRequestId, userId, ...inspectionForm } = body;
+
+    let docRef;
+    let notFound = false;
+    const userRef = doc(db, usersCollection, userId);
+    if (inspectionRequestId) {
+      await runTransaction(db, async (transaction) => {
+        const inspectionRequestRef = doc(
+          db,
+          inspectionRequestsCollection,
+          inspectionRequestId,
+        );
+
+        const snapshot = await transaction.get(inspectionRequestRef);
+        if (!snapshot.exists()) {
+          notFound = true;
+          return;
+        }
+
+        const requestedByUserId: string = snapshot.data().user_id;
+        const requestedByUserRef = doc(db, usersCollection, requestedByUserId);
+
+        transaction.update(inspectionRequestRef, {
+          reportStatus: InspectionReportStatus.FilledForm,
+        });
+
+        docRef = await addDoc(collection(db, inspectionFormsCollection), {
+          ...inspectionForm,
+          inspectionRequestRef: inspectionRequestRef,
+          userRef, // inspector
+          reportStatus: InspectionReportStatus.FilledForm,
+          requestedByUserRef,
+          requestedByUserId,
+        });
       });
 
+      if (notFound) {
+        return NextResponse.json(
+          { error: "Inspection request not found" },
+          { status: 404 },
+        );
+      }
+    } else {
       docRef = await addDoc(collection(db, inspectionFormsCollection), {
         ...inspectionForm,
-        inspectionRequestRef: inspectionRequestRef,
+        ...(inspectionForm["batch_id"] && { id: inspectionForm["batch_id"] }),
         userRef, // inspector
         reportStatus: InspectionReportStatus.FilledForm,
-        requestedByUserRef,
-        requestedByUserId,
+        reportID: crypto.randomUUID(),
+        timestamp: serverTimestamp(),
       });
-    });
-  } else {
-    docRef = await addDoc(collection(db, inspectionFormsCollection), {
-      ...inspectionForm,
-      ...(inspectionForm["batch_id"] && { id: inspectionForm["batch_id"] }),
-      userRef, // inspector
-      reportStatus: InspectionReportStatus.FilledForm,
-      reportID: crypto.randomUUID(),
-      timestamp: serverTimestamp(),
-    });
-  }
+    }
 
-  return NextResponse.json({ success: true, id: docRef?.id }, { status: 201 });
-}
+    return NextResponse.json({ success: true, id: docRef?.id }, { status: 201 });
+  },
+  "Error creating inspection form",
+);

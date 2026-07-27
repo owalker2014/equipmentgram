@@ -1,3 +1,4 @@
+import { withApiErrorHandling } from "@/lib/api-errors";
 import type { InspectionResult } from "@/lib/network/forms.shared";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -63,8 +64,9 @@ import { NextRequest, NextResponse } from "next/server";
  *       500:
  *         description: Internal server error
  */
-export async function POST(req: NextRequest) {
-  try {
+export const POST = withApiErrorHandling(
+  "POST /api/inspections/mono",
+  async (req: NextRequest) => {
     const incoming = await req.formData();
 
     const equipment_type = incoming.get("equipment_type");
@@ -118,8 +120,6 @@ export async function POST(req: NextRequest) {
     const result: InspectionResult = await response.json();
     delete result.image_base64;
     return NextResponse.json(result);
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unexpected error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
-}
+  },
+  "Error running defect detection",
+);

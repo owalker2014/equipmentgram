@@ -1,3 +1,4 @@
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   equipmentManufacturersCollection,
@@ -74,78 +75,82 @@ import { NextRequest, NextResponse } from "next/server";
  *       404:
  *         description: Equipment type not found
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { equipmentType: string } },
-) {
-  const { searchParams } = req.nextUrl;
-  const manufacturerId = searchParams.get("manufacturer");
-  const modelId = searchParams.get("model");
-  const isEnriched = searchParams.get("enriched") === "true";
+export const GET = withApiErrorHandling(
+  "GET /api/equipment-types/[equipmentType]/sections",
+  async (
+    req: NextRequest,
+    { params }: { params: { equipmentType: string } },
+  ) => {
+    const { searchParams } = req.nextUrl;
+    const manufacturerId = searchParams.get("manufacturer");
+    const modelId = searchParams.get("model");
+    const isEnriched = searchParams.get("enriched") === "true";
 
-  const { equipmentType: equipmentTypeId } = params;
+    const { equipmentType: equipmentTypeId } = params;
 
-  const typesnapshot = await getDoc(
-    doc(db, equipmentTypesCollection, equipmentTypeId),
-  );
-  if (!typesnapshot.exists()) {
-    return NextResponse.json(
-      { error: "Equipment type not found" },
-      { status: 404 },
+    const typesnapshot = await getDoc(
+      doc(db, equipmentTypesCollection, equipmentTypeId),
     );
-  }
-  const equipmentType = typesnapshot.data();
-
-  let manufacturer;
-  let model;
-  if (isEnriched) {
-    if (manufacturerId) {
-      const manufacturersnapshot = await getDoc(
-        doc(db, equipmentManufacturersCollection, manufacturerId),
+    if (!typesnapshot.exists()) {
+      return NextResponse.json(
+        { error: "Equipment type not found" },
+        { status: 404 },
       );
-      if (manufacturersnapshot.exists()) {
-        manufacturer = manufacturersnapshot.data();
+    }
+    const equipmentType = typesnapshot.data();
+
+    let manufacturer;
+    let model;
+    if (isEnriched) {
+      if (manufacturerId) {
+        const manufacturersnapshot = await getDoc(
+          doc(db, equipmentManufacturersCollection, manufacturerId),
+        );
+        if (manufacturersnapshot.exists()) {
+          manufacturer = manufacturersnapshot.data();
+        }
+      }
+
+      if (modelId) {
+        const modelsnapshot = await getDoc(
+          doc(db, equipmentModelsCollection, modelId),
+        );
+        if (modelsnapshot.exists()) {
+          model = modelsnapshot.data();
+        }
       }
     }
 
-    if (modelId) {
-      const modelsnapshot = await getDoc(
-        doc(db, equipmentModelsCollection, modelId),
-      );
-      if (modelsnapshot.exists()) {
-        model = modelsnapshot.data();
-      }
+    const ref = collection(db, equipmentSectionsCollection);
+    const snapshot = await getDocs(
+      query(ref, where("type_id", "==", equipmentTypeId)),
+    );
+
+    if (snapshot.empty) {
+      return NextResponse.json([]);
     }
-  }
 
-  const ref = collection(db, equipmentSectionsCollection);
-  const snapshot = await getDocs(
-    query(ref, where("type_id", "==", equipmentTypeId)),
-  );
+    const sections = await Promise.all(
+      snapshot.docs.map(async (sectionDoc) => {
+        const questionsRef = collection(
+          sectionDoc.ref,
+          equipmentSectionQuestionsCollection,
+        );
+        const questionsSnapshot = await getDocs(questionsRef);
+        const questions = questionsSnapshot.docs.map((q) => ({
+          id: q.id,
+          ...q.data(),
+        }));
+        return { id: sectionDoc.id, ...sectionDoc.data(), questions };
+      }),
+    );
 
-  if (snapshot.empty) {
-    return NextResponse.json([]);
-  }
-
-  const sections = await Promise.all(
-    snapshot.docs.map(async (sectionDoc) => {
-      const questionsRef = collection(
-        sectionDoc.ref,
-        equipmentSectionQuestionsCollection,
-      );
-      const questionsSnapshot = await getDocs(questionsRef);
-      const questions = questionsSnapshot.docs.map((q) => ({
-        id: q.id,
-        ...q.data(),
-      }));
-      return { id: sectionDoc.id, ...sectionDoc.data(), questions };
-    }),
-  );
-
-  return NextResponse.json({
-    equipmentType,
-    manufacturer,
-    model,
-    data: sections,
-  });
-}
+    return NextResponse.json({
+      equipmentType,
+      manufacturer,
+      model,
+      data: sections,
+    });
+  },
+  "Error fetching equipment sections",
+);

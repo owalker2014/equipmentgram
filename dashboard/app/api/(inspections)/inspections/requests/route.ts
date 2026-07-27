@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import { InspectionReportStatus } from "@/lib/network/forms.shared";
 import {
@@ -80,59 +81,67 @@ import { NextRequest, NextResponse } from "next/server";
  *       401:
  *         description: Unauthorized
  */
-export async function GET(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/inspections/requests",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const userId = req.nextUrl.searchParams.get("userId");
-  const inspectorId = req.nextUrl.searchParams.get("inspectorId");
-  const equipmentType = req.nextUrl.searchParams.get("equipmentType");
+    const userId = req.nextUrl.searchParams.get("userId");
+    const inspectorId = req.nextUrl.searchParams.get("inspectorId");
+    const equipmentType = req.nextUrl.searchParams.get("equipmentType");
 
-  const ref = collection(db, inspectionRequestsCollection);
-  let q = query(ref);
+    const ref = collection(db, inspectionRequestsCollection);
+    let q = query(ref);
 
-  if (userId) {
-    q = query(
-      ref,
-      where("user_id", "==", userId),
-      where("canceled", "==", false),
+    if (userId) {
+      q = query(
+        ref,
+        where("user_id", "==", userId),
+        where("canceled", "==", false),
+      );
+    } else if (inspectorId && equipmentType) {
+      const inspectorRef = doc(db, usersCollection, inspectorId);
+      q = query(
+        ref,
+        where("inspectorRef", "==", inspectorRef),
+        where("equipmentType", "==", equipmentType),
+        where("reportStatus", "==", InspectionReportStatus.Pending),
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const requests = snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as InspectionRequestObjectWithId,
     );
-  } else if (inspectorId && equipmentType) {
-    const inspectorRef = doc(db, usersCollection, inspectorId);
-    q = query(
-      ref,
-      where("inspectorRef", "==", inspectorRef),
-      where("equipmentType", "==", equipmentType),
-      where("reportStatus", "==", InspectionReportStatus.Pending),
+    return NextResponse.json(requests);
+  },
+  "Error fetching inspection requests",
+);
+
+export const POST = withApiErrorHandling(
+  "POST /api/inspections/requests",
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
+
+    const body = await req.json();
+    const { inspectorId, ...rest } = body;
+
+    const inspectionRequest: Record<string, unknown> = {
+      ...rest,
+      created: serverTimestamp(),
+    };
+
+    if (inspectorId) {
+      inspectionRequest.inspectorRef = doc(db, usersCollection, inspectorId);
+    }
+
+    const docRef = await addDoc(
+      collection(db, inspectionRequestsCollection),
+      inspectionRequest,
     );
-  }
-
-  const snapshot = await getDocs(q);
-  const requests = snapshot.docs.map(
-    (doc) => ({ id: doc.id, ...doc.data() }) as InspectionRequestObjectWithId,
-  );
-  return NextResponse.json(requests);
-}
-
-export async function POST(req: NextRequest) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
-
-  const body = await req.json();
-  const { inspectorId, ...rest } = body;
-
-  const inspectionRequest: Record<string, unknown> = {
-    ...rest,
-    created: serverTimestamp(),
-  };
-
-  if (inspectorId) {
-    inspectionRequest.inspectorRef = doc(db, usersCollection, inspectorId);
-  }
-
-  const docRef = await addDoc(
-    collection(db, inspectionRequestsCollection),
-    inspectionRequest,
-  );
-  return NextResponse.json({ id: docRef.id });
-}
+    return NextResponse.json({ id: docRef.id });
+  },
+  "Error creating inspection request",
+);

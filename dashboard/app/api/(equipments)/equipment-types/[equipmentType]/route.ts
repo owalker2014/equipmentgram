@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/api-auth";
+import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
   EquipmentMetadata,
@@ -78,85 +79,89 @@ import { NextRequest, NextResponse } from "next/server";
  *       404:
  *         description: Equipment type not found
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { equipmentType: string } },
-) {
-  const auth = await requireAuth(req);
-  if (auth instanceof NextResponse) return auth;
+export const GET = withApiErrorHandling(
+  "GET /api/equipment-types/[equipmentType]",
+  async (
+    req: NextRequest,
+    { params }: { params: { equipmentType: string } },
+  ) => {
+    const auth = await requireAuth(req);
+    if (auth instanceof NextResponse) return auth;
 
-  const { equipmentType: equipmentTypeId } = params;
+    const { equipmentType: equipmentTypeId } = params;
 
-  const typesnapshot = await getDoc(
-    doc(db, equipmentTypesCollection, equipmentTypeId),
-  );
-  if (!typesnapshot.exists()) {
-    return NextResponse.json(
-      { error: "Equipment type not found" },
-      { status: 404 },
+    const typesnapshot = await getDoc(
+      doc(db, equipmentTypesCollection, equipmentTypeId),
     );
-  }
-  const equipmentType = {
-    id: typesnapshot.id,
-    ...typesnapshot.data(),
-  } as EquipmentMetadata;
+    if (!typesnapshot.exists()) {
+      return NextResponse.json(
+        { error: "Equipment type not found" },
+        { status: 404 },
+      );
+    }
+    const equipmentType = {
+      id: typesnapshot.id,
+      ...typesnapshot.data(),
+    } as EquipmentMetadata;
 
-  const junctionSnap = await getDocs(
-    query(
-      collection(db, equipmentTypeManufacturersCollection),
-      where("type_id", "==", equipmentTypeId),
-    ),
-  );
+    const junctionSnap = await getDocs(
+      query(
+        collection(db, equipmentTypeManufacturersCollection),
+        where("type_id", "==", equipmentTypeId),
+      ),
+    );
 
-  if (junctionSnap.empty) {
-    return NextResponse.json({ ...equipmentType, manufacturers: [] });
-  }
+    if (junctionSnap.empty) {
+      return NextResponse.json({ ...equipmentType, manufacturers: [] });
+    }
 
-  const manufacturerIds = junctionSnap.docs.map(
-    (d) => d.data().manufacturer_id as string,
-  );
+    const manufacturerIds = junctionSnap.docs.map(
+      (d) => d.data().manufacturer_id as string,
+    );
 
-  const chunks: string[][] = [];
-  for (let i = 0; i < manufacturerIds.length; i += 30) {
-    chunks.push(manufacturerIds.slice(i, i + 30));
-  }
+    const chunks: string[][] = [];
+    for (let i = 0; i < manufacturerIds.length; i += 30) {
+      chunks.push(manufacturerIds.slice(i, i + 30));
+    }
 
-  const manufacturerDocs = (
-    await Promise.all(
-      chunks.map((chunk) =>
-        getDocs(
+    const manufacturerDocs = (
+      await Promise.all(
+        chunks.map((chunk) =>
+          getDocs(
+            query(
+              collection(db, equipmentManufacturersCollection),
+              where("__name__", "in", chunk),
+              where("supported", "==", true),
+            ),
+          ),
+        ),
+      )
+    ).flatMap((snap) =>
+      snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EquipmentMetadata),
+    );
+
+    const manufacturers = await Promise.all(
+      manufacturerDocs.map(async (manufacturer) => {
+        const junctionKey = `${manufacturer.id}__${equipmentTypeId}`;
+        const modelsSnap = await getDocs(
           query(
-            collection(db, equipmentManufacturersCollection),
-            where("__name__", "in", chunk),
+            collection(
+              db,
+              equipmentTypeManufacturersCollection,
+              junctionKey,
+              equipmentModelsCollection,
+            ),
             where("supported", "==", true),
           ),
-        ),
-      ),
-    )
-  ).flatMap((snap) =>
-    snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EquipmentMetadata),
-  );
+        );
+        const models = modelsSnap.docs.map(
+          (d) => ({ id: d.id, ...d.data() }) as EquipmentMetadata,
+        );
+        return { ...manufacturer, models };
+      }),
+    );
 
-  const manufacturers = await Promise.all(
-    manufacturerDocs.map(async (manufacturer) => {
-      const junctionKey = `${manufacturer.id}__${equipmentTypeId}`;
-      const modelsSnap = await getDocs(
-        query(
-          collection(
-            db,
-            equipmentTypeManufacturersCollection,
-            junctionKey,
-            equipmentModelsCollection,
-          ),
-          where("supported", "==", true),
-        ),
-      );
-      const models = modelsSnap.docs.map(
-        (d) => ({ id: d.id, ...d.data() }) as EquipmentMetadata,
-      );
-      return { ...manufacturer, models };
-    }),
-  );
-
-  return NextResponse.json({ ...equipmentType, manufacturers });
-}
+    return NextResponse.json({ ...equipmentType, manufacturers });
+  },
+  "Error fetching equipment type",
+);
