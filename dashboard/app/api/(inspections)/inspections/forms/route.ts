@@ -198,7 +198,7 @@ export const GET = withApiErrorHandling(
 export const POST = withApiErrorHandling(
   "POST /api/inspections/forms",
   async (req: NextRequest) => {
-    const auth = await requireAuth(req);
+    const auth = await requireAuth(req, { scopes: ["inspections-forms"] });
     if (auth instanceof NextResponse) return auth;
 
     const body = await req.json();
