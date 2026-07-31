@@ -1,3 +1,4 @@
+import { requireAuth } from "@/lib/api-auth";
 import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
@@ -53,9 +54,12 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = withApiErrorHandling(
   "GET /api/equipment-types/[equipmentType]/manufacturers",
   async (
-    _req: NextRequest,
+    req: NextRequest,
     { params }: { params: { equipmentType: string } },
   ) => {
+    const auth = await requireAuth(req, { scopes: ["equipment-catalog"] });
+    if (auth instanceof NextResponse) return auth;
+
     const { equipmentType: equipmentTypeId } = params;
 
     const typesnapshot = await getDoc(
