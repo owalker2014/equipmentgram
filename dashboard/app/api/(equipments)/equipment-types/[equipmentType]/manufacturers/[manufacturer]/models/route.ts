@@ -1,4 +1,4 @@
-// import { requireAuth } from "@/lib/api-auth";
+import { requireAuth } from "@/lib/api-auth";
 import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
@@ -51,16 +51,14 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = withApiErrorHandling(
   "GET /api/equipment-types/[equipmentType]/manufacturers/[manufacturer]/models",
   async (
-    _req: NextRequest,
+    req: NextRequest,
     { params }: { params: { equipmentType: string; manufacturer: string } },
   ) => {
-    // const auth = await requireAuth(req);
-    // if (auth instanceof NextResponse) return auth;
+    const auth = await requireAuth(req, { scopes: ["equipment-catalog"] });
+    if (auth instanceof NextResponse) return auth;
 
-    const {
-      equipmentType: equipmentTypeOrId,
-      manufacturer: manufacturerOrId,
-    } = params;
+    const { equipmentType: equipmentTypeOrId, manufacturer: manufacturerOrId } =
+      params;
 
     const junctionKey = `${manufacturerOrId}__${equipmentTypeOrId}`; // very important
     const ref = collection(

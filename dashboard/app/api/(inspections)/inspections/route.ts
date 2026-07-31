@@ -1,4 +1,8 @@
 import { withApiErrorHandling } from "@/lib/api-errors";
+import {
+  callDefectDetectionService,
+  defectDetectionErrorResponse,
+} from "@/lib/defect-detection-client";
 import type { InspectionResultBatch } from "@/lib/network/forms.shared";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -74,21 +78,13 @@ export const POST = withApiErrorHandling(
     formData.append("component_names", components as string);
     images.forEach((image) => formData.append("images", image as Blob));
 
-    const url = `${process.env.NEXT_PUBLIC_DEFECT_DETECTION_URL}/inspect/batch`;
-    const response = await fetch(url, { method: "POST", body: formData });
-
-    if (!response.ok) {
-      if ([400, 422].includes(response.status)) {
-        const validationErrors: { detail: string } = await response.json();
-        return NextResponse.json(
-          { error: validationErrors?.detail ?? "Unknown Error" },
-          { status: response.status },
-        );
-      }
-      return NextResponse.json(
-        { error: `HTTP error! status: ${response.status}` },
-        { status: response.status },
-      );
+    const response = await callDefectDetectionService(
+      "/inspect/batch",
+      formData,
+    );
+    const errorResponse = await defectDetectionErrorResponse(response);
+    if (errorResponse) {
+      return errorResponse;
     }
 
     const result: InspectionResultBatch = await response.json();

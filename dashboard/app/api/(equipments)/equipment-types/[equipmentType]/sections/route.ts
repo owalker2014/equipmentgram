@@ -1,3 +1,4 @@
+import { requireAuth } from "@/lib/api-auth";
 import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
@@ -81,6 +82,9 @@ export const GET = withApiErrorHandling(
     req: NextRequest,
     { params }: { params: { equipmentType: string } },
   ) => {
+    const auth = await requireAuth(req, { scopes: ["equipment-catalog"] });
+    if (auth instanceof NextResponse) return auth;
+
     const { searchParams } = req.nextUrl;
     const manufacturerId = searchParams.get("manufacturer");
     const modelId = searchParams.get("model");

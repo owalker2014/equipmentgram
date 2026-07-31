@@ -1,4 +1,4 @@
-// import { requireAuth } from "@/lib/api-auth";
+import { requireAuth } from "@/lib/api-auth";
 import { withApiErrorHandling } from "@/lib/api-errors";
 import { db } from "@/lib/firebaseConfig/init";
 import {
@@ -35,9 +35,9 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export const GET = withApiErrorHandling(
   "GET /api/equipment-types",
-  async (_req: NextRequest) => {
-    // const auth = await requireAuth(req);
-    // if (auth instanceof NextResponse) return auth;
+  async (req: NextRequest) => {
+    const auth = await requireAuth(req, { scopes: ["equipment-catalog"] });
+    if (auth instanceof NextResponse) return auth;
 
     const ref = collection(db, equipmentTypesCollection);
     const snapshot = await getDocs(query(ref, where("supported", "==", true)));
