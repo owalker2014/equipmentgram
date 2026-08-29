@@ -12,6 +12,11 @@ export interface IBlog {
   updated_at: string;
   imageUrl?: string;
   category: ICategory;
+  /** The readable part of the URL, e.g. "how-to-inspect-an-excavator". */
+  slug?: string;
+  /** The ~155 character summary Google shows under the search result. */
+  excerpt?: string;
+  author?: string;
 }
 
 export interface IBlogWithId extends IBlog {
@@ -70,8 +75,10 @@ export const useCreateBlog = () => {
 export const useUpdateBlog = () => {
   const queryClient = useQueryClient();
   return useMutation(
-    (blog: IBlogWithId) => {
-      return updateDoc(doc(db, BlogsCollection, blog.id), { blog });
+    ({ id, ...blog }: IBlogWithId) => {
+      // Previously this wrote `{ blog: {...} }`, nesting every field one level
+      // too deep and corrupting the document. Spread the fields instead.
+      return updateDoc(doc(db, BlogsCollection, id), { ...blog, updated_at: new Date().toISOString() });
     },
     {
       onSuccess: () => {

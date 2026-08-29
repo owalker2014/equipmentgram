@@ -7,13 +7,13 @@ export const navLinks = [
     title: "Pricing ",
     link: "/pricing",
   },
-  /*{
-    title: "Blog ",
-    link: "/blog",
-  },*/
   {
     title: "How it works",
     link: "/how-it-works",
+  },
+  {
+    title: "Blog",
+    link: "/blog",
   },
   {
     title: "Contact Sales",
