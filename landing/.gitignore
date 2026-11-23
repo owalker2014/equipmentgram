@@ -41,9 +41,6 @@ next-env.d.ts
 .react-email
 .react-email-temp
 
-# ignore the blog folder
-/app/blog
-
 # PWA generated assets
 /public/sw.js
 /public/sw.js.map

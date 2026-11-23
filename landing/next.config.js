@@ -14,6 +14,10 @@ const withPWA = require("next-pwa")({
 
 const nextConfig = withPWA({
   reactStrictMode: true,
+  experimental: {
+    // The blog's HTML cleaner must be loaded by Node.js itself, not bundled.
+    serverComponentsExternalPackages: ["sanitize-html"],
+  },
   // async rewrites() {
   //   return [
   //     {

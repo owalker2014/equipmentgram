@@ -13,7 +13,6 @@ export enum Tab {
   InspectionRequests = "Inspection Requests",
   InspectionReports = "Inspection Reports",
   Users = "Users",
-  Tools = "Admin Tools",
 }
 
 export function mapTabToPath(tab: Tab): string {
@@ -24,8 +23,6 @@ export function mapTabToPath(tab: Tab): string {
       return "/admin/inspection-reports";
     case Tab.Users:
       return "/admin/users";
-    case Tab.Tools:
-      return "/admin/tools";
   }
 }
 
@@ -60,7 +57,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           { label: "Inspection Requests", value: "inspection-requests" },
           { label: "Inspection Reports", value: "inspection-reports" },
           { label: "Users", value: "users" },
-          { label: "Admin Tools", value: "tools" },
         ]}
       />
       <div className="my-10">{children}</div>

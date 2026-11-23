@@ -1,15 +1,7 @@
-import React from "react";
+import type { ReactNode } from "react";
+import "@/components/blog/blog.css";
 
-type Props = {};
-
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "EquipmentGram - Blog",
-};
-
-const BlogLayout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
-};
-
-export default BlogLayout;
+// Wraps every public blog page.
+export default function BlogLayout({ children }: { children: ReactNode }) {
+  return <div className="bg-white pb-16">{children}</div>;
+}
