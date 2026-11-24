@@ -64,6 +64,12 @@ const Navbar = ({}: Props) => {
             </li>
           </ul> */}
           <div className="flex gap-2">
+            <Link
+              href="/blog"
+              className="hidden md:inline-flex items-center px-3 text-sm font-medium text-gray-700 hover:text-blue-700"
+            >
+              Blog
+            </Link>
             {!user ? (
               <div className="space-x-2 hidden md:block">
                 <Link href="/signin">

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography'
 
 const config: Config = {
   content: [
@@ -18,6 +19,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  // Styles the text of blog posts: see the "prose" classes in components/blog/PostLayout.tsx
+  plugins: [typography],
 }
 export default config

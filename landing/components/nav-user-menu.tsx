@@ -6,6 +6,7 @@ import { Avatar, Group, Menu, Text, UnstyledButton, rem } from "@mantine/core";
 import {
   IconLayoutDashboard,
   IconLogout,
+  IconPencil,
   IconUser,
   IconUserBolt,
 } from "@tabler/icons-react";
@@ -53,6 +54,16 @@ const NavUserMenu = () => {
             }
           >
             Admin
+          </Menu.Item>
+        )}
+        {userData?.type === UserType.admin && (
+          <Menu.Item
+            onClick={() => router.push("/studio")}
+            leftSection={
+              <IconPencil style={{ width: rem(14), height: rem(14) }} />
+            }
+          >
+            Blog studio
           </Menu.Item>
         )}
 
