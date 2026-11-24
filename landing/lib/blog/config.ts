@@ -4,7 +4,7 @@
 // The address of the live site, without a slash at the end. It is used for
 // links in the sitemap, the RSS feed and the tags that Google reads.
 // If Vercel shows the address without "www" as your main domain, change it here.
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.equipmentgram.com").replace(/\/+$/, "");
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://equipmentgram.com").replace(/\/+$/, "");
 
 export const SITE_NAME = "EquipmentGram";
 
