@@ -4,7 +4,11 @@ import InspectionFormEmail, {
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+export const maxDuration = 60;
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Resend caps total email size at 40 MB (after base64). Leave headroom for the HTML body.
+// const MAX_BASE64_CHARS = 35 * 1024 * 1024;
 
 // /**
 //  * @swagger
@@ -68,20 +72,40 @@ export async function POST(request: Request) {
   } = (await request.json()) as InspectionFormEmailProps;
 
   try {
-    const recipients = Array.isArray(sendTo) ? sendTo : [sendTo];
-    const { data, error } = await resend.batch.send(
-      recipients.map((recipient) => ({
-        from: `${process.env.NEXT_PUBLIC_REPORT_SENT_FORM}`,
+    const recipients = (Array.isArray(sendTo) ? sendTo : [sendTo]).filter(
+      Boolean,
+    );
+    if (!pdfBase64 || recipients.length === 0) {
+      return NextResponse.json(
+        { error: "PDF and recipients are required." },
+        { status: 400 },
+      );
+    }
+
+    // keep raw value if malformed
+    let typeSlug = String(type);
+    try {
+      typeSlug = decodeURI(typeSlug);
+    } catch {} // eslint-disable-line
+
+    // ---- Build shared pieces once ----
+    const from = `${process.env.REPORT_SENT_FROM}`;
+    const attachments = [
+      {
+        filename: `inspection-report-${id}-${typeSlug.replace(/\s+/g, "-").toLowerCase()}-${Date.now()}.pdf`,
+        content: pdfBase64.replace(/^data:application\/pdf;base64,/, ""),
+      },
+    ];
+    const subject = `New report form ${String(sentFrom ?? "").toLowerCase()}`;
+    const failed: string[] = [];
+
+    // One at a time keeps us under Resend's 2 req/s limit and isolates failures.
+    for (const recipient of recipients) {
+      const { error } = await resend.emails.send({
+        from,
         to: recipient,
-        subject: `New report form ${sentFrom.toLowerCase()}`,
-        attachments: [
-          {
-            filename: `inspection-report-${id}-${decodeURI(type)
-              .replace(/\s+/g, "-")
-              .toLowerCase()}-${Date.now()}.pdf`,
-            content: pdfBase64,
-          },
-        ],
+        subject,
+        attachments,
         react: InspectionFormEmail({
           createdByUserUid,
           form,
@@ -91,31 +115,32 @@ export async function POST(request: Request) {
           sentFrom,
           recipient,
         }),
-      })),
-    );
+      });
 
-    if (error) {
-      console.log(`Failed to send email: ${error.message}`); // eslint-disable-line
+      if (error) {
+        console.error(`Failed for ${recipient}: ${error.message}`); // eslint-disable-line
+        failed.push(recipient);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 600)); // Pace sends a little under Resend's 2 req/s limit.
+    }
+
+    if (failed.length === recipients.length) {
       return NextResponse.json(
-        { error: "Failed to send email.", details: error.message },
-        { status: 500 },
+        { error: "Failed to send email.", failed },
+        { status: 502 },
       );
     }
-    // console.log(`Email sent with id: ${id}`);
 
     return NextResponse.json(
-      { status: "Ok", success: true, data },
+      { status: "Ok", success: true, failed },
       { status: 200 },
     );
   } catch (e: unknown) {
-    if (e instanceof Error) {
-      console.log(`Failed to send email: ${e.message}`); // eslint-disable-line
-    }
+    const details = e instanceof Error ? e.message : "Unknown error";
+    console.error(`Failed to send email: ${details}`); // eslint-disable-line
     return NextResponse.json(
-      {
-        error: "Internal server error.",
-        details: e instanceof Error ? e.message : "Unknown error",
-      },
+      { error: "Internal server error.", details },
       { status: 500 },
     );
   }
