@@ -1,5 +1,5 @@
-import { getStorage } from 'firebase/storage';
 // Import the functions you need from the SDKs you need
+import { getStorage } from "firebase/storage";
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
@@ -16,8 +16,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_appId,
 };
 
-
-let firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const firebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export default firebaseApp;
 
 // export const app = initializeApp(firebaseConfig2);

@@ -8,10 +8,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   const spec = createSwaggerSpec({
-    apiFolder:
-      // process.env.NODE_ENV === "production"
-      //   ? path.join(process.cwd(), "app/api")
-      "app/api",
+    apiFolder: "app/api",
     definition: {
       openapi: "3.0.0",
       info: {
